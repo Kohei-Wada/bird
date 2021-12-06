@@ -20,12 +20,13 @@ data Game = Game
     }
 
 
-gameInit :: Game
-gameInit = Game 
-    { _state = GameLoop
-    , _bird  = birdInit
-    , _score = 0
-    }
+gameInit :: IO Game
+gameInit = do 
+    b <- birdInit 
+    return Game { _state = GameLoop
+                , _bird  = b
+                , _score = 0
+                }
 
 
 gameDisplay :: Game -> IO Picture
@@ -43,6 +44,15 @@ eventHandler e g@Game{..} = case _state of
           EventKey (SpecialKey KeySpace) Down _ _ -> 
               return g { _bird = birdFlapping _bird } 
                   
+          EventKey (Char 'k') Down _ _ -> 
+              return g { _bird = birdFlapping _bird } 
+
+          EventKey (Char 'l') Down _ _ -> 
+              return g { _bird = moveBirdX _bird 10} 
+
+          EventKey (Char 'h') Down _ _ -> 
+              return g { _bird = moveBirdX _bird (-10)}
+
           EventKey (Char 'q') Down _ _ -> 
               exitSuccess
               
@@ -60,7 +70,7 @@ updateGame _ g@Game{..} = do
 gameMain :: IO ()
 gameMain = do
     let window = InWindow __windowTitle (__wWidth, __wHeight) (100, 100)
-        g      = gameInit
+    g <-  gameInit
 
     playIO window white __iFps g gameDisplay eventHandler updateGame
 

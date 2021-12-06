@@ -28,6 +28,7 @@ library
       Bird
       Game
       Options
+      Utils
   other-modules:
       Paths_bird
   hs-source-dirs:
