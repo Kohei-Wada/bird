@@ -31,35 +31,38 @@ gameInit = Game
 gameDisplay :: Game -> IO Picture
 gameDisplay g@Game{..} = case _state of 
     GameStop -> return blank
-    GameLoop -> return blank
+    GameLoop -> return $ translate (_birdX _bird) (_birdY _bird) (_birdPic _bird)  
     GameOver -> return blank
-
 
 
 eventHandler :: Event -> Game -> IO Game
 eventHandler e g@Game{..} = case _state of 
     GameStop -> return g
-    GameLoop -> case e of 
-                  EventKey (SpecialKey KeySpace) Down _ _ -> 
-                      return g { _score = _score + 1 }
-                  EventKey (Char 'q') Down _ _ -> 
-                      exitSuccess
-                      
-                  _ -> return g
+    GameLoop -> 
+        case e of 
+          EventKey (SpecialKey KeySpace) Down _ _ -> 
+              return g { _bird = birdFlapping _bird } 
+                  
+          EventKey (Char 'q') Down _ _ -> 
+              exitSuccess
+              
+          _ ->
+              return g
     
     GameOver -> return g
 
-updateGame :: Float -> Game -> IO Game
-updateGame _ g = return g 
 
+updateGame :: Float -> Game -> IO Game
+updateGame _ g@Game{..} = do 
+    return g { _bird = birdUpdate _bird }
 
 
 gameMain :: IO ()
 gameMain = do
-    let window = InWindow windowTitle (wWidth, wHeight) (100, 100)
+    let window = InWindow __windowTitle (__wWidth, __wHeight) (100, 100)
         g      = gameInit
 
-    playIO window white 20 g gameDisplay eventHandler updateGame
+    playIO window white __iFps g gameDisplay eventHandler updateGame
 
 
 
