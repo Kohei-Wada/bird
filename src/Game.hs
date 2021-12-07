@@ -3,6 +3,9 @@
 module Game where
 
 import Bird
+import Pipe
+import Ground
+import Sky
 import Options
 import System.Exit
 
@@ -14,25 +17,39 @@ import Graphics.Gloss.Juicy
 data GameState = GameStop | GameLoop | GameOver
 
 data Game = Game 
-    { _state :: GameState
-    , _bird  :: Bird
-    , _score :: Int
+    { _state  :: GameState
+    , _bird   :: Bird
+    , _sky    :: Sky
+    , _ground :: Ground
+    , _score  :: Int
     }
 
 
 gameInit :: IO Game
 gameInit = do 
     b <- birdInit 
-    return Game { _state = GameLoop
-                , _bird  = b
-                , _score = 0
+    s <- skyInit
+    g <- groundInit
+    return Game { _state  = GameLoop
+                , _bird   = b
+                , _sky    = s
+                , _ground = g
+                , _score  = 0
                 }
 
 
 gameDisplay :: Game -> IO Picture
 gameDisplay g@Game{..} = case _state of 
     GameStop -> return blank
-    GameLoop -> return $ translate (_birdX _bird) (_birdY _bird) (_birdPic _bird)  
+
+    GameLoop -> 
+        return $ pictures  
+            [ blank 
+            , translate (_skyX _sky) (_skyY _sky) (_skyPic _sky)
+            , translate (_groundX _ground) (_groundY _ground) (_groundPic _ground)
+            , _birdPic _bird
+            ]
+
     GameOver -> return blank
 
 
@@ -64,7 +81,10 @@ eventHandler e g@Game{..} = case _state of
 
 updateGame :: Float -> Game -> IO Game
 updateGame _ g@Game{..} = do 
-    return g { _bird = birdUpdate _bird }
+    return g { _bird = birdUpdate _bird 
+             , _sky  = skyUpdate _sky 
+             , _ground = groundUpdate _ground
+             }
 
 
 gameMain :: IO ()
@@ -73,7 +93,5 @@ gameMain = do
     g <-  gameInit
 
     playIO window white __iFps g gameDisplay eventHandler updateGame
-
-
 
 

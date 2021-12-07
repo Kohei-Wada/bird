@@ -27,7 +27,10 @@ library
   exposed-modules:
       Bird
       Game
+      Ground
       Options
+      Pipe
+      Sky
       Utils
   other-modules:
       Paths_bird

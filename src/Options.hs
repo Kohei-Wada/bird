@@ -26,8 +26,8 @@ __birdFlappingV = -500.0
 
 
 __wWidth, __wHeight :: Num a => a
-__wWidth  = 1000
-__wHeight = 1000
+__wWidth  = 276 
+__wHeight = 600
 
 
 __windowTitle :: String
@@ -41,3 +41,26 @@ __birdAssets =
     , "/home/kohei/programs/bird/assets/bird-03.png"
     , "/home/kohei/programs/bird/assets/bird-04.png"
     ]
+
+
+__pipeAssets :: [FilePath]
+__pipeAssets = 
+    [ "/home/kohei/programs/bird/assets/pipe-down.png"
+    , "/home/kohei/programs/bird/assets/pipe-up.png"
+    , "/home/kohei/programs/bird/assets/pipe.png"
+    ]
+
+
+__skyAssets :: [FilePath]
+__skyAssets = 
+    [ "/home/kohei/programs/bird/assets/sky.png" 
+    ]
+
+
+__groundAssets :: [FilePath]
+__groundAssets = 
+    [ "/home/kohei/programs/bird/assets/land.png" 
+    ]
+
+
+

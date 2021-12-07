@@ -58,20 +58,25 @@ birdUpdate b = (updateBirdPic . birdFalling) b
 
 
 --TODO 
-calcrateAngle :: Float -> Float
-calcrateAngle vy 
+calcurateAngle :: Float -> Float
+calcurateAngle vy 
   | tmp > 90  = 90
   | tmp < -45 = -45
   | otherwise = tmp 
   where tmp = vy / 10
 
 
+--TODO 
 updateBirdPic :: Bird -> Bird
 updateBirdPic b@Bird{..} = 
     let c = if fromIntegral _count >= (__fFps / __fPps) then 0 else _count + 1
         i = if c == 0 
                then if _pIndex == (length _birdPics - 1) then 0 else _pIndex + 1
                else _pIndex
-        p = rotate (calcrateAngle _birdVy) (_birdPics !! i) 
+        p = translate _birdX _birdY $ rotate (calcurateAngle _birdVy) (_birdPics !! i) 
 
      in b { _birdPic = p , _count = c , _pIndex = i}
+
+
+
+

@@ -12,3 +12,9 @@ loadPictures (s:ss) = do
     ps <- loadPictures ss
     return (p:ps)
 
+
+pictureSize :: Picture -> (Int, Int)
+pictureSize p = 
+    let Bitmap bitmap = p 
+     in bitmapSize bitmap
+
