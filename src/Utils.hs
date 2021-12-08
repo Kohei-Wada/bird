@@ -18,3 +18,8 @@ pictureSize p =
     let Bitmap bitmap = p 
      in bitmapSize bitmap
 
+
+makeLongPic :: Picture -> Int -> Int -> Picture
+makeLongPic p r initW = 
+    pictures [ translate (fromIntegral (a * initW)) 0 p | a <- [0..(r-1)]]
+

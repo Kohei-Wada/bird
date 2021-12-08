@@ -65,10 +65,10 @@ eventHandler e g@Game{..} = case _state of
               return g { _bird = birdFlapping _bird } 
 
           EventKey (Char 'l') Down _ _ -> 
-              return g { _bird = moveBirdX _bird 10} 
+              return g 
 
           EventKey (Char 'h') Down _ _ -> 
-              return g { _bird = moveBirdX _bird (-10)}
+              return g 
 
           EventKey (Char 'q') Down _ _ -> 
               exitSuccess
@@ -80,18 +80,29 @@ eventHandler e g@Game{..} = case _state of
 
 
 updateGame :: Float -> Game -> IO Game
-updateGame _ g@Game{..} = do 
-    return g { _bird = birdUpdate _bird 
-             , _sky  = skyUpdate _sky 
-             , _ground = groundUpdate _ground
-             }
+updateGame _ g@Game{..} = case _state  of
+    GameStop -> return g
+    GameLoop -> 
+        let b = birdUpdate _bird
+         in if b == BirdDead 
+               then 
+                    return g { _bird = birdReset _bird
+                             , _sky  = skyUpdate _sky 
+                             , _ground = groundUpdate _ground
+                             }
+
+               else 
+                    return g { _bird = b
+                             , _sky  = skyUpdate _sky 
+                             , _ground = groundUpdate _ground
+                             }
 
 
 gameMain :: IO ()
 gameMain = do
-    let window = InWindow __windowTitle (__wWidth, __wHeight) (100, 100)
+    let window = InWindow __winTitle (__wWidth, __wHeight) (500, 200)
     g <-  gameInit
 
-    playIO window white __iFps g gameDisplay eventHandler updateGame
+    playIO window __bkColor __iFps g gameDisplay eventHandler updateGame
 
 
