@@ -1,5 +1,8 @@
 module Utils where
 
+
+import Options
+
 import Data.Maybe    
 import Graphics.Gloss.Juicy
 import Graphics.Gloss
@@ -23,3 +26,6 @@ makeLongPic :: Picture -> Int -> Int -> Picture
 makeLongPic p r initW = 
     pictures [ translate (fromIntegral (a * initW)) 0 p | a <- [0..(r-1)]]
 
+
+expansionRate :: Int -> Int
+expansionRate origin = round $ (fromIntegral __wWidth) / (fromIntegral origin) * 3.0 + 1.0 

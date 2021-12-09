@@ -58,6 +58,12 @@ __birdAssets =
 
 
 {- Pipe -}
+
+__defaultPipeWid :: Int
+__defaultPipeWid = 52 
+__pipeSpeed :: Float
+__pipeSpeed = -50.0
+
 __pipeAssets :: [FilePath]
 __pipeAssets = 
     [ "/home/kohei/programs/bird/assets/pipe-down.png"

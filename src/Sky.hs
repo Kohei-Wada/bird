@@ -21,8 +21,7 @@ skyInit :: IO Sky
 skyInit = do 
     ps <- loadPictures __skyAssets
     let p = head ps
-        r = round $ 
-            (fromIntegral __wWidth) / (fromIntegral __defaultSkyWid) * 3.0 + 1.0 
+        r = expansionRate __defaultSkyWid
         sWidth = __defaultSkyWid * r 
  
     return Sky { _skyX   = -fromIntegral sWidth 
@@ -41,8 +40,3 @@ updateSkyPic s@Sky{..} =
     let x = if abs _skyX > (fromIntegral _skyWid) / 2
                then -fromIntegral __skyWid else _skyX + __skySpeed * (1.0 / __fFps) 
      in s { _skyX = x }
-
-
-
-
-

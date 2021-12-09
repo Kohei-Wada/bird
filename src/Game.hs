@@ -21,6 +21,7 @@ data Game = Game
     , _bird   :: Bird
     , _sky    :: Sky
     , _ground :: Ground
+    , _pipe   :: Pipe
     , _score  :: Int
     }
 
@@ -30,10 +31,12 @@ gameInit = do
     b <- birdInit 
     s <- skyInit
     g <- groundInit
+    p <- pipeInit
     return Game { _state  = GameLoop
                 , _bird   = b
                 , _sky    = s
                 , _ground = g
+                , _pipe   = p
                 , _score  = 0
                 }
 
@@ -44,8 +47,7 @@ gameDisplay g@Game{..} = case _state of
 
     GameLoop -> 
         return $ pictures  
-            [ blank 
-            , translate (_skyX _sky) (_skyY _sky) (_skyPic _sky)
+            [ translate (_skyX _sky) (_skyY _sky) (_skyPic _sky)
             , translate (_groundX _ground) (_groundY _ground) (_groundPic _ground)
             , _birdPic _bird
             ]
@@ -84,25 +86,15 @@ updateGame _ g@Game{..} = case _state  of
     GameStop -> return g
     GameLoop -> 
         let b = birdUpdate _bird
-         in if b == BirdDead 
-               then 
-                    return g { _bird = birdReset _bird
-                             , _sky  = skyUpdate _sky 
-                             , _ground = groundUpdate _ground
-                             }
-
-               else 
-                    return g { _bird = b
-                             , _sky  = skyUpdate _sky 
-                             , _ground = groundUpdate _ground
-                             }
+         in return g { _bird = if b == BirdDead then birdReset _bird else b
+                     , _sky  = skyUpdate _sky 
+                     , _ground = groundUpdate _ground
+                     }
 
 
 gameMain :: IO ()
 gameMain = do
     let window = InWindow __winTitle (__wWidth, __wHeight) (500, 200)
     g <-  gameInit
-
     playIO window __bkColor __iFps g gameDisplay eventHandler updateGame
-
 

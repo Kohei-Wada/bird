@@ -21,10 +21,9 @@ data Ground = Ground
 groundInit :: IO Ground
 groundInit = do 
     ps <- loadPictures __groundAssets
-    let p = head ps
-        r = round $ 
-            (fromIntegral __wWidth) / (fromIntegral __defaultGroundWid) * 3.0 + 1.0 
-        gWidth = __defaultGroundWid * r 
+    let p    = head ps
+        r = expansionRate __defaultGroundWid
+        gWidth = __defaultGroundWid * r
     
     return Ground 
         { _groundX   = -fromIntegral gWidth 
@@ -41,6 +40,6 @@ groundUpdate g = updateGroundPic g
 updateGroundPic :: Ground -> Ground
 updateGroundPic g@Ground{..} =
     let x = if abs _groundX > (fromIntegral _groundWid) / 2
-               then -fromIntegral __groundWid else _groundX + __groundSpeed * (1.0 / __fFps)
-        in g { _groundX = x }
-
+               then -fromIntegral __groundWid 
+               else _groundX + __groundSpeed * (1.0 / __fFps)
+     in g { _groundX = x }
