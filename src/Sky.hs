@@ -26,17 +26,18 @@ skyInit = do
  
     return Sky { _skyX   = -fromIntegral sWidth 
                , _skyY   = __defaultSkyY 
-               , _skyPic = makeLongPic p r __defaultSkyWid
+               , _skyPic = makeLongPicW p r __defaultSkyWid
                , _skyWid = sWidth 
                }
 
 
 skyUpdate :: Sky -> Sky
-skyUpdate s = updateSkyPic s
+skyUpdate s = updateSkyX s
 
 
-updateSkyPic :: Sky -> Sky
-updateSkyPic s@Sky{..} = 
+updateSkyX :: Sky -> Sky
+updateSkyX s@Sky{..} = 
     let x = if abs _skyX > (fromIntegral _skyWid) / 2
                then -fromIntegral __skyWid else _skyX + __skySpeed * (1.0 / __fFps) 
      in s { _skyX = x }
+

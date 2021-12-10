@@ -7,6 +7,7 @@ import Pipe
 import Ground
 import Sky
 import Options
+import Utils
 import System.Exit
 
 import Graphics.Gloss
@@ -45,10 +46,21 @@ gameDisplay :: Game -> IO Picture
 gameDisplay g@Game{..} = case _state of 
     GameStop -> return blank
 
-    GameLoop -> 
+    GameLoop -> do 
+        let p@Pipe{..}  = _pipe
+            g@Ground{..} = _ground
+            s@Sky{..}   = _sky
+
+            tmpUp = makeLongPicH _pipePic (round $ (fromIntegral __wHeight) / 2)__pipeHgt
+            tmpDw = makeLongPicH _pipePic (round $ (fromIntegral __wHeight) / 2) (- __pipeHgt)
+
         return $ pictures  
-            [ translate (_skyX _sky) (_skyY _sky) (_skyPic _sky)
-            , translate (_groundX _ground) (_groundY _ground) (_groundPic _ground)
+            [ translate _skyX  _skyY  _skyPic 
+            , translate _pipeX _pipeUp tmpUp
+            , translate _pipeX _pipeDw tmpDw
+            , translate _pipeX _pipeUp _pipePicUp 
+            , translate _pipeX _pipeDw _pipePicDw
+            , translate _groundX _groundY _groundPic 
             , _birdPic _bird
             ]
 
@@ -89,6 +101,7 @@ updateGame _ g@Game{..} = case _state  of
          in return g { _bird = if b == BirdDead then birdReset _bird else b
                      , _sky  = skyUpdate _sky 
                      , _ground = groundUpdate _ground
+                     , _pipe = pipeUpdate _pipe
                      }
 
 
@@ -97,4 +110,6 @@ gameMain = do
     let window = InWindow __winTitle (__wWidth, __wHeight) (500, 200)
     g <-  gameInit
     playIO window __bkColor __iFps g gameDisplay eventHandler updateGame
+
+
 

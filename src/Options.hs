@@ -61,8 +61,12 @@ __birdAssets =
 
 __defaultPipeWid :: Int
 __defaultPipeWid = 52 
+
+__pipeHgt :: Int
+__pipeHgt = 1
+
 __pipeSpeed :: Float
-__pipeSpeed = -50.0
+__pipeSpeed = -200.0
 
 __pipeAssets :: [FilePath]
 __pipeAssets = 
@@ -100,7 +104,7 @@ __defaultGroundX = 0.0
 __defaultGroundY = -250.0
 
 __groundSpeed :: Float
-__groundSpeed = -50.0
+__groundSpeed = __pipeSpeed  
 
 __defaultGroundWid :: Int
 __defaultGroundWid = 336

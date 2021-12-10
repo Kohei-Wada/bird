@@ -22,10 +22,16 @@ pictureSize p =
      in bitmapSize bitmap
 
 
-makeLongPic :: Picture -> Int -> Int -> Picture
-makeLongPic p r initW = 
-    pictures [ translate (fromIntegral (a * initW)) 0 p | a <- [0..(r-1)]]
+makeLongPicW :: Picture -> Int -> Int -> Picture
+makeLongPicW p r originW = 
+    pictures [ translate (fromIntegral (a * originW)) 0 p | a <- [0..(r-1)] ]
+
+
+makeLongPicH :: Picture -> Int -> Int -> Picture
+makeLongPicH p r originH = 
+    pictures [ translate 0 (fromIntegral (a * originH)) p | a <- [0..(r-1)] ]
 
 
 expansionRate :: Int -> Int
 expansionRate origin = round $ (fromIntegral __wWidth) / (fromIntegral origin) * 3.0 + 1.0 
+
