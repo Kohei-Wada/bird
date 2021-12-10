@@ -11,14 +11,14 @@ import Graphics.Gloss
 
 
 data Bird = Bird 
-    { _birdX    :: Float
-    , _birdY    :: Float 
-    , _birdVx   :: Float
-    , _birdVy   :: Float     
-    , _birdPic  :: Picture   -- Current bird Picture
-    , _birdPics :: [Picture] -- All bird Pictures
-    , _count    :: Int       -- count for FPS
-    , _pIndex   :: Int       -- Picture Index
+    { _birdX    :: !Float
+    , _birdY    :: !Float 
+    , _birdVx   :: !Float
+    , _birdVy   :: !Float     
+    , _birdPic  :: !Picture   -- Current bird Picture
+    , _birdPics :: ![Picture] -- All bird Pictures
+    , _count    :: !Int       -- count for FPS
+    , _pIndex   :: !Int       -- Picture Index
     } 
     | BirdDead
     deriving (Show, Eq)

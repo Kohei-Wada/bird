@@ -58,6 +58,8 @@ __birdAssets =
 
 {- Pipe -}
 
+__pipesGap = -150 :: Float
+
 __defaultPipeWid :: Int
 __defaultPipeWid = 52 
 
