@@ -54,8 +54,8 @@ gameDisplay g@Game{..} = case _state of
                 g@Ground{..} = _ground
                 s@Sky{..}   = _sky
 
-                tmpUp = makeLongPicH _pipePic (round $ (fromIntegral __wHeight) / 2) __pipeHgt
-                tmpDw = makeLongPicH _pipePic (round $ (fromIntegral __wHeight) / 2) (- __pipeHgt)
+                tmpUp = makeLongPicH _pipePic (round $ (fromIntegral __wHeight)) __pipeHgt
+                tmpDw = makeLongPicH _pipePic (round $ (fromIntegral __wHeight)) (- __pipeHgt)
 
             return $ pictures  
                 [ translate _skyX  _skyY  _skyPic 

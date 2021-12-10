@@ -35,8 +35,8 @@ pipeInit = do
     ps <- loadPictures __pipeAssets
     r  <- randomHeight 
 
-    return Pipe { _pipeUp    = fromIntegral r
-                , _pipeDw    = fromIntegral r + __pipesGap
+    return Pipe { _pipeUp    = r
+                , _pipeDw    = r + __pipesGap
                 , _pipeX     = __wWidth / 2 
                 , _pipePicUp = ps !! 0
                 , _pipePicDw = ps !! 1
@@ -49,8 +49,8 @@ pipeInit' x = do
     ps <- loadPictures __pipeAssets
     r <- randomHeight 
 
-    return Pipe { _pipeUp    = fromIntegral r 
-                , _pipeDw    = fromIntegral r + __pipesGap 
+    return Pipe { _pipeUp    = r 
+                , _pipeDw    = r + __pipesGap 
                 , _pipeX     = x
                 , _pipePicUp = ps !! 0
                 , _pipePicDw = ps !! 1
@@ -72,8 +72,8 @@ newPipe :: Pipe -> IO Pipe
 newPipe p@Pipe{..} = do 
     r <- randomHeight 
     return p { _pipeX = __wWidth  
-             , _pipeUp = fromIntegral r
-             , _pipeDw = fromIntegral r + __pipesGap 
+             , _pipeUp = r
+             , _pipeDw = r + __pipesGap 
              }
 
 

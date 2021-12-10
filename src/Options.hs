@@ -32,7 +32,7 @@ __birdX = (-1) * __wWidth / 8
 __birdY = 0.0
 
 __gravity :: Float
-__gravity = 1000
+__gravity = 1500
 
 __birdFlappingV :: Float
 __birdFlappingV = -500.0 
