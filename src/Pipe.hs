@@ -20,32 +20,19 @@ data Pipe = Pipe
 
 
 -----------------------------------------------------------------------------------------
-
+ 
 pipesInit :: IO [Pipe]
-pipesInit = return []
+pipesInit = do return []
 
 
 pipesUpdate ::[Pipe] -> IO [Pipe]
 pipesUpdate ps = return ps
-   
+
 -----------------------------------------------------------------------------------------
 
-pipeInit :: IO Pipe
-pipeInit = do
-    ps <- loadPictures __pipeAssets
-    r  <- randomHeight 
 
-    return Pipe { _pipeUp    = r
-                , _pipeDw    = r + __pipesGap
-                , _pipeX     = __wWidth / 2 
-                , _pipePicUp = ps !! 0
-                , _pipePicDw = ps !! 1
-                , _pipePic   = ps !! 2
-                }
-
-
-pipeInit' :: Float -> IO Pipe
-pipeInit' x = do
+pipeInit :: Float -> IO Pipe
+pipeInit x = do
     ps <- loadPictures __pipeAssets
     r <- randomHeight 
 
@@ -58,16 +45,6 @@ pipeInit' x = do
                 }
 
 
-pipeUpdate :: Pipe -> Pipe
-pipeUpdate p@Pipe{..} = updatePipeX p
-
-
-updatePipeX :: Pipe -> Pipe
-updatePipeX p@Pipe{..} = 
-    let x = if _pipeX < -__wWidth / 2 then __wWidth else _pipeX + (__pipeSpeed / __fFps)
-     in p { _pipeX = x }
-
-
 newPipe :: Pipe -> IO Pipe
 newPipe p@Pipe{..} = do 
     r <- randomHeight 
@@ -77,8 +54,8 @@ newPipe p@Pipe{..} = do
              }
 
 
-pipeUpdate' :: Pipe -> IO Pipe
-pipeUpdate' p@Pipe{..} = 
+pipeUpdate :: Pipe -> IO Pipe
+pipeUpdate p@Pipe{..} = 
     if _pipeX < -__wWidth / 2 
        then newPipe p
        else return p { _pipeX = _pipeX + (__pipeSpeed / __fFps) }

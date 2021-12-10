@@ -23,6 +23,7 @@ data Game = Game
     , _sky    :: !Sky
     , _ground :: !Ground
     , _pipe   :: !Pipe
+    , _pipes  :: ![Pipe]
     , _score  :: !Int
     }
 
@@ -32,12 +33,14 @@ gameInit = do
     b <- birdInit 
     s <- skyInit
     g <- groundInit
-    p <- pipeInit
+    p <- pipeInit (__wWidth / 2)
+    ps <- pipesInit
     return Game { _state  = GameLoop
                 , _bird   = b
                 , _sky    = s
                 , _ground = g
                 , _pipe   = p
+                , _pipes  = ps
                 , _score  = 0
                 }
 
@@ -100,7 +103,7 @@ updateGame _ g@Game{..} = case _state of
     GameStop -> return g
 
     GameLoop ->  do 
-        p <- pipeUpdate' _pipe
+        p <- pipeUpdate _pipe
         let b = birdUpdate _bird
             s = if b == BirdDead then GameOver else _state
 
