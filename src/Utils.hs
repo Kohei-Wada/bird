@@ -4,6 +4,7 @@ module Utils where
 import Options
 
 import Data.Maybe    
+import System.Random
 import Graphics.Gloss.Juicy
 import Graphics.Gloss
 
@@ -34,4 +35,10 @@ makeLongPicH p r originH =
 
 expansionRate :: Int -> Int
 expansionRate origin = round $ (fromIntegral __wWidth) / (fromIntegral origin) * 3.0 + 1.0 
+
+
+randomHeight:: IO Int
+randomHeight = 
+    randomRIO(round (fromIntegral __wHeight / 4), round (fromIntegral __wHeight / 4) ) :: IO Int
+
 

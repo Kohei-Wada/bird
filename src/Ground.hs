@@ -37,6 +37,7 @@ groundUpdate :: Ground -> Ground
 groundUpdate g = updateGroundX g
 
 
+--TODO
 updateGroundX :: Ground -> Ground
 updateGroundX g@Ground{..} =
     let x = if abs _groundX > (fromIntegral _groundWid) / 2

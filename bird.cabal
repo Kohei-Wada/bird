@@ -40,6 +40,7 @@ library
       base >=4.7 && <5
     , gloss >=0.2.3
     , gloss-juicy
+    , random
   default-language: Haskell2010
 
 executable bird-exe
@@ -54,6 +55,7 @@ executable bird-exe
     , bird
     , gloss >=0.2.3
     , gloss-juicy
+    , random
   default-language: Haskell2010
 
 test-suite bird-test
@@ -69,4 +71,5 @@ test-suite bird-test
     , bird
     , gloss >=0.2.3
     , gloss-juicy
+    , random
   default-language: Haskell2010

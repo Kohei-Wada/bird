@@ -10,10 +10,10 @@ import Graphics.Gloss.Juicy
 
 
 data Sky = Sky 
-    { _skyX   :: Float 
-    , _skyY   :: Float
-    , _skyPic :: Picture
-    , _skyWid :: Int
+    { _skyX   :: !Float 
+    , _skyY   :: !Float
+    , _skyPic :: !Picture
+    , _skyWid :: !Int
     }
 
 
@@ -35,6 +35,7 @@ skyUpdate :: Sky -> Sky
 skyUpdate s = updateSkyX s
 
 
+--TODO
 updateSkyX :: Sky -> Sky
 updateSkyX s@Sky{..} = 
     let x = if abs _skyX > (fromIntegral _skyWid) / 2
