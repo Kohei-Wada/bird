@@ -33,5 +33,4 @@ expansionRate origin = round $ (fromIntegral __wWidth) / (fromIntegral origin) *
 
 
 randomHeight:: IO Float 
-randomHeight = 
-    randomRIO(0, __wHeight / 2) :: IO Float 
+randomHeight = randomRIO( 0, __wHeight / 2) :: IO Float 

@@ -49,7 +49,7 @@ executable bird-exe
       Paths_bird
   hs-source-dirs:
       app
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -threaded -rtsopts -O3 -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
     , bird

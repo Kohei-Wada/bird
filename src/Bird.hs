@@ -12,7 +12,7 @@ import Graphics.Gloss
 data Bird = Bird 
     { _birdX    :: !Float
     , _birdY    :: !Float 
-    , _birdVx   :: !Float
+    , _birdVx   ::  Float
     , _birdVy   :: !Float     
     , _birdPic  :: !Picture   -- Current bird Picture
     , _birdPics :: ![Picture] -- All bird Pictures
@@ -20,6 +20,7 @@ data Bird = Bird
     , _pIndex   :: !Int       -- Picture Index
     } 
     | BirdDead
+    | BirdStop
     deriving (Show, Eq)
 
 
@@ -28,7 +29,6 @@ birdInit = do
     ps <- loadPictures __birdAssets
     return Bird { _birdX    = __birdX
                 , _birdY    = __birdY 
-                , _birdVx   = 0
                 , _birdVy   = 0 
                 , _birdPic  = head ps
                 , _birdPics = ps
@@ -68,7 +68,7 @@ birdFalling = updateBirdY . updateBirdVy
 birdFlapping :: Bird -> Bird
 birdFlapping b = setBirdVy b __birdFlappingV 
 
-
+-- TODO
 isDead :: Bird -> Bool
 isDead b@Bird{..} = -_birdY > __wHeight || _birdY > __wHeight  
 

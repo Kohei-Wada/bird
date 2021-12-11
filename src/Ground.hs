@@ -40,3 +40,5 @@ updateGroundX g@Ground{..} =
                then -fromIntegral __groundWid 
                else _groundX + __groundSpeed * (1.0 / __fFps)
       }
+
+

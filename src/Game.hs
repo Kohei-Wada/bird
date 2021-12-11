@@ -18,12 +18,12 @@ import Graphics.Gloss.Juicy
 data GameState = GameStop | GameLoop | GameOver
 
 data Game = Game 
-    { _state  :: !GameState
-    , _bird   :: !Bird
-    , _sky    :: !Sky
-    , _ground :: !Ground
-    , _pipes  :: ![Pipe]
-    , _score  :: !Int
+    { _state  :: GameState
+    , _bird   :: Bird
+    , _sky    :: Sky
+    , _ground :: Ground
+    , _pipes  :: [Pipe]
+    , _score  :: Int
     }
 
 
@@ -32,14 +32,16 @@ gameInit = do
     b  <- birdInit 
     s  <- skyInit
     g  <- groundInit
-    ps <- pipesInit 1
-    return Game { _state  = GameLoop
-                , _bird   = b
-                , _sky    = s
-                , _ground = g
-                , _pipes  = ps
-                , _score  = 0
-                }
+    ps <- pipesInit 2
+
+    return Game 
+        { _state  = GameLoop  
+        , _bird   = b
+        , _sky    = s
+        , _ground = g
+        , _pipes  = ps
+        , _score  = 0
+        }
 
 
 pipePicture :: Pipe -> Picture
@@ -54,12 +56,12 @@ pipePicture p@Pipe{..} =
 
 
 pipesPicture :: [Pipe] -> [Picture]
-pipesPicture ps =  map pipePicture ps
+pipesPicture =  map pipePicture 
 
 
 gameDisplay :: Game -> IO Picture
 gameDisplay g@Game{..} = case _state of 
-    GameStop -> return blank
+    GameStop -> display 
     GameLoop -> display
     GameOver -> display
 
@@ -79,7 +81,20 @@ gameDisplay g@Game{..} = case _state of
 
 eventHandler :: Event -> Game -> IO Game
 eventHandler e g@Game{..} = case _state of 
-    GameStop -> return g
+    GameStop -> 
+        case e of 
+          EventKey (SpecialKey KeySpace) Down _ _ -> 
+              return g { _state = GameLoop }
+
+          EventKey (Char 'k') Down _ _ -> 
+              return g { _state = GameLoop }
+
+          EventKey (Char 'q') Down _ _ -> 
+              exitSuccess
+
+          _ -> 
+              return g
+
     GameLoop -> 
         case e of 
           EventKey (SpecialKey KeySpace) Down _ _ -> 
@@ -103,10 +118,18 @@ eventHandler e g@Game{..} = case _state of
     GameOver -> return g
 
 
---TODO
+-- TODO 
+checkCollosion :: Game -> Bool
+checkCollosion g@Game{..} = True
+
+
 updateGame :: Float -> Game -> IO Game
 updateGame _ g@Game{..} = case _state of
-    GameStop -> return g
+    GameStop -> do 
+        return
+           g { _sky    = skyUpdate _sky 
+             , _ground = groundUpdate _ground
+             }
 
     GameLoop ->  do 
         ps <- pipesUpdate _pipes
