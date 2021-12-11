@@ -5,7 +5,6 @@ module Bird where
 import Utils
 import Options
 
-import Data.Maybe    
 import Graphics.Gloss
 
 
