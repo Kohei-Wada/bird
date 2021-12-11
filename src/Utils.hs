@@ -1,13 +1,11 @@
 module Utils where
 
-
 import Options
 
-import Data.Maybe    
-import System.Random
-import Graphics.Gloss.Juicy
-import Graphics.Gloss
 import Control.Monad
+import System.Random
+import Graphics.Gloss
+import Graphics.Gloss.Juicy
 
 
 loadPictures :: [FilePath] -> IO [Picture]

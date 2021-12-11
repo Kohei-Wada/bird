@@ -4,9 +4,9 @@ module Pipe where
 
 import Options
 import Utils
+
 import Control.Monad
 import Graphics.Gloss
-import Graphics.Gloss.Interface.IO.Game
 
 
 data Pipe = Pipe 
@@ -27,8 +27,7 @@ pipesInit n = forM [1..n] $ \x -> do
 
 
 pipesUpdate :: [Pipe] -> IO [Pipe]
-pipesUpdate ps = forM ps $ \p -> do 
-    pipeUpdate p
+pipesUpdate ps = forM ps $ \p -> pipeUpdate p
 
 -----------------------------------------------------------------------------------------
 

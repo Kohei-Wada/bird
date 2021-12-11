@@ -32,7 +32,7 @@ gameInit = do
     b  <- birdInit 
     s  <- skyInit
     g  <- groundInit
-    ps <- pipesInit 2
+    ps <- pipesInit 1
     return Game { _state  = GameLoop
                 , _bird   = b
                 , _sky    = s

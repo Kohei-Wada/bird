@@ -6,7 +6,6 @@ import Utils
 import Options
 
 import Data.Maybe    
-import Graphics.Gloss.Juicy
 import Graphics.Gloss
 
 
@@ -55,13 +54,11 @@ setBirdVy b@Bird{..} vY = b { _birdVy = vY }
 
 
 updateBirdY :: Bird -> Bird
-updateBirdY b@Bird{..} = 
-    b { _birdY = _birdY - _birdVy * (1.0 / __fFps) } 
+updateBirdY b@Bird{..} = b { _birdY = _birdY - _birdVy * (1.0 / __fFps) } 
 
 
 updateBirdVy :: Bird -> Bird
-updateBirdVy b@Bird{..} = 
-    b { _birdVy = _birdVy + __gravity * (1.0 / __fFps) }
+updateBirdVy b@Bird{..} = b { _birdVy = _birdVy + __gravity * (1.0 / __fFps) }
 
     
 birdFalling :: Bird -> Bird   
@@ -73,7 +70,7 @@ birdFlapping b = setBirdVy b __birdFlappingV
 
 
 isDead :: Bird -> Bool
-isDead b@Bird{..} = (-_birdY > __wHeight) || (_birdY > __wHeight)  
+isDead b@Bird{..} = -_birdY > __wHeight || _birdY > __wHeight  
 
 
 birdUpdate :: Bird -> Bird
@@ -82,9 +79,7 @@ birdUpdate b@Bird{..} = if isDead b then BirdDead else (updateBirdPic . birdFall
 
 updateCount :: Bird -> Bird
 updateCount b@Bird{..} = 
-    let c = if (fromIntegral _count) >= (__fFps / __fPps) 
-               then 0 else _count + 1
-     in b { _count = c }
+    b { _count = if (fromIntegral _count) >= (__fFps / __fPps) then 0 else _count + 1 }
 
 
 updatePicIndex :: Bird -> Bird

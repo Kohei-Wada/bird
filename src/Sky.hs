@@ -5,8 +5,6 @@ import Options
 import Utils
 
 import Graphics.Gloss
-import Graphics.Gloss.Interface.IO.Game
-import Graphics.Gloss.Juicy
 
 
 data Sky = Sky 
@@ -21,12 +19,12 @@ skyInit :: IO Sky
 skyInit = do 
     ps <- loadPictures __skyAssets
     let p = head ps
-        r = expansionRate __defaultSkyWid
-        sWidth = __defaultSkyWid * r 
+        r = expansionRate __skyWid__  
+        sWidth = __skyWid__ * r
  
     return Sky { _skyX   = -fromIntegral sWidth 
                , _skyY   = __defaultSkyY 
-               , _skyPic = makeLongPicW p r __defaultSkyWid
+               , _skyPic = makeLongPicW p r __skyWid__
                , _skyWid = sWidth 
                }
 
@@ -38,6 +36,6 @@ skyUpdate = updateSkyX
 updateSkyX :: Sky -> Sky
 updateSkyX s@Sky{..} = 
     s { _skyX  = if _skyX <  - (fromIntegral __wWidth) 
-               then -fromIntegral __skyWid 
-               else _skyX + __skySpeed * (1.0 / __fFps) 
+                    then -fromIntegral __skyWid 
+                    else _skyX + __skySpeed * (1.0 / __fFps) 
       }

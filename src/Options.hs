@@ -1,7 +1,6 @@
 module Options where
 
 import Graphics.Gloss
-import Graphics.Gloss.Interface.IO.Game
 
 
 {- Game -}
@@ -35,8 +34,8 @@ __birdAssets    =
 
 
 {- Pipe -}
+__PipeWid__      = 52     :: Int  -- Original picture size
 __pipesGap       = -150   :: Float
-__defaultPipeWid = 52     :: Int 
 __pipeHgt        = 1      :: Int
 __pipeSpeed      = -200.0 :: Float
 __pipeAssets     = 
@@ -47,23 +46,23 @@ __pipeAssets     =
 
 
 {- Sky -}
-__defaultSkyWid = 276             :: Int
+__skyWid__      = 276             :: Int -- Original picture size
 __defaultSkyX   = 0.0             :: Float
 __defaultSkyY   = -150.0          :: Float
 __skySpeed      = -50             :: Float
-__skyWid        = __defaultSkyWid :: Int
+__skyWid        = __skyWid__      :: Int
 __skyAssets     = 
     [ "/home/kohei/programs/bird/assets/sky.png" 
     ]
 
 
 {- Ground -}
-__defaultGroundX = 0.0         :: Float
-__defaultGroundY = -250.0 :: Float
-__groundSpeed    = __pipeSpeed :: Float
-__defaultGroundWid = 336 :: Int
-__groundWid = __defaultGroundWid  :: Int
-__groundAssets = 
+__defaultGroundX = 0.0           :: Float
+__defaultGroundY = -250.0        :: Float
+__groundSpeed    = __pipeSpeed   :: Float
+__groundWid__    = 336           :: Int -- Original picture size
+__groundWid      = __groundWid__ :: Int
+__groundAssets   = 
     [ "/home/kohei/programs/bird/assets/land.png" 
     ]
 

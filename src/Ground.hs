@@ -1,13 +1,10 @@
 {-#LANGUAGE RecordWildCards #-}
 module Ground where
 
-
 import Options
 import Utils
 
 import Graphics.Gloss
-import Graphics.Gloss.Interface.IO.Game
-import Graphics.Gloss.Juicy
 
 
 data Ground = Ground 
@@ -22,13 +19,13 @@ groundInit :: IO Ground
 groundInit = do 
     ps <- loadPictures __groundAssets
     let p = head ps
-        r = expansionRate __defaultGroundWid
-        gWidth = __defaultGroundWid * r
+        r = expansionRate __groundWid__
+        gWidth = __groundWid__ * r
     
     return Ground 
         { _groundX   = -fromIntegral gWidth 
         , _groundY   = __defaultGroundY 
-        , _groundPic = makeLongPicW p r __defaultGroundWid 
+        , _groundPic = makeLongPicW p r __groundWid__ 
         , _groundWid = gWidth
         }
 
@@ -37,7 +34,6 @@ groundUpdate :: Ground -> Ground
 groundUpdate g = updateGroundX g
 
 
---TODO
 updateGroundX :: Ground -> Ground
 updateGroundX g@Ground{..} =
     g { _groundX = if _groundX < -(fromIntegral __wWidth)
