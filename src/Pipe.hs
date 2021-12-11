@@ -20,13 +20,15 @@ data Pipe = Pipe
 
 
 -----------------------------------------------------------------------------------------
- 
-pipesInit :: IO [Pipe]
-pipesInit = do return []
+    
+pipesInit :: Int -> IO [Pipe]
+pipesInit n = forM [1..n] $ \x -> do 
+     pipeInit (fromIntegral x * fromIntegral __wWidth / fromIntegral n)
 
 
-pipesUpdate ::[Pipe] -> IO [Pipe]
-pipesUpdate ps = return ps
+pipesUpdate :: [Pipe] -> IO [Pipe]
+pipesUpdate ps = forM ps $ \p -> do 
+    pipeUpdate p
 
 -----------------------------------------------------------------------------------------
 
@@ -34,7 +36,7 @@ pipesUpdate ps = return ps
 pipeInit :: Float -> IO Pipe
 pipeInit x = do
     ps <- loadPictures __pipeAssets
-    r <- randomHeight 
+    r  <- randomHeight 
 
     return Pipe { _pipeUp    = r 
                 , _pipeDw    = r + __pipesGap 
@@ -48,7 +50,7 @@ pipeInit x = do
 newPipe :: Pipe -> IO Pipe
 newPipe p@Pipe{..} = do 
     r <- randomHeight 
-    return p { _pipeX = __wWidth  
+    return p { _pipeX = __wWidth / 2  
              , _pipeUp = r
              , _pipeDw = r + __pipesGap 
              }
@@ -59,5 +61,4 @@ pipeUpdate p@Pipe{..} =
     if _pipeX < -__wWidth / 2 
        then newPipe p
        else return p { _pipeX = _pipeX + (__pipeSpeed / __fFps) }
-
 

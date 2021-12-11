@@ -32,13 +32,12 @@ skyInit = do
 
 
 skyUpdate :: Sky -> Sky
-skyUpdate s = updateSkyX s
+skyUpdate = updateSkyX 
 
 
---TODO
 updateSkyX :: Sky -> Sky
 updateSkyX s@Sky{..} = 
-    let x = if abs _skyX > (fromIntegral _skyWid) / 2
-               then -fromIntegral __skyWid else _skyX + __skySpeed * (1.0 / __fFps) 
-     in s { _skyX = x }
-
+    s { _skyX  = if _skyX <  - (fromIntegral __wWidth) 
+               then -fromIntegral __skyWid 
+               else _skyX + __skySpeed * (1.0 / __fFps) 
+      }

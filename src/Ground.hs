@@ -40,7 +40,7 @@ groundUpdate g = updateGroundX g
 --TODO
 updateGroundX :: Ground -> Ground
 updateGroundX g@Ground{..} =
-    let x = if abs _groundX > (fromIntegral _groundWid) / 2
+    g { _groundX = if _groundX < -(fromIntegral __wWidth)
                then -fromIntegral __groundWid 
                else _groundX + __groundSpeed * (1.0 / __fFps)
-     in g { _groundX = x }
+      }

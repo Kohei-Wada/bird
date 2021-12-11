@@ -7,20 +7,17 @@ import Data.Maybe
 import System.Random
 import Graphics.Gloss.Juicy
 import Graphics.Gloss
+import Control.Monad
 
 
-loadPictures :: [FilePath] ->  IO [Picture]
-loadPictures [] = return []
-loadPictures (s:ss) = do 
+loadPictures :: [FilePath] -> IO [Picture]
+loadPictures ss = forM ss $ \s -> do 
     Just p <- loadJuicy s
-    ps <- loadPictures ss
-    return (p:ps)
+    return p
 
 
 pictureSize :: Picture -> (Int, Int)
-pictureSize p = 
-    let Bitmap bitmap = p 
-     in bitmapSize bitmap
+pictureSize p = let Bitmap b = p in bitmapSize b
 
 
 makeLongPicW :: Picture -> Int -> Int -> Picture
@@ -34,7 +31,7 @@ makeLongPicH p r originH =
 
 
 expansionRate :: Int -> Int
-expansionRate origin = round $ (fromIntegral __wWidth) / (fromIntegral origin) * 3.0 + 1.0 
+expansionRate origin = round $ (fromIntegral __wWidth) / (fromIntegral origin) * 2 
 
 
 randomHeight:: IO Float 

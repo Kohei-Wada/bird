@@ -27,14 +27,14 @@ data Bird = Bird
 birdInit :: IO Bird
 birdInit = do 
     ps <- loadPictures __birdAssets
-    return Bird { _birdX     = __birdX
-                , _birdY     = __birdY 
-                , _birdVx    = 0
-                , _birdVy    = 0 
-                , _birdPic   = head ps
-                , _birdPics  = ps
-                , _count     = 0
-                , _pIndex    = 0
+    return Bird { _birdX    = __birdX
+                , _birdY    = __birdY 
+                , _birdVx   = 0
+                , _birdVy   = 0 
+                , _birdPic  = head ps
+                , _birdPics = ps
+                , _count    = 0
+                , _pIndex   = 0
                 }
 
 
@@ -65,7 +65,7 @@ updateBirdVy b@Bird{..} =
 
     
 birdFalling :: Bird -> Bird   
-birdFalling b@Bird{..} = (updateBirdY . updateBirdVy ) b
+birdFalling = updateBirdY . updateBirdVy
 
 
 birdFlapping :: Bird -> Bird
