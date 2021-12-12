@@ -105,7 +105,6 @@ updateGame _ g@Game{..} =
           updateGameObjects g
 
 
--- TODO 
 checkCollision :: Game -> Bool
 checkCollision g@Game{..} = 
     let b@Bird{..} = _bird 
@@ -136,37 +135,36 @@ birdPicture b@Bird{..} =
    translate _birdX _birdY $ rotate _angle (_birdPics !! _pIndex) 
 
 
+groundPicture :: Ground -> Picture
+groundPicture g@Ground{..} = translate _groundX _groundY _groundPic 
+
+
+skyPicture :: Sky -> Picture
+skyPicture s@Sky{..} = translate _skyX  _skyY  _skyPic 
+
+
 gameDisplay :: Game -> IO Picture
 gameDisplay g@Game{..} = case _state of 
-    GameStop -> do
-        let g@Ground{..} = _ground
-            s@Sky{..}    = _sky
-
+    GameStop -> 
         return $ pictures  
-            [ translate _skyX  _skyY  _skyPic 
-            , translate _groundX _groundY _groundPic 
+            [ skyPicture _sky
+            , groundPicture _ground 
             , birdPicture _bird  
             ]
 
-    GameLoop -> do 
-        let g@Ground{..} = _ground
-            s@Sky{..}    = _sky
-
+    GameLoop -> 
         return $ pictures  
-            [ translate _skyX  _skyY  _skyPic 
+            [ skyPicture _sky
             , pictures $ pipesPicture _pipes
-            , translate _groundX _groundY _groundPic 
+            , groundPicture _ground
             , birdPicture _bird
             ]
 
-    GameOver -> do 
-        let g@Ground{..} = _ground
-            s@Sky{..}    = _sky
-
+    GameOver -> 
         return $ pictures  
-            [ translate _skyX  _skyY  _skyPic 
+            [ skyPicture _sky
             , pictures $ pipesPicture _pipes
-            , translate _groundX _groundY _groundPic 
+            , groundPicture _ground
             , birdPicture _bird 
             ]
 
@@ -230,6 +228,5 @@ gameMain = do
     let window = InWindow __winTitle (__wWidth, __wHeight) (500, 200)
     g <- gameInit
     playIO window __bkColor __iFps g gameDisplay eventHandler updateGame
-
 
 
