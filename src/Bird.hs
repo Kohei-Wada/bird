@@ -13,13 +13,11 @@ data Bird = Bird
     , _birdY    :: !Float 
     , _birdVx   ::  Float
     , _birdVy   :: !Float     
-    , _birdPic  :: !Picture   -- Current bird Picture
     , _birdPics :: ![Picture] -- All bird Pictures
     , _count    :: !Int       -- count for FPS
     , _pIndex   :: !Int       -- Picture Index
+    , _angle    :: Float
     } 
-    | BirdDead
-    | BirdStop
     deriving (Show, Eq)
 
 
@@ -28,11 +26,12 @@ birdInit = do
     ps <- loadPictures __birdAssets
     return Bird { _birdX    = __birdX
                 , _birdY    = __birdY 
+                , _birdVx   = 0 
                 , _birdVy   = 0 
-                , _birdPic  = head ps
                 , _birdPics = ps
                 , _count    = 0
                 , _pIndex   = 0
+                , _angle    = 0
                 }
 
 
@@ -41,6 +40,7 @@ birdReset b@Bird{..} = b { _birdX  = __birdX
                          , _birdY  = __birdY 
                          , _birdVx = 0 
                          , _birdVy = 0 
+                         , _angle  = 0
                          }
 
 
@@ -67,13 +67,9 @@ birdFalling = updateBirdY . updateBirdVy
 birdFlapping :: Bird -> Bird
 birdFlapping b = setBirdVy b __birdFlappingV 
 
--- TODO
-isDead :: Bird -> Bool
-isDead b@Bird{..} = -_birdY > __wHeight || _birdY > __wHeight  
-
 
 birdUpdate :: Bird -> Bird
-birdUpdate b@Bird{..} = if isDead b then BirdDead else (updateBirdPic . birdFalling) b
+birdUpdate b = (updateAngle. updatePicIndex . updateCount . birdFalling) b
 
 
 updateCount :: Bird -> Bird
@@ -89,16 +85,8 @@ updatePicIndex b@Bird{..} =
      in b { _pIndex = i }
 
 
-updateBirdPic :: Bird -> Bird
-updateBirdPic b@Bird{..} = 
-    let b' = (updatePicIndex . updateCount) b
-        p = translate _birdX _birdY $ 
-            rotate (calcurateAngle _birdVy) (_birdPics !! _pIndex) 
-     in b' { _birdPic = p }
-
-
-velocityToAngle :: Float -> Float
-velocityToAngle v = v / __angleBias 
+updateAngle :: Bird -> Bird 
+updateAngle b@Bird{..} = b { _angle = calcurateAngle _birdVy }
 
 
 calcurateAngle :: Float -> Float
@@ -107,5 +95,9 @@ calcurateAngle vy
   | tmp < __minBirdAngle = __minBirdAngle
   | otherwise = tmp 
   where tmp = velocityToAngle vy
+
+
+velocityToAngle :: Float -> Float
+velocityToAngle v = v / __angleBias 
 
 

@@ -10,7 +10,7 @@ import Graphics.Gloss
 data Ground = Ground 
     { _groundX   :: !Float 
     , _groundY   :: !Float
-    , _groundPic :: !Picture
+    , _groundPic :: Picture
     , _groundWid :: !Int
     }
 
@@ -42,3 +42,6 @@ updateGroundX g@Ground{..} =
       }
 
 
+-- TODO
+groundCollision :: Ground -> Float -> Float -> Bool
+groundCollision g x y = False 

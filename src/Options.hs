@@ -9,11 +9,11 @@ __fFps     = fromIntegral __iFps :: Float
 __winTitle = "Flappy Bird"
 __bkColor  = light $ light $ light blue
 
-__defaultWinWidth, __defaultWinHeight , __wWidth, __wHeight :: Num a => a
-__defaultWinWidth  = 276 
-__defaultWinHeight = 600
-__wWidth           = __defaultWinWidth * 3
-__wHeight          = __defaultWinHeight
+__winWidth__ , __winHeight__ , __wWidth, __wHeight :: Num a => a
+__winWidth__  = 276  -- WARNING : Don't change
+__winHeight__ = 600  -- WARNING : Don't change
+__wWidth      = __winWidth__ * 2
+__wHeight     = __winHeight__
 
 
 {- Bird -}
@@ -34,7 +34,7 @@ __birdAssets    =
 
 
 {- Pipe -}
-__PipeWid__      = 52     :: Int  -- Original picture size
+__PipeWid__      = 52     :: Int  -- Warning : Original picture size , Don't change.
 __pipesGap       = -120   :: Float
 __pipeHgt        = 1      :: Int
 __pipeSpeed      = -150.0 :: Float
@@ -46,7 +46,7 @@ __pipeAssets     =
 
 
 {- Sky -}
-__skyWid__      = 276             :: Int -- Original picture size
+__skyWid__      = 276             :: Int -- Warning : Original picture size, Don't change.
 __defaultSkyX   = 0.0             :: Float
 __defaultSkyY   = -150.0          :: Float
 __skySpeed      = -50             :: Float
@@ -60,7 +60,7 @@ __skyAssets     =
 __defaultGroundX = 0.0           :: Float
 __defaultGroundY = -250.0        :: Float
 __groundSpeed    = __pipeSpeed   :: Float
-__groundWid__    = 336           :: Int -- Original picture size
+__groundWid__    = 336           :: Int -- Warning : Original picture size, Don't change.
 __groundWid      = __groundWid__ :: Int
 __groundAssets   = 
     [ "/home/kohei/programs/bird/assets/land.png" 

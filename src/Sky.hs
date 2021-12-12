@@ -10,8 +10,8 @@ import Graphics.Gloss
 data Sky = Sky 
     { _skyX   :: !Float 
     , _skyY   :: !Float
-    , _skyPic :: !Picture
     , _skyWid :: !Int
+    , _skyPic ::  Picture
     }
 
 
@@ -24,9 +24,10 @@ skyInit = do
  
     return Sky { _skyX   = -fromIntegral sWidth 
                , _skyY   = __defaultSkyY 
-               , _skyPic = makeLongPicW p r __skyWid__
                , _skyWid = sWidth 
+               , _skyPic = makeLongPicW p r __skyWid__
                }
+
 
 
 skyUpdate :: Sky -> Sky
