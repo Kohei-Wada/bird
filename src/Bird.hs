@@ -13,7 +13,7 @@ data Bird = Bird
     , _birdY    :: !Float 
     , _birdVx   ::  Float
     , _birdVy   :: !Float     
-    , _birdPics :: ![Picture] -- All bird Pictures
+    , _birdPics :: ![Picture] -- TODO move _birdPics inside Game
     , _count    :: !Int       -- count for FPS
     , _pIndex   :: !Int       -- Picture Index
     , _angle    :: Float
@@ -68,6 +68,7 @@ birdFlapping :: Bird -> Bird
 birdFlapping b = setBirdVy b __birdFlappingV 
 
 
+-- TODO 
 birdUpdate :: Bird -> Bird
 birdUpdate b = (updateAngle. updatePicIndex . updateCount . birdFalling) b
 

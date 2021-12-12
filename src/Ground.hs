@@ -44,4 +44,5 @@ updateGroundX g@Ground{..} =
 
 -- TODO
 groundCollision :: Ground -> Float -> Float -> Bool
-groundCollision g x y = False 
+groundCollision g@Ground{..} x y = y < _groundY + 80 
+

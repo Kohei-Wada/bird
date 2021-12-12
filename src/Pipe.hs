@@ -32,14 +32,12 @@ pipesUpdate ps = forM ps pipeUpdate
 
 
 pipesCollision :: [Pipe] -> Float -> Float -> Bool
-pipesCollision ps x y = False
+pipesCollision ps x y = any (\p -> pipeCollision p x y) ps
 
 
 resetPipes :: [Pipe] -> IO [Pipe]
 resetPipes ps = forM (zip ps [1..]) $ \(p, n) ->
     pipeReset p (fromIntegral n * fromIntegral __wWidth / fromIntegral (length ps)) 
-
-
 
 
 -----------------------------------------------------------------------------------------
@@ -87,7 +85,4 @@ pipeUpdate p@Pipe{..} =
 
 -- TODO 
 pipeCollision :: Pipe -> Float -> Float -> Bool
-pipeCollision p x y = False
-
-
-
+pipeCollision p@Pipe{..} x y = False 
