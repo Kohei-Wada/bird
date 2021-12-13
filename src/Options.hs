@@ -26,10 +26,10 @@ __minBirdAngle  = -45                 :: Float
 __angleBias     = 10                  :: Float
 __fPps          = 10                  :: Float -- Picture per sec
 __birdAssets    = 
-    [ "/home/kohei/programs/bird/assets/bird-01.png"
-    , "/home/kohei/programs/bird/assets/bird-02.png"
-    , "/home/kohei/programs/bird/assets/bird-03.png"
-    , "/home/kohei/programs/bird/assets/bird-04.png"
+    [ "assets/bird-01.png"
+    , "assets/bird-02.png"
+    , "assets/bird-03.png"
+    , "assets/bird-04.png"
     ]
 
 
@@ -39,9 +39,9 @@ __pipesGap       = -120   :: Float
 __pipeHgt        = 1      :: Int
 __pipeSpeed      = -150.0 :: Float
 __pipeAssets     = 
-    [ "/home/kohei/programs/bird/assets/pipe-down.png"
-    , "/home/kohei/programs/bird/assets/pipe-up.png"
-    , "/home/kohei/programs/bird/assets/pipe.png"
+    [ "assets/pipe-down.png"
+    , "assets/pipe-up.png"
+    , "assets/pipe.png"
     ]
 
 
@@ -52,7 +52,7 @@ __defaultSkyY   = -150.0          :: Float
 __skySpeed      = -50             :: Float
 __skyWid        = __skyWid__      :: Int
 __skyAssets     = 
-    [ "/home/kohei/programs/bird/assets/sky.png" 
+    [ "assets/sky.png" 
     ]
 
 
@@ -63,7 +63,7 @@ __groundSpeed    = __pipeSpeed   :: Float
 __groundWid__    = 336           :: Int -- Warning : Original picture size, Don't change.
 __groundWid      = __groundWid__ :: Int
 __groundAssets   = 
-    [ "/home/kohei/programs/bird/assets/land.png" 
+    [ "assets/land.png" 
     ]
 
 
