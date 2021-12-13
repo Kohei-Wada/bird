@@ -1,5 +1,4 @@
 {-#LANGUAGE RecordWildCards #-}
-
 module Game where
 
 import Bird
@@ -8,11 +7,11 @@ import Ground
 import Sky
 import Options
 import Utils
+
 import System.Exit
 
 import Graphics.Gloss
 import Graphics.Gloss.Interface.IO.Game
-import Graphics.Gloss.Juicy
 
 
 data GameState = GameStop | GameLoop | GameOver
@@ -43,6 +42,7 @@ gameInit = do
         , _score  = 0
         }
 
+
 gameRestart :: Game -> IO Game 
 gameRestart g@Game{..} = do 
     ps <- resetPipes _pipes 
@@ -67,19 +67,19 @@ updateGameObjects :: Game -> IO Game
 updateGameObjects g@Game{..} = 
     case _state of 
       GameStop -> 
-          return 
-             g { _sky    = skyUpdate _sky
-               , _ground = groundUpdate _ground 
-               }
+          return g 
+              { _sky    = skyUpdate _sky
+              , _ground = groundUpdate _ground 
+              }
 
       GameLoop -> do 
           ps <- pipesUpdate _pipes
-          return 
-             g { _bird   = birdUpdate _bird
-               , _sky    = skyUpdate _sky 
-               , _ground = groundUpdate _ground
-               , _pipes  = ps
-               }
+          return g 
+              { _bird   = birdUpdate _bird
+              , _sky    = skyUpdate _sky 
+              , _ground = groundUpdate _ground
+              , _pipes  = ps
+              }
 
       GameOver ->
           return g

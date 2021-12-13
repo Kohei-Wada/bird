@@ -20,14 +20,14 @@ skyInit = do
     ps <- loadPictures __skyAssets
     let p = head ps
         r = expansionRate __skyWid__  
-        sWidth = __skyWid__ * r
+        w = __skyWid__ * r
  
-    return Sky { _skyX   = -fromIntegral sWidth 
-               , _skyY   = __defaultSkyY 
-               , _skyWid = sWidth 
-               , _skyPic = makeLongPicW p r __skyWid__
-               }
-
+    return Sky 
+        { _skyX   = -fromIntegral w 
+        , _skyY   = __defaultSkyY 
+        , _skyWid = w 
+        , _skyPic = makeLongPicW p r __skyWid__
+        }
 
 
 skyUpdate :: Sky -> Sky

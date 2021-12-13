@@ -60,7 +60,7 @@ pipeInit x = do
 pipeReset :: Pipe -> Float -> IO Pipe
 pipeReset p@Pipe{..} x =  do 
     r <- randomHeight
-    return p { _pipeX = x 
+    return p { _pipeX  = x 
              , _pipeUp = r
              , _pipeDw = r + __pipesGap 
              }
@@ -70,7 +70,7 @@ pipeReset p@Pipe{..} x =  do
 newPipe :: Pipe -> IO Pipe
 newPipe p@Pipe{..} = do 
     r <- randomHeight 
-    return p { _pipeX = __wWidth / 2  
+    return p { _pipeX  = __wWidth / 2  
              , _pipeUp = r
              , _pipeDw = r + __pipesGap 
              }
@@ -86,3 +86,5 @@ pipeUpdate p@Pipe{..} =
 -- TODO 
 pipeCollision :: Pipe -> Float -> Float -> Bool
 pipeCollision p@Pipe{..} x y = False 
+
+

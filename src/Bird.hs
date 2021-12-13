@@ -68,9 +68,8 @@ birdFlapping :: Bird -> Bird
 birdFlapping b = setBirdVy b __birdFlappingV 
 
 
--- TODO 
 birdUpdate :: Bird -> Bird
-birdUpdate b = (updateAngle. updatePicIndex . updateCount . birdFalling) b
+birdUpdate b = (updateAngle . updatePicIndex . updateCount . birdFalling) b
 
 
 updateCount :: Bird -> Bird
@@ -80,8 +79,10 @@ updateCount b@Bird{..} =
 
 updatePicIndex :: Bird -> Bird
 updatePicIndex b@Bird{..} = 
-    let i = if _count == 0 then if _pIndex == (length _birdPics - 1) 
-                       then 0 else _pIndex + 1
+    let i = if _count == 0 
+               then if _pIndex == (length _birdPics - 1) 
+                       then 0 
+                       else _pIndex + 1
                else _pIndex
      in b { _pIndex = i }
 
