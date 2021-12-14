@@ -19,8 +19,8 @@ __wHeight     = __winHeight__
 {- Bird -}
 __birdWid__     = 34                  :: Int
 __birdHgt__     = 24                  :: Int
-__birdX         = (-1) * __wWidth / 9 :: Float
-__birdY         = 0.0                 :: Float 
+__birdX         = (-1) * __wWidth / 5 :: Float
+__birdY         = __winHeight__ / 8   :: Float 
 __gravity       = 2000                :: Float
 __birdFlappingV = -500.0              :: Float
 __maxBirdAngle  = 90                  :: Float
@@ -69,9 +69,7 @@ __groundAssets   =
     ]
 
 
-
 {- Score -}
-
 __scoreWid__ = 20 :: Float
 __scoreAssets = 
     [ "assets/font_big_0.png"

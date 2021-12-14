@@ -189,7 +189,7 @@ eventHandler e g@Game{..} = case _state of
     
     GameOver -> 
         case e of 
-          EventKey (SpecialKey KeyEnter) Down _ _ -> do
+          EventKey (SpecialKey KeySpace) Down _ _ -> do
               gameReset g
 
           EventKey (Char 'k') Down _ _ -> 
