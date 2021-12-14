@@ -12,14 +12,14 @@ __bkColor  = light $ light $ light blue
 __winWidth__ , __winHeight__ , __wWidth, __wHeight :: Num a => a
 __winWidth__  = 276  -- WARNING : Don't change
 __winHeight__ = 600  -- WARNING : Don't change
-__wWidth      = __winWidth__ * 2
+__wWidth      = __winWidth__ * 3
 __wHeight     = __winHeight__
 
 
 {- Bird -}
 __birdWid__     = 34                  :: Int
 __birdHgt__     = 24                  :: Int
-__birdX         = (-1) * __wWidth / 8 :: Float
+__birdX         = (-1) * __wWidth / 9 :: Float
 __birdY         = 0.0                 :: Float 
 __gravity       = 2000                :: Float
 __birdFlappingV = -500.0              :: Float

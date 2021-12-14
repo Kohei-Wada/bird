@@ -32,7 +32,7 @@ gameInit = do
     b  <- birdInit 
     s  <- skyInit
     g  <- groundInit
-    ps <- pipesInit 1
+    ps <- pipesInit 2
     sc <- scoreInit 
 
     return Game 
@@ -52,6 +52,7 @@ gameRestart g@Game{..} = do
         { _state = GameLoop 
         , _bird  = birdReset _bird
         , _pipes = ps
+        , _score = scoreReset _score 
         }
 
 
@@ -62,6 +63,7 @@ gameReset g@Game{..} = do
         { _state = GameStop 
         , _bird  = birdReset _bird
         , _pipes = ps
+        , _score = scoreReset _score 
         }
 
 
@@ -81,6 +83,7 @@ updateGameObjects g@Game{..} =
               , _sky    = skyUpdate _sky 
               , _ground = groundUpdate _ground
               , _pipes  = ps
+              , _score  = updateScore _score _pipes _bird 
               }
 
       GameOver ->
@@ -93,10 +96,6 @@ updateGameState g@Game{..} =
      in g { _state = s }
 
 
--- TODO 
-updateScore :: Game -> Game
-updateScore g@Game{..} = g
-
 updateGame :: Float -> Game -> IO Game
 updateGame _ g@Game{..} = 
     case _state of
@@ -105,6 +104,7 @@ updateGame _ g@Game{..} =
          
       GameLoop -> do 
           g' <- updateGameObjects g
+          print $  _num _score
           return $ updateGameState g'
 
       GameOver -> 
@@ -114,7 +114,7 @@ updateGame _ g@Game{..} =
 checkCollision :: Game -> Bool
 checkCollision g@Game{..} = 
     let b@Bird{..} = _bird 
-     in groundCollision _ground _birdX _birdY || pipesCollision _pipes _birdX _birdY 
+    in groundCollision _ground _birdX _birdY || pipesCollision _pipes _birdX _birdY 
 
 
 checkCoordinates :: Bird -> Bool 
