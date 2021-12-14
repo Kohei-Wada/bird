@@ -72,6 +72,7 @@ __groundAssets   =
 
 {- Score -}
 
+__scoreWid__ = 20 :: Float
 __scoreAssets = 
     [ "assets/font_big_0.png"
     , "assets/font_big_1.png"
@@ -84,8 +85,4 @@ __scoreAssets =
     , "assets/font_big_8.png"
     , "assets/font_big_9.png"
     ]
-
-
-
-
 

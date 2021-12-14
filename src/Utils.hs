@@ -34,3 +34,9 @@ expansionRate origin = round $ (fromIntegral __wWidth) / (fromIntegral origin) *
 
 randomHeight:: IO Float 
 randomHeight = randomRIO( 0, __wHeight / 2) :: IO Float 
+
+
+digs :: Int -> [Int]
+digs 0 = []
+digs x = x `mod` 10 : digs (x `div` 10) 
+

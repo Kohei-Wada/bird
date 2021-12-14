@@ -104,7 +104,6 @@ updateGame _ g@Game{..} =
          
       GameLoop -> do 
           g' <- updateGameObjects g
-          print $  _num _score
           return $ updateGameState g'
 
       GameOver -> 
@@ -114,7 +113,7 @@ updateGame _ g@Game{..} =
 checkCollision :: Game -> Bool
 checkCollision g@Game{..} = 
     let b@Bird{..} = _bird 
-    in groundCollision _ground _birdX _birdY || pipesCollision _pipes _birdX _birdY 
+     in groundCollision _ground _birdX _birdY || pipesCollision _pipes _birdX _birdY 
 
 
 checkCoordinates :: Bird -> Bool 
@@ -190,7 +189,7 @@ eventHandler e g@Game{..} = case _state of
     
     GameOver -> 
         case e of 
-          EventKey (SpecialKey KeySpace) Down _ _ -> do
+          EventKey (SpecialKey KeyEnter) Down _ _ -> do
               gameReset g
 
           EventKey (Char 'k') Down _ _ -> 

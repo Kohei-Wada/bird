@@ -43,6 +43,6 @@ updateSkyX s@Sky{..} =
 
 
 skyPicture :: Sky -> Picture
-skyPicture s@Sky{..} = translate _skyX  _skyY  _skyPic 
+skyPicture s@Sky{..} = translate _skyX _skyY _skyPic 
 
 
