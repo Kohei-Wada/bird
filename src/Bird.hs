@@ -24,15 +24,16 @@ data Bird = Bird
 birdInit :: IO Bird
 birdInit = do 
     ps <- loadPictures __birdAssets
-    return Bird { _birdX    = __birdX
-                , _birdY    = __birdY 
-                , _birdVx   = 0 
-                , _birdVy   = 0 
-                , _birdPics = ps
-                , _count    = 0
-                , _pIndex   = 0
-                , _angle    = 0
-                }
+    return Bird 
+        { _birdX    = __birdX
+        , _birdY    = __birdY 
+        , _birdVx   = 0 
+        , _birdVy   = 0 
+        , _birdPics = ps
+        , _count    = 0
+        , _pIndex   = 0
+        , _angle    = 0
+        }
 
 
 birdReset :: Bird -> Bird
@@ -101,5 +102,10 @@ calcurateAngle vy
 
 velocityToAngle :: Float -> Float
 velocityToAngle v = v / __angleBias 
+
+
+birdPicture :: Bird -> Picture
+birdPicture b@Bird{..} = 
+   translate _birdX _birdY $ rotate _angle (_birdPics !! _pIndex) 
 
 

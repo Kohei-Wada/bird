@@ -5,6 +5,7 @@ import Bird
 import Pipe
 import Ground
 import Sky
+import Score
 import Options
 import Utils
 
@@ -22,7 +23,7 @@ data Game = Game
     , _sky    :: Sky
     , _ground :: Ground
     , _pipes  :: [Pipe]
-    , _score  :: Int
+    , _score  :: Score
     }
 
 
@@ -31,7 +32,8 @@ gameInit = do
     b  <- birdInit 
     s  <- skyInit
     g  <- groundInit
-    ps <- pipesInit 2
+    ps <- pipesInit 1
+    sc <- scoreInit 
 
     return Game 
         { _state  = GameStop
@@ -39,7 +41,7 @@ gameInit = do
         , _sky    = s
         , _ground = g
         , _pipes  = ps
-        , _score  = 0
+        , _score  = sc
         }
 
 
@@ -91,6 +93,10 @@ updateGameState g@Game{..} =
      in g { _state = s }
 
 
+-- TODO 
+updateScore :: Game -> Game
+updateScore g@Game{..} = g
+
 updateGame :: Float -> Game -> IO Game
 updateGame _ g@Game{..} = 
     case _state of
@@ -115,34 +121,6 @@ checkCoordinates :: Bird -> Bool
 checkCoordinates b@Bird{..} = -_birdY > __wHeight || _birdY > __wHeight 
 
 
-pipesPicture :: [Pipe] -> [Picture]
-pipesPicture =  map pipePicture 
-
-
-pipePicture :: Pipe -> Picture
-pipePicture p@Pipe{..} = 
-    let tmpUp = makeLongPicH _pipePic __wHeight __pipeHgt 
-        tmpDw = makeLongPicH _pipePic __wHeight (- __pipeHgt)
-     in pictures [ translate _pipeX _pipeUp tmpUp
-                 , translate _pipeX _pipeDw tmpDw
-                 , translate _pipeX _pipeUp _pipePicUp 
-                 , translate _pipeX _pipeDw _pipePicDw
-                 ] 
-
-
-birdPicture :: Bird -> Picture
-birdPicture b@Bird{..} = 
-   translate _birdX _birdY $ rotate _angle (_birdPics !! _pIndex) 
-
-
-groundPicture :: Ground -> Picture
-groundPicture g@Ground{..} = translate _groundX _groundY _groundPic 
-
-
-skyPicture :: Sky -> Picture
-skyPicture s@Sky{..} = translate _skyX  _skyY  _skyPic 
-
-
 gameDisplay :: Game -> IO Picture
 gameDisplay g@Game{..} = case _state of 
     GameStop -> 
@@ -158,6 +136,7 @@ gameDisplay g@Game{..} = case _state of
             , pictures $ pipesPicture _pipes
             , groundPicture _ground
             , birdPicture _bird
+            , scorePicture _score
             ]
 
     GameOver -> 
@@ -166,6 +145,7 @@ gameDisplay g@Game{..} = case _state of
             , pictures $ pipesPicture _pipes
             , groundPicture _ground
             , birdPicture _bird 
+            , scorePicture _score
             ]
 
 

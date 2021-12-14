@@ -17,6 +17,8 @@ __wHeight     = __winHeight__
 
 
 {- Bird -}
+__birdWid__     = 34                  :: Int
+__birdHgt__     = 24                  :: Int
 __birdX         = (-1) * __wWidth / 8 :: Float
 __birdY         = 0.0                 :: Float 
 __gravity       = 2000                :: Float
@@ -34,7 +36,7 @@ __birdAssets    =
 
 
 {- Pipe -}
-__PipeWid__      = 52     :: Int  -- Warning : Original picture size , Don't change.
+__pipeWid__      = 52     :: Int  -- Warning : Original picture size , Don't change.
 __pipesGap       = -120   :: Float
 __pipeHgt        = 1      :: Int
 __pipeSpeed      = -150.0 :: Float
@@ -65,6 +67,25 @@ __groundWid      = __groundWid__ :: Int
 __groundAssets   = 
     [ "assets/land.png" 
     ]
+
+
+
+{- Score -}
+
+__scoreAssets = 
+    [ "assets/font_big_0.png"
+    , "assets/font_big_1.png"
+    , "assets/font_big_2.png"
+    , "assets/font_big_3.png"
+    , "assets/font_big_4.png"
+    , "assets/font_big_5.png"
+    , "assets/font_big_6.png"
+    , "assets/font_big_7.png"
+    , "assets/font_big_8.png"
+    , "assets/font_big_9.png"
+    ]
+
+
 
 
 

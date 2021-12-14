@@ -46,3 +46,9 @@ updateGroundX g@Ground{..} =
 groundCollision :: Ground -> Float -> Float -> Bool
 groundCollision g@Ground{..} x y = y < _groundY + 80 
 
+
+groundPicture :: Ground -> Picture
+groundPicture g@Ground{..} = translate _groundX _groundY _groundPic 
+
+
+

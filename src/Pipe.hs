@@ -39,8 +39,12 @@ resetPipes :: [Pipe] -> IO [Pipe]
 resetPipes ps = forM (zip ps [1..]) $ \(p, n) ->
     pipeReset p (fromIntegral n * fromIntegral __wWidth / fromIntegral (length ps)) 
 
+pipesPicture :: [Pipe] -> [Picture]
+pipesPicture =  map pipePicture 
+
 
 -----------------------------------------------------------------------------------------
+
 
 
 pipeInit :: Float -> IO Pipe
@@ -83,8 +87,29 @@ pipeUpdate p@Pipe{..} =
        else return p { _pipeX = _pipeX + (__pipeSpeed / __fFps) }
 
 
--- TODO 
 pipeCollision :: Pipe -> Float -> Float -> Bool
-pipeCollision p@Pipe{..} x y = False 
+pipeCollision p@Pipe{..} x y = 
+       x <= _pipeX + fromIntegral __pipeWid__
+    && x >= _pipeX - fromIntegral __pipeWid__ 
+     
+    && ( y + fromIntegral __birdHgt__ >= _pipeUp || 
+         y - fromIntegral __birdHgt__ <= _pipeDw  
+       ) 
 
 
+pipePicture :: Pipe -> Picture
+pipePicture p@Pipe{..} = 
+    let tmpUp = makeLongPicH _pipePic __wHeight __pipeHgt 
+        tmpDw = makeLongPicH _pipePic __wHeight (- __pipeHgt)
+     in pictures [ translate _pipeX _pipeUp tmpUp
+                 , translate _pipeX _pipeDw tmpDw
+                 , translate _pipeX _pipeUp _pipePicUp 
+                 , translate _pipeX _pipeDw _pipePicDw
+                 ] 
+
+
+insidePipeGap :: Pipe -> Float -> Bool
+insidePipeGap p@Pipe{..} x = 
+       x <= _pipeX + fromIntegral __pipeWid__ 
+    && x >= _pipeX - fromIntegral __pipeWid__ 
+    

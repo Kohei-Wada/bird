@@ -30,6 +30,7 @@ library
       Ground
       Options
       Pipe
+      Score
       Sky
       Utils
   other-modules:
@@ -49,7 +50,7 @@ executable bird-exe
       Paths_bird
   hs-source-dirs:
       app
-  ghc-options: -threaded -rtsopts -O3 -with-rtsopts=-N
+  ghc-options: -threaded -rtsopts -O2 -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
     , bird

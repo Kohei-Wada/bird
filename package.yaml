@@ -36,7 +36,7 @@ executables:
     ghc-options:
     - -threaded
     - -rtsopts
-    - -O3
+    - -O2
     - -with-rtsopts=-N
     dependencies:
     - bird

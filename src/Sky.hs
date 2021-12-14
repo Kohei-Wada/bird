@@ -40,3 +40,9 @@ updateSkyX s@Sky{..} =
                     then -fromIntegral __skyWid 
                     else _skyX + __skySpeed * (1.0 / __fFps) 
       }
+
+
+skyPicture :: Sky -> Picture
+skyPicture s@Sky{..} = translate _skyX  _skyY  _skyPic 
+
+
