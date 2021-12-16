@@ -49,9 +49,9 @@ scoreReset s@Score{..} = s { _num = 0
 updateScore :: Score -> [Pipe] -> Bird -> Score 
 updateScore s@Score{..} ps b@Bird{..} = 
     let f = any (\p -> insidePipeGap p _birdX) ps 
-     in  if _sFlag 
-               then if f then s else addScore s
-               else scoreSetFlag s f
+     in if _sFlag 
+           then if f then s else addScore s
+           else scoreSetFlag s f
 
 
 scorePicture :: Score -> Picture
@@ -59,9 +59,8 @@ scorePicture s@Score{..} =
     if _num == 0 
        then translate _scoreX _scoreY $ _scorePics !! 0
        else 
-        let nl = zip [0..] $ digs _num
-            ps = map (\(i, n) -> translate (-__scoreWid__ * fromIntegral i) 0 (_scorePics !! n)) nl
-         in translate _scoreX _scoreY $ pictures ps 
-
+       let nl = zip [0..] $ digs _num
+           ps = map (\(i, n) -> translate (-__scoreWid__ * fromIntegral i) 0 (_scorePics !! n)) nl
+        in translate _scoreX _scoreY $ pictures ps 
 
 

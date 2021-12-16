@@ -39,6 +39,7 @@ resetPipes :: [Pipe] -> IO [Pipe]
 resetPipes ps = forM (zip ps [1..]) $ \(p, n) ->
     pipeReset p (fromIntegral n * fromIntegral __wWidth / fromIntegral (length ps)) 
 
+
 pipesPicture :: [Pipe] -> [Picture]
 pipesPicture =  map pipePicture 
 
@@ -68,7 +69,6 @@ pipeReset p@Pipe{..} x =  do
              , _pipeUp = r
              , _pipeDw = r + __pipesGap 
              }
-
 
 
 newPipe :: Pipe -> IO Pipe
