@@ -3,7 +3,7 @@
 bird is a copy of Flappy Bird. 
 I used the assets of flappy-haskell.
 
-##Install 
+## Install 
 
 1.stack 
 
@@ -26,7 +26,7 @@ Copy "freeglut/bin/(platform)/freeglut.dll" to your executable path and
 rename it to "glut32.dll"
 
 
-##Usage
+## Usage
 
 ```bash
 $ git clone https://github.com/Kohei-Wada/bird.git
