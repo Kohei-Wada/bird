@@ -89,11 +89,17 @@ updateGameObjects g@Game{..} =
       GameOver ->
           return g
 
+
 -- TODO 
 updateGameState :: Game -> Game
 updateGameState g@Game{..} = 
-    let s = if checkCoordinates _bird || checkCollision g then GameOver else _state
-     in g { _state = s }
+    case _state of 
+      GameLoop -> 
+          let s = if checkCollision g || checkCoordinates _bird then GameOver else _state
+           in g { _state = s 
+                }
+
+      _ -> g
 
 
 updateGame :: Float -> Game -> IO Game
@@ -103,8 +109,8 @@ updateGame _ g@Game{..} =
           updateGameObjects g
          
       GameLoop -> do 
-          g' <- updateGameObjects g
-          return $ updateGameState g'
+          g' <- updateGameObjects $ updateGameState g
+          return g'
 
       GameOver -> 
           updateGameObjects g

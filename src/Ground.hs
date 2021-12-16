@@ -42,9 +42,8 @@ updateGroundX g@Ground{..} =
       }
 
 
--- TODO
 groundCollision :: Ground -> Float -> Float -> Bool
-groundCollision g@Ground{..} x y = y < _groundY + 80 
+groundCollision g@Ground{..} x y = y < _groundY + __groundCollisionBias  
 
 
 groundPicture :: Ground -> Picture

@@ -17,6 +17,7 @@ data Bird = Bird
     , _count    :: !Int       -- count for FPS
     , _pIndex   :: !Int       -- Picture Index
     , _angle    :: Float
+    , _dead     :: Bool
     } 
     deriving (Show, Eq)
 
@@ -33,6 +34,7 @@ birdInit = do
         , _count    = 0
         , _pIndex   = 0
         , _angle    = 0
+        , _dead     = False
         }
 
 
@@ -42,6 +44,7 @@ birdReset b@Bird{..} = b { _birdX  = __birdX
                          , _birdVx = 0 
                          , _birdVy = 0 
                          , _angle  = 0
+                         , _dead   = False
                          }
 
 
@@ -51,6 +54,10 @@ setBirdVx b@Bird{..} vX = b { _birdVx = vX }
 
 setBirdVy :: Bird -> Float -> Bird
 setBirdVy b@Bird{..} vY = b { _birdVy = vY }
+
+
+setBirdDead :: Bird -> Bool -> Bird 
+setBirdDead b@Bird{..} f = b { _dead = f }
 
 
 updateBirdY :: Bird -> Bird
@@ -70,7 +77,9 @@ birdFlapping b = setBirdVy b __birdFlappingV
 
 
 birdUpdate :: Bird -> Bird
-birdUpdate b = (updateAngle . updatePicIndex . updateCount . birdFalling) b
+birdUpdate b@Bird{..} = 
+    if not _dead then (updateAngle . updatePicIndex . updateCount . birdFalling) b
+             else (updateAngle . birdFalling) b
 
 
 updateCount :: Bird -> Bird
