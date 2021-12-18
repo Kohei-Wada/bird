@@ -4,7 +4,7 @@ import Graphics.Gloss
 
 
 {- Game -}
-__iFps     = 30                  :: Int
+__iFps     = 50                  :: Int
 __fFps     = fromIntegral __iFps :: Float
 __winTitle = "Flappy Bird"
 __bkColor  = light $ light $ light blue
@@ -26,7 +26,7 @@ __birdFlappingV = -500.0              :: Float
 __maxBirdAngle  = 90                  :: Float
 __minBirdAngle  = -45                 :: Float
 __angleBias     = 10                  :: Float
-__fPps          = 10                  :: Float -- Picture per sec
+__fPps          = 30                  :: Float -- Picture per sec
 __birdAssets    = 
     [ "assets/bird-01.png"
     , "assets/bird-02.png"

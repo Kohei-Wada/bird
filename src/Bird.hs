@@ -73,14 +73,16 @@ birdFalling = updateBirdY . updateBirdVy
 
 
 birdFlapping :: Bird -> Bird
-birdFlapping b = setBirdVy b __birdFlappingV 
+birdFlapping b@Bird{..} = 
+    if _dead 
+       then b
+       else setBirdVy b __birdFlappingV 
 
 
 birdUpdate :: Bird -> Bird
 birdUpdate b@Bird{..} = 
-    if not _dead then (updateAngle . updatePicIndex . updateCount . birdFalling) b
-             else (updateAngle . birdFalling) b
-
+    if _dead then (updateAngle . birdFalling) b
+             else (updateAngle . updatePicIndex . updateCount . birdFalling) b
 
 updateCount :: Bird -> Bird
 updateCount b@Bird{..} = 
