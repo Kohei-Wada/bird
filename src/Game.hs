@@ -77,14 +77,22 @@ updateGameObjects g@Game{..} =
               }
 
       GameLoop -> do 
-          ps <- pipesUpdate _pipes
-          return g 
-              { _bird   = birdUpdate _bird
-              , _sky    = skyUpdate _sky 
-              , _ground = groundUpdate _ground
-              , _pipes  = ps
-              , _score  = updateScore _score _pipes _bird 
-              }
+          if _dead _bird 
+             then do 
+                 return g 
+                     { _bird   = birdUpdate _bird 
+                     }
+             else do 
+                 ps <- pipesUpdate _pipes
+                 let b = birdUpdate _bird
+                 return g 
+                     { _bird   = if checkCollision g || checkCoordinates b 
+                                    then setBirdDead b True else b 
+                     , _sky    = skyUpdate _sky 
+                     , _ground = groundUpdate _ground
+                     , _pipes  = ps
+                     , _score  = updateScore _score _pipes _bird 
+                     }
 
       GameOver ->
           return g
@@ -95,10 +103,13 @@ updateGameState :: Game -> Game
 updateGameState g@Game{..} = 
     case _state of 
       GameLoop -> 
-          let s = if checkCollision g || checkCoordinates _bird then GameOver else _state
-           in g { _state = s 
-                }
-
+          if _dead _bird 
+             then 
+                 let b@Bird{..} = _bird 
+                     s = if groundCollision _ground _birdX _birdY 
+                            then GameOver else _state 
+                  in g { _state = s }
+             else g 
       _ -> g
 
 
@@ -109,8 +120,8 @@ updateGame _ g@Game{..} =
           updateGameObjects g
          
       GameLoop -> do 
-          g' <- updateGameObjects $ updateGameState g
-          return g'
+          let g' = updateGameState g
+          updateGameObjects g' >>= return 
 
       GameOver -> 
           updateGameObjects g
