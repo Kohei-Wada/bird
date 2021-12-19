@@ -8,6 +8,7 @@ import Sky
 import Score
 import Options
 import Utils
+import GamePictures
 
 import System.Exit
 
@@ -24,24 +25,23 @@ data Game = Game
     , _ground :: Ground
     , _pipes  :: [Pipe]
     , _score  :: Score
+    , _gamePictures :: GamePictures 
     }
 
 
 gameInit :: IO Game
 gameInit = do 
-    b  <- birdInit 
-    s  <- skyInit
-    g  <- groundInit
     ps <- pipesInit 2
-    sc <- scoreInit 
+    gp <- loadAllPictures 
 
     return Game 
         { _state  = GameStop
-        , _bird   = b
-        , _sky    = s
-        , _ground = g
+        , _bird   = birdInit 
+        , _sky    = skyInit 
+        , _ground = groundInit  
         , _pipes  = ps
-        , _score  = sc
+        , _score  = scoreInit 
+        , _gamePictures = gp
         }
 
 
@@ -141,27 +141,27 @@ gameDisplay :: Game -> IO Picture
 gameDisplay g@Game{..} = case _state of 
     GameStop -> 
         return $ pictures  
-            [ skyPicture _sky
-            , groundPicture _ground 
-            , birdPicture _bird  
+            [ skyPicture _gamePictures _sky
+            , groundPicture _gamePictures _ground 
+            , birdPicture _gamePictures _bird  
             ]
 
     GameLoop -> 
         return $ pictures  
-            [ skyPicture _sky
-            , pictures $ pipesPicture _pipes
-            , groundPicture _ground
-            , birdPicture _bird
-            , scorePicture _score
+            [ skyPicture _gamePictures _sky
+            , pictures $ pipesPicture _gamePictures _pipes
+            , groundPicture _gamePictures _ground
+            , birdPicture _gamePictures _bird
+            , scorePicture _gamePictures _score
             ]
 
     GameOver -> 
         return $ pictures  
-            [ skyPicture _sky
-            , pictures $ pipesPicture _pipes
-            , groundPicture _ground
-            , birdPicture _bird 
-            , scorePicture _score
+            [ skyPicture _gamePictures _sky
+            , pictures $ pipesPicture _gamePictures _pipes
+            , groundPicture _gamePictures _ground
+            , birdPicture _gamePictures _bird 
+            , scorePicture _gamePictures _score
             ]
 
 

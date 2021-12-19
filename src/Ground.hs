@@ -11,23 +11,16 @@ data Ground = Ground
     { _groundX   :: !Float 
     , _groundY   :: !Float
     , _groundWid :: !Int
-    , _groundPic :: Picture
     }
 
 
-groundInit :: IO Ground
-groundInit = do 
-    ps <- loadPictures __groundAssets
-    let p = head ps
-        r = expansionRate __groundWid__
-        w = __groundWid__ * r
-    
-    return Ground 
-        { _groundX   = -fromIntegral w 
-        , _groundY   = __defaultGroundY 
-        , _groundWid = w
-        , _groundPic = makeLongPicW p r __groundWid__ 
-        }
+groundInit :: Ground
+groundInit = let w = __groundWid__ * expansionRate __groundWid__ 
+              in Ground 
+                  { _groundX   = -fromIntegral w 
+                  , _groundY   = __defaultGroundY 
+                  , _groundWid = w
+                  }
 
 
 groundUpdate :: Ground -> Ground
@@ -44,10 +37,4 @@ updateGroundX g@Ground{..} =
 
 groundCollision :: Ground -> Float -> Float -> Bool
 groundCollision g@Ground{..} x y = y < _groundY + __groundCollisionBias  
-
-
-groundPicture :: Ground -> Picture
-groundPicture g@Ground{..} = translate _groundX _groundY _groundPic 
-
-
 

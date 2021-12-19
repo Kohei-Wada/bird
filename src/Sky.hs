@@ -11,23 +11,16 @@ data Sky = Sky
     { _skyX   :: !Float 
     , _skyY   :: !Float
     , _skyWid :: !Int
-    , _skyPic ::  Picture
     }
 
 
-skyInit :: IO Sky
-skyInit = do 
-    ps <- loadPictures __skyAssets
-    let p = head ps
-        r = expansionRate __skyWid__  
-        w = __skyWid__ * r
- 
-    return Sky 
-        { _skyX   = -fromIntegral w 
-        , _skyY   = __defaultSkyY 
-        , _skyWid = w 
-        , _skyPic = makeLongPicW p r __skyWid__
-        }
+skyInit :: Sky
+skyInit = let w = __skyWid__ * expansionRate __skyWid__  
+           in Sky 
+               { _skyX   = -fromIntegral w 
+               , _skyY   = __defaultSkyY 
+               , _skyWid = w 
+               }
 
 
 skyUpdate :: Sky -> Sky
@@ -40,8 +33,4 @@ updateSkyX s@Sky{..} =
                     then -fromIntegral __skyWid 
                     else _skyX + __skySpeed * (1.0 / __fFps) 
       }
-
-
-skyPicture :: Sky -> Picture
-skyPicture s@Sky{..} = translate _skyX _skyY _skyPic 
 

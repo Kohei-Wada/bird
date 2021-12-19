@@ -27,6 +27,7 @@ library
   exposed-modules:
       Bird
       Game
+      GamePictures
       Ground
       Options
       Pipe
