@@ -27,6 +27,7 @@ __maxBirdAngle  = 90                  :: Float
 __minBirdAngle  = -45                 :: Float
 __angleBias     = 10                  :: Float
 __fPps          = 30                  :: Float -- Picture per sec
+__nBirdAssets   = 4                   :: Int
 __birdAssets    = 
     [ "assets/bird-01.png"
     , "assets/bird-02.png"
