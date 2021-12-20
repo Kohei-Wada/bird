@@ -19,13 +19,13 @@ import Graphics.Gloss.Interface.IO.Game
 data GameState = GameStop | GameLoop | GameOver
 
 data Game = Game 
-    { _state  :: GameState
-    , _bird   :: Bird
-    , _sky    :: Sky
-    , _ground :: Ground
-    , _pipes  :: [Pipe]
-    , _score  :: Score
-    , _gamePictures :: GamePictures 
+    { _state    :: GameState
+    , _bird     :: Bird
+    , _sky      :: Sky
+    , _ground   :: Ground
+    , _pipes    :: [Pipe]
+    , _score    :: Score
+    , _pictures :: GamePictures 
     }
 
 
@@ -35,13 +35,13 @@ gameInit = do
     gp <- loadAllPictures 
 
     return Game 
-        { _state  = GameStop
-        , _bird   = birdInit 
-        , _sky    = skyInit 
-        , _ground = groundInit  
-        , _pipes  = ps
-        , _score  = scoreInit 
-        , _gamePictures = gp
+        { _state    = GameStop
+        , _bird     = birdInit 
+        , _sky      = skyInit 
+        , _ground   = groundInit  
+        , _pipes    = ps
+        , _score    = scoreInit 
+        , _pictures = gp
         }
 
 
@@ -84,10 +84,9 @@ updateGameObjects g@Game{..} =
                      }
              else do 
                  ps <- pipesUpdate _pipes
-                 let b = birdUpdate _bird
                  return g 
-                     { _bird   = if checkCollision g || checkCoordinates b 
-                                    then setBirdDead b True else b 
+                     { _bird   = (if checkCollision g || checkCoordinates _bird
+                                    then (`setBirdDead` True) else \b -> b) $birdUpdate _bird
                      , _sky    = skyUpdate _sky 
                      , _ground = groundUpdate _ground
                      , _pipes  = ps
@@ -104,11 +103,10 @@ updateGameState g@Game{..} =
     case _state of 
       GameLoop -> 
           if _dead _bird 
-             then 
-                 let b@Bird{..} = _bird 
-                     s = if groundCollision _ground _birdX _birdY 
-                            then GameOver else _state 
-                  in g { _state = s }
+             then let b@Bird{..} = _bird 
+                      s = if groundCollision _ground _birdX _birdY 
+                             then GameOver else _state 
+                   in g { _state = s }
              else g 
       _ -> g
 
@@ -119,9 +117,8 @@ updateGame _ g@Game{..} =
       GameStop -> 
           updateGameObjects g
          
-      GameLoop -> do 
-          let g' = updateGameState g
-          updateGameObjects g' >>= return 
+      GameLoop -> 
+          (updateGameObjects . updateGameState) g >>= return 
 
       GameOver -> 
           updateGameObjects g
@@ -141,27 +138,27 @@ gameDisplay :: Game -> IO Picture
 gameDisplay g@Game{..} = case _state of 
     GameStop -> 
         return $ pictures  
-            [ skyPicture _gamePictures _sky
-            , groundPicture _gamePictures _ground 
-            , birdPicture _gamePictures _bird  
+            [ skyPicture _pictures _sky
+            , groundPicture _pictures _ground 
+            , birdPicture _pictures _bird  
             ]
 
     GameLoop -> 
         return $ pictures  
-            [ skyPicture _gamePictures _sky
-            , pictures $ pipesPicture _gamePictures _pipes
-            , groundPicture _gamePictures _ground
-            , birdPicture _gamePictures _bird
-            , scorePicture _gamePictures _score
+            [ skyPicture _pictures _sky
+            , pictures $ pipesPicture _pictures _pipes
+            , groundPicture _pictures _ground
+            , birdPicture _pictures _bird
+            , scorePicture _pictures _score
             ]
 
     GameOver -> 
         return $ pictures  
-            [ skyPicture _gamePictures _sky
-            , pictures $ pipesPicture _gamePictures _pipes
-            , groundPicture _gamePictures _ground
-            , birdPicture _gamePictures _bird 
-            , scorePicture _gamePictures _score
+            [ skyPicture _pictures _sky
+            , pictures $ pipesPicture _pictures _pipes
+            , groundPicture _pictures _ground
+            , birdPicture _pictures _bird 
+            , scorePicture _pictures _score
             ]
 
 

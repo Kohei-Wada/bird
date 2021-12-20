@@ -33,7 +33,6 @@ loadAllPictures = do
     pps <- loadPictures __pipeAssets 
     scs <- loadPictures __scoreAssets 
 
-
     let gp = head gps
         gr = expansionRate __groundWid__ 
 
@@ -79,7 +78,7 @@ pipePicture gp@GamePictures{..} p@Pipe{..} =
               , translate _pipeX _pipeDw _pipePicDw
               ] 
 
-
+-- TODO 
 scorePicture :: GamePictures -> Score -> Picture
 scorePicture gp@GamePictures{..} s@Score{..} =
     if _num == 0 
@@ -88,6 +87,4 @@ scorePicture gp@GamePictures{..} s@Score{..} =
        let nl = zip [0..] $ digs _num
            ps = map (\(i, n) -> translate (-__scoreWid__ * fromIntegral i) 0 (_scorePics !! n)) nl
         in translate _scoreX _scoreY $ pictures ps 
-
-
 
