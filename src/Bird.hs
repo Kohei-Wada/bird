@@ -68,10 +68,7 @@ birdFalling = updateBirdY . updateBirdVy
 
 
 birdFlapping :: Bird -> Bird
-birdFlapping b@Bird{..} = 
-    if _dead 
-       then b
-       else setBirdVy b __birdFlappingV 
+birdFlapping b@Bird{..} = if _dead then b else setBirdVy b __birdFlappingV 
 
 
 birdUpdate :: Bird -> Bird
@@ -108,6 +105,4 @@ calcurateAngle vy
 
 velocityToAngle :: Float -> Float
 velocityToAngle v = v / __angleBias 
-
-
 
