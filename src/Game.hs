@@ -7,7 +7,6 @@ import Ground
 import Sky
 import Score
 import Options
-import Utils
 import GamePictures
 
 import System.Exit
@@ -86,7 +85,7 @@ updateGameObjects g@Game{..} =
                  ps <- pipesUpdate _pipes
                  return g 
                      { _bird   = (if checkCollision g || checkCoordinates _bird
-                                    then (`setBirdDead` True) else \b -> b) $birdUpdate _bird
+                                    then (`setBirdDead` True) else id) $birdUpdate _bird
                      , _sky    = skyUpdate _sky 
                      , _ground = groundUpdate _ground
                      , _pipes  = ps
@@ -221,5 +220,4 @@ gameMain = do
     let window = InWindow __winTitle (__wWidth, __wHeight) (500, 200)
     g <- gameInit
     playIO window __bkColor __iFps g gameDisplay eventHandler updateGame
-
 
