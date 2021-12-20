@@ -42,10 +42,10 @@ resetPipes ps = forM (zip ps [1..]) $ \(p, n) ->
 
 pipeInit :: Float -> IO Pipe
 pipeInit x = do
-    r  <- randomHeight 
+    r <- randomHeight 
     return Pipe { _pipeUp    = r 
-                , _pipeDw    = r + __pipesGap 
                 , _pipeX     = x
+                , _pipeDw    = r + __pipesGap 
                 }
 
 
@@ -58,19 +58,10 @@ pipeReset p@Pipe{..} x =  do
              }
 
 
-newPipe :: Pipe -> IO Pipe
-newPipe p@Pipe{..} = do 
-    r <- randomHeight 
-    return p { _pipeX  = __wWidth / 2  
-             , _pipeUp = r
-             , _pipeDw = r + __pipesGap 
-             }
-
-
 pipeUpdate :: Pipe -> IO Pipe
 pipeUpdate p@Pipe{..} = 
     if _pipeX < -__wWidth / 2 
-       then newPipe p
+       then pipeReset p $  __wWidth / 2 
        else return p { _pipeX = _pipeX + (__pipeSpeed / __fFps) }
 
 
@@ -88,7 +79,4 @@ insidePipeGap :: Pipe -> Float -> Bool
 insidePipeGap p@Pipe{..} x = 
        x <= _pipeX + fromIntegral __pipeWid__ 
     && x >= _pipeX - fromIntegral __pipeWid__ 
-
-
-
 
