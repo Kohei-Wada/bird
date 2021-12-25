@@ -146,8 +146,8 @@ gameDisplay g@Game{..} = case _state of
         return $ pictures  
             [ skyPicture _pictures _sky
             , pictures $ pipesPicture _pictures _pipes
-            , groundPicture _pictures _ground
             , birdPicture _pictures _bird
+            , groundPicture _pictures _ground
             , scorePicture _pictures _score
             ]
 
@@ -155,8 +155,8 @@ gameDisplay g@Game{..} = case _state of
         return $ pictures  
             [ skyPicture _pictures _sky
             , pictures $ pipesPicture _pictures _pipes
-            , groundPicture _pictures _ground
             , birdPicture _pictures _bird 
+            , groundPicture _pictures _ground
             , scorePicture _pictures _score
             ]
 

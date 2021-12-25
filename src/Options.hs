@@ -4,7 +4,7 @@ import Graphics.Gloss
 
 
 {- Game -}
-__iFps     = 100                 :: Int
+__iFps     = 60                  :: Int
 __fFps     = fromIntegral __iFps :: Float
 __winTitle = "Flappy Bird"
 __bkColor  = light $ light $ light blue
