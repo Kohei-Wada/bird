@@ -22,6 +22,7 @@ data GamePictures = GamePictures
     , _pipePicDw  :: Picture
     , _pipePicLng :: Picture
     , _scorePics  :: [Picture]
+    , _logoPic    :: Picture
     }
 
 
@@ -32,6 +33,7 @@ loadAllPictures = do
     sps <- loadPictures __skyAssets  
     pps <- loadPictures __pipeAssets 
     scs <- loadPictures __scoreAssets 
+    lps <- loadPictures __logoAssets 
 
     let gp = head gps
         gr = expansionRate __groundWid__ 
@@ -41,6 +43,7 @@ loadAllPictures = do
 
     let pp = pps !! 2
 
+
     return GamePictures 
         { _birdPics   = bps
         , _groundPic  = makeLongPicW gp gr __groundWid__ 
@@ -49,7 +52,12 @@ loadAllPictures = do
         , _pipePicDw  = pps !! 1
         , _pipePicLng = makeLongPicH pp __wHeight __pipeHgt 
         , _scorePics  = scs
+        , _logoPic    = lps !! 0
         }
+
+
+logoPicture :: GamePictures -> Picture 
+logoPicture gp@GamePictures{..} =  translate 0 0 _logoPic 
 
 
 birdPicture :: GamePictures -> Bird -> Picture

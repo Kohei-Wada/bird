@@ -40,7 +40,7 @@ __birdAssets    =
 __pipeWid__      = 52     :: Int  -- Warning : Original picture size , Don't change.
 __pipesGap       = -120   :: Float
 __pipeHgt        = 1      :: Int
-__pipeSpeed      = -150.0 :: Float
+__pipeSpeed      = -180.0 :: Float
 __pipeAssets     = 
     [ "assets/pipe-down.png"
     , "assets/pipe-up.png"
@@ -85,4 +85,11 @@ __scoreAssets =
     , "assets/font_big_8.png"
     , "assets/font_big_9.png"
     ]
+
+
+
+{- Logo -}
+__logoAssets = 
+    [ "assets/logo.png" ]
+
 

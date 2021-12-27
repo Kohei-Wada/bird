@@ -15,7 +15,7 @@ import Graphics.Gloss
 import Graphics.Gloss.Interface.IO.Game
 
 
-data GameState = GameStop | GameLoop | GameOver
+data GameState = GameStart | GameStop | GameLoop | GameOver
 
 data Game = Game 
     { _state    :: GameState
@@ -34,7 +34,7 @@ gameInit = do
     gp <- loadAllPictures 
 
     return Game 
-        { _state    = GameStop
+        { _state    = GameStart 
         , _bird     = birdInit 
         , _sky      = skyInit 
         , _ground   = groundInit  
@@ -69,6 +69,12 @@ gameReset g@Game{..} = do
 updateGameObjects :: Game -> IO Game
 updateGameObjects g@Game{..} = 
     case _state of 
+      GameStart -> 
+          return g 
+              { _sky    = skyUpdate _sky
+              , _ground = groundUpdate _ground 
+              }
+
       GameStop -> 
           return g 
               { _sky    = skyUpdate _sky
@@ -113,6 +119,9 @@ updateGameState g@Game{..} =
 updateGame :: Float -> Game -> IO Game
 updateGame _ g@Game{..} = 
     case _state of
+      GameStart -> 
+          updateGameObjects g
+
       GameStop -> 
           updateGameObjects g
          
@@ -135,6 +144,14 @@ checkCoordinates b@Bird{..} = -_birdY > __wHeight || _birdY > __wHeight
 
 gameDisplay :: Game -> IO Picture
 gameDisplay g@Game{..} = case _state of 
+
+    GameStart -> 
+        return $ pictures  
+            [ skyPicture _pictures _sky
+            , groundPicture _pictures _ground 
+            , logoPicture _pictures 
+            ]
+
     GameStop -> 
         return $ pictures  
             [ skyPicture _pictures _sky
@@ -163,6 +180,15 @@ gameDisplay g@Game{..} = case _state of
 
 eventHandler :: Event -> Game -> IO Game
 eventHandler e g@Game{..} = case _state of 
+
+    GameStart -> 
+        case e of 
+          EventKey (SpecialKey KeySpace) Down _ _ -> 
+              return g { _state = GameStop }
+
+          _ -> 
+              return g
+
     GameStop -> 
         case e of 
           EventKey (SpecialKey KeySpace) Down _ _ -> 
