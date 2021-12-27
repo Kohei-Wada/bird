@@ -43,7 +43,6 @@ loadAllPictures = do
 
     let pp = pps !! 2
 
-
     return GamePictures 
         { _birdPics   = bps
         , _groundPic  = makeLongPicW gp gr __groundWid__ 

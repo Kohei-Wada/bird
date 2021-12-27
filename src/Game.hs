@@ -186,6 +186,12 @@ eventHandler e g@Game{..} = case _state of
           EventKey (SpecialKey KeySpace) Down _ _ -> 
               return g { _state = GameStop }
 
+          EventKey (Char 'k') Down _ _ -> 
+              return g { _state = GameStop }
+
+          EventKey (Char 'q') Down _ _ -> 
+              exitSuccess
+
           _ -> 
               return g
 
@@ -246,4 +252,5 @@ gameMain = do
     let window = InWindow __winTitle (__wWidth, __wHeight) (500, 200)
     g <- gameInit
     playIO window __bkColor __iFps g gameDisplay eventHandler updateGame
+
 
