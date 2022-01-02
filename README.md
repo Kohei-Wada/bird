@@ -1,5 +1,7 @@
 # bird
 
+https://user-images.githubusercontent.com/64008205/147843539-85b7360a-5521-4155-a2ab-661fd99b80cf.mp4
+
 bird is a copy of Flappy Bird. 
 I used the assets of flappy-haskell.
 
