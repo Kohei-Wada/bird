@@ -33,4 +33,3 @@ $ git clone https://github.com/Kohei-Wada/bird.git
 $ cd bird
 $ stack run 
 ``` 
-
