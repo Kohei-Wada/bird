@@ -45,11 +45,11 @@ loadAllPictures = do
 
     return GamePictures 
         { _birdPics   = bps
-        , _groundPic  = makeLongPicW gp gr __groundWid__ 
-        , _skyPic     = makeLongPicW sp sr __skyWid__ 
+        , _groundPic  = makeLongPicW gp gr __groundWid__  -- TODO change drawing method
+        , _skyPic     = makeLongPicW sp sr __skyWid__     -- TODO change drawing method 
         , _pipePicUp  = pps !! 0 
         , _pipePicDw  = pps !! 1
-        , _pipePicLng = makeLongPicH pp __wHeight __pipeHgt 
+        , _pipePicLng = scale 1 __wHeight pp 
         , _scorePics  = scs
         , _logoPic    = lps !! 0
         }
@@ -79,17 +79,8 @@ pipesPicture gp = map $ pipePicture gp
 
 pipePicture :: GamePictures -> Pipe -> Picture
 pipePicture gp@GamePictures{..} p@Pipe{..} = 
-     pictures [ translate _pipeX _pipeUp _pipePicLng
-              , translate _pipeX (_pipeDw - __winHeight__ ) _pipePicLng
-              , translate _pipeX _pipeUp _pipePicUp 
-              , translate _pipeX _pipeDw _pipePicDw
-              ] 
-
-
--- TODO 
-pipePicture' :: GamePictures -> Pipe -> Picture
-pipePicture' gp@GamePictures{..} p@Pipe{..} = 
-     pictures [ translate _pipeX _pipeUp _pipePicLng
+     pictures [ translate _pipeX (_pipeUp + __wHeight / 2) _pipePicLng
+              , translate _pipeX (_pipeDw - __wHeight / 2) _pipePicLng
               , translate _pipeX _pipeUp _pipePicUp 
               , translate _pipeX _pipeDw _pipePicDw
               ] 
