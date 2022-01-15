@@ -35,9 +35,9 @@ executables:
     source-dirs:         app
     ghc-options:
     - -threaded
-    - -rtsopts
+      #    - -rtsopts
     - -O2
-    - -with-rtsopts=-N
+      #    - -with-rtsopts=-N
     dependencies:
     - bird
 

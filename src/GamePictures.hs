@@ -85,6 +85,16 @@ pipePicture gp@GamePictures{..} p@Pipe{..} =
               , translate _pipeX _pipeDw _pipePicDw
               ] 
 
+
+-- TODO 
+pipePicture' :: GamePictures -> Pipe -> Picture
+pipePicture' gp@GamePictures{..} p@Pipe{..} = 
+     pictures [ translate _pipeX _pipeUp _pipePicLng
+              , translate _pipeX _pipeUp _pipePicUp 
+              , translate _pipeX _pipeDw _pipePicDw
+              ] 
+
+
 -- TODO 
 scorePicture :: GamePictures -> Score -> Picture
 scorePicture gp@GamePictures{..} s@Score{..} =

@@ -10,7 +10,6 @@ import Graphics.Gloss
 data Bird = Bird 
     { _birdX    :: !Float
     , _birdY    :: !Float 
-    , _birdVx   ::  Float
     , _birdVy   :: !Float     
     , _count    :: !Int       -- count for FPS
     , _pIndex   :: !Int       -- Picture Index
@@ -24,7 +23,6 @@ birdInit :: Bird
 birdInit = Bird 
         { _birdX    = __birdX
         , _birdY    = __birdY 
-        , _birdVx   = 0 
         , _birdVy   = 0 
         , _count    = 0
         , _pIndex   = 0
@@ -36,15 +34,14 @@ birdInit = Bird
 birdReset :: Bird -> Bird
 birdReset b@Bird{..} = b { _birdX  = __birdX
                          , _birdY  = __birdY 
-                         , _birdVx = 0 
                          , _birdVy = 0 
                          , _angle  = 0
                          , _dead   = False
                          }
 
 
-setBirdVx :: Bird -> Float -> Bird
-setBirdVx b@Bird{..} vX = b { _birdVx = vX }
+--setBirdVx :: Bird -> Float -> Bird
+--setBirdVx b@Bird{..} vX = b { _birdVx = vX }
 
 
 setBirdVy :: Bird -> Float -> Bird
@@ -75,6 +72,7 @@ birdUpdate :: Bird -> Bird
 birdUpdate b@Bird{..} = 
     if _dead then (updateAngle . birdFalling) b
              else (updateAngle . updatePicIndex . updateCount . birdFalling) b
+
 
 updateCount :: Bird -> Bird
 updateCount b@Bird{..} = 

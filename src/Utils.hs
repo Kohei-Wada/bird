@@ -27,6 +27,10 @@ makeLongPicH :: Picture -> Int -> Int -> Picture
 makeLongPicH p r originH = 
     pictures [ translate 0 (fromIntegral (a * originH)) p | a <- [0..(r-1)] ]
 
+-- TODO 
+makeLongPicH' :: Picture -> Int -> Int -> Picture 
+makeLongPicH' p r originH = 
+    scale 1 50 p 
 
 expansionRate :: Int -> Int
 expansionRate origin = round $ (fromIntegral __wWidth) / (fromIntegral origin) * 2 
