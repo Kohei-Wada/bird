@@ -5,8 +5,6 @@ import Bird
 import Pipe
 import Options
 
-import Graphics.Gloss
-
 
 data Score = Score 
     { _num       :: Int 

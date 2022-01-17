@@ -30,7 +30,7 @@ data Game = Game
 
 gameInit :: IO Game
 gameInit = do 
-    ps <- pipesInit 2
+    ps <- pipesInit __nPipes  
     gp <- loadAllPictures 
 
     return Game 

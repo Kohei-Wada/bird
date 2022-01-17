@@ -4,8 +4,6 @@ module Ground where
 import Options
 import Utils
 
-import Graphics.Gloss
-
 
 data Ground = Ground 
     { _groundX   :: !Float 

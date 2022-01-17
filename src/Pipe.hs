@@ -6,7 +6,6 @@ import Options
 import Utils
 
 import Control.Monad
-import Graphics.Gloss
 
 
 data Pipe = Pipe 
@@ -21,7 +20,8 @@ data Pipe = Pipe
 
 pipesInit :: Int -> IO [Pipe]
 pipesInit n = forM [1..n] $ \x -> do 
-     pipeInit (fromIntegral x * fromIntegral __wWidth / fromIntegral n)
+    let tmp = fromIntegral __wWidth 
+    pipeInit $ (fromIntegral x * tmp/ fromIntegral n) + tmp / fromIntegral 3
 
 
 pipesUpdate :: [Pipe] -> IO [Pipe]
