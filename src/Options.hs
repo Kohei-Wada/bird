@@ -67,6 +67,7 @@ __groundSpeed         = __pipeSpeed   :: Float
 __groundWid__         = 336           :: Int -- Warning : Original picture size, Don't change.
 __groundWid           = __groundWid__ :: Int
 __groundCollisionBias = 80            :: Float
+__groundResetBias     = 10            :: Float 
 __groundAssets        = 
     [ "assets/land.png" 
     ]

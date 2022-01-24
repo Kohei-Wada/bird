@@ -35,7 +35,7 @@ addGroundX g@Ground{..} = g { _groundX = _groundX + __groundSpeed * (1.0 / __fFp
 
 
 resetGroundX :: Ground -> Ground
-resetGroundX g@Ground{..} = g { _groundX = -fromIntegral __groundWid } 
+resetGroundX g@Ground{..} = g { _groundX = -fromIntegral __groundWid + __groundResetBias } 
 
 
 groundCollision :: Ground -> Float -> Float -> Bool
