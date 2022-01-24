@@ -22,15 +22,20 @@ groundInit = let w = __groundWid__ * expansionRate __groundWid__
 
 
 groundUpdate :: Ground -> Ground
-groundUpdate = updateGroundX
+groundUpdate =  updateGroundX
 
 
-updateGroundX :: Ground -> Ground
-updateGroundX g@Ground{..} =
-    g { _groundX = if _groundX < -(fromIntegral __wWidth)
-               then -fromIntegral __groundWid 
-               else _groundX + __groundSpeed * (1.0 / __fFps)
-      }
+updateGroundX :: Ground -> Ground 
+updateGroundX g@Ground{..} =  
+    if _groundX < -(fromIntegral __wWidth) then resetGroundX g else addGroundX g
+
+
+addGroundX :: Ground -> Ground 
+addGroundX g@Ground{..} = g { _groundX = _groundX + __groundSpeed * (1.0 / __fFps) }
+
+
+resetGroundX :: Ground -> Ground
+resetGroundX g@Ground{..} = g { _groundX = -fromIntegral __groundWid } 
 
 
 groundCollision :: Ground -> Float -> Float -> Bool
