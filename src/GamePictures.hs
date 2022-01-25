@@ -89,10 +89,10 @@ pipePicture gp@GamePictures{..} p@Pipe{..} =
 -- TODO 
 scorePicture :: GamePictures -> Score -> Picture
 scorePicture gp@GamePictures{..} s@Score{..} =
-    if _num == 0 
+    if _value == 0 
        then translate _scoreX _scoreY $ _scorePics !! 0
        else 
-       let nl = zip [0..] $ digs _num
+       let nl = zip [0..] $ digs _value
            ps = map (\(i, n) -> translate (-__scoreWid__ * fromIntegral i) 0 (_scorePics !! n)) nl
         in translate _scoreX _scoreY $ pictures ps 
 

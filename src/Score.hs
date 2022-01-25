@@ -7,7 +7,7 @@ import Options
 
 
 data Score = Score 
-    { _num       :: Int 
+    { _value     :: Int 
     , _scoreX    :: Float
     , _scoreY    :: Float
     , _sFlag     :: Bool
@@ -16,7 +16,7 @@ data Score = Score
 
 scoreInit :: Score 
 scoreInit = Score 
-    { _num       = 0 
+    { _value     = 0 
     , _scoreX    = 0 
     , _scoreY    = __wHeight / 3
     , _sFlag     = False
@@ -24,7 +24,7 @@ scoreInit = Score
 
 
 addScore :: Score -> Score
-addScore s@Score{..} = s { _num   = _num + 1 
+addScore s@Score{..} = s { _value   = _value + 1 
                          , _sFlag = False
                          }
 
@@ -33,7 +33,7 @@ scoreSetFlag s@Score{..} b = s { _sFlag = b }
 
 
 scoreReset :: Score -> Score
-scoreReset s@Score{..} = s { _num = 0 
+scoreReset s@Score{..} = s { _value = 0 
                            , _sFlag = False 
                            }
 
