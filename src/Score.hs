@@ -41,6 +41,4 @@ scoreReset s@Score{..} = s { _value = 0
 updateScore :: Score -> [Pipe] -> Bird -> Score 
 updateScore s@Score{..} ps b@Bird{..} = 
     let f = any (\p -> insidePipeGap p _birdX) ps 
-     in if _sFlag 
-           then if f then s else addScore s
-           else scoreSetFlag s f
+     in if _sFlag then if f then s else addScore s else scoreSetFlag s f

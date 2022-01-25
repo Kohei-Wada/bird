@@ -217,6 +217,9 @@ eventHandler e g@Game{..} = case _state of
           EventKey (Char 'k') Down _ _ -> 
               return g { _bird = birdFlapping _bird } 
 
+          EventKey (Char 'j') Down _ _ -> 
+              return g { _bird = birdSwooping _bird }
+
           EventKey (Char 'l') Down _ _ -> 
               return g 
 

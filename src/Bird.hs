@@ -68,6 +68,10 @@ birdFlapping :: Bird -> Bird
 birdFlapping b@Bird{..} = if _dead then b else setBirdVy b __birdFlappingV 
 
 
+birdSwooping :: Bird -> Bird
+birdSwooping b@Bird{..} = if _dead then b else setBirdVy b __birdSwoopingV
+
+
 birdUpdate :: Bird -> Bird
 birdUpdate b@Bird{..} = 
     if _dead then (updateAngle . birdFalling) b

@@ -45,8 +45,8 @@ loadAllPictures = do
 
     return GamePictures 
         { _birdPics   = bps
-        , _groundPic  = makeLongPicW gp gr __groundWid__  -- TODO change drawing method
-        , _skyPic     = makeLongPicW sp sr __skyWid__     -- TODO change drawing method 
+        , _groundPic  = makeLongPicW gp gr __groundWid__ 
+        , _skyPic     = makeLongPicW sp sr __skyWid__     
         , _pipePicUp  = pps !! 0 
         , _pipePicDw  = pps !! 1
         , _pipePicLng = scale 1 __wHeight pp 

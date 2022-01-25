@@ -7,7 +7,7 @@ import Graphics.Gloss
 __iFps     = 60                  :: Int
 __fFps     = fromIntegral __iFps :: Float
 __winTitle = "Flappy Bird"
-__bkColor  = light $ light $ light blue
+__bkColor  = cyan
 
 __winWidth__ , __winHeight__ , __wWidth, __wHeight :: Num a => a
 __winWidth__  = 276  -- WARNING : Don't change
@@ -23,6 +23,7 @@ __birdX         = (-1) * __wWidth / 5 :: Float
 __birdY         = __winHeight__ / 8   :: Float 
 __gravity       = 2000                :: Float
 __birdFlappingV = -500.0              :: Float
+__birdSwoopingV = 500.0               :: Float
 __maxBirdAngle  = 90                  :: Float
 __minBirdAngle  = -45                 :: Float
 __angleBias     = 10                  :: Float
