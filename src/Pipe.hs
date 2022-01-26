@@ -21,7 +21,7 @@ data Pipe = Pipe
 pipesInit :: Int -> IO [Pipe]
 pipesInit n = forM [1..n] $ \x -> do 
     let tmp = fromIntegral __wWidth 
-    pipeInit $ (fromIntegral x * tmp/ fromIntegral n) + tmp / fromIntegral 3
+    pipeInit $ (fromIntegral x * tmp / fromIntegral n) + tmp / fromIntegral 3
 
 
 pipesUpdate :: [Pipe] -> IO [Pipe]
@@ -33,8 +33,9 @@ pipesCollision ps x y = any (\p -> pipeCollision p x y) ps
 
 
 resetPipes :: [Pipe] -> IO [Pipe]
-resetPipes ps = forM (zip ps [1..]) $ \(p, n) ->
-    pipeReset p (fromIntegral n * fromIntegral __wWidth / fromIntegral (length ps)) 
+resetPipes ps = forM (zip ps [1..]) $ \(p, n) -> do 
+    let tmp = fromIntegral __wWidth 
+    pipeReset p (fromIntegral n * (tmp / fromIntegral (length ps)) + tmp / fromIntegral 3) 
 
 
 -----------------------------------------------------------------------------------------

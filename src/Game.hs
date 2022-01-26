@@ -175,6 +175,7 @@ gameDisplay g@Game{..} = case _state of
             , birdPicture _pictures _bird 
             , groundPicture _pictures _ground
             , scorePicture _pictures _score
+--            , gameOverPicture _pictures 
             ]
 
 
@@ -183,6 +184,9 @@ eventHandler e g@Game{..} = case _state of
 
     GameStart -> 
         case e of 
+          EventKey (MouseButton LeftButton) Down _ _ -> 
+              return g { _state = GameStop }
+
           EventKey (SpecialKey KeySpace) Down _ _ -> 
               return g { _state = GameStop }
 
@@ -197,6 +201,9 @@ eventHandler e g@Game{..} = case _state of
 
     GameStop -> 
         case e of 
+          EventKey (MouseButton LeftButton) Down _ _ -> 
+              return g { _state = GameLoop }
+
           EventKey (SpecialKey KeySpace) Down _ _ -> 
               return g { _state = GameLoop }
 
@@ -211,6 +218,9 @@ eventHandler e g@Game{..} = case _state of
 
     GameLoop -> 
         case e of 
+          EventKey (MouseButton LeftButton) Down _ _ -> 
+              return g { _bird = birdFlapping _bird } 
+
           EventKey (SpecialKey KeySpace) Down _ _ -> 
               return g { _bird = birdFlapping _bird } 
                   
@@ -237,6 +247,9 @@ eventHandler e g@Game{..} = case _state of
     
     GameOver -> 
         case e of 
+          EventKey (MouseButton LeftButton) Down _ _ -> 
+              gameReset g
+
           EventKey (SpecialKey KeySpace) Down _ _ -> do
               gameReset g
 

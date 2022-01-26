@@ -15,14 +15,15 @@ import Graphics.Gloss
 
 
 data GamePictures = GamePictures
-    { _birdPics   :: [Picture]
-    , _groundPic  :: Picture
-    , _skyPic     :: Picture
-    , _pipePicUp  :: Picture
-    , _pipePicDw  :: Picture
-    , _pipePicLng :: Picture
-    , _scorePics  :: [Picture]
-    , _logoPic    :: Picture
+    { _birdPics    :: [Picture]
+    , _groundPic   :: Picture
+    , _skyPic      :: Picture
+    , _pipePicUp   :: Picture
+    , _pipePicDw   :: Picture
+    , _pipePicLng  :: Picture
+    , _scorePics   :: [Picture]
+    , _logoPic     :: Picture
+    , _gameOverPic :: Picture
     }
 
 
@@ -34,6 +35,7 @@ loadAllPictures = do
     pps <- loadPictures __pipeAssets 
     scs <- loadPictures __scoreAssets 
     lps <- loadPictures __logoAssets 
+    gop <- loadPictures __gameOver
 
     let gp = head gps
         gr = expansionRate __groundWid__ 
@@ -44,19 +46,24 @@ loadAllPictures = do
     let pp = pps !! 2
 
     return GamePictures 
-        { _birdPics   = bps
-        , _groundPic  = makeLongPicW gp gr __groundWid__ 
-        , _skyPic     = makeLongPicW sp sr __skyWid__     
-        , _pipePicUp  = pps !! 0 
-        , _pipePicDw  = pps !! 1
-        , _pipePicLng = scale 1 __wHeight pp 
-        , _scorePics  = scs
-        , _logoPic    = lps !! 0
+        { _birdPics    = bps
+        , _groundPic   = makeLongPicW gp gr __groundWid__ 
+        , _skyPic      = makeLongPicW sp sr __skyWid__     
+        , _pipePicUp   = pps !! 0 
+        , _pipePicDw   = pps !! 1
+        , _pipePicLng  = scale 1 __wHeight pp 
+        , _scorePics   = scs
+        , _logoPic     = lps !! 0
+        , _gameOverPic = gop !! 0 
         }
 
 
 logoPicture :: GamePictures -> Picture 
 logoPicture gp@GamePictures{..} =  translate 0 0 _logoPic 
+
+
+gameOverPicture :: GamePictures -> Picture
+gameOverPicture gp@GamePictures{..} =  translate 0 0 _gameOverPic 
 
 
 birdPicture :: GamePictures -> Bird -> Picture
