@@ -5,6 +5,9 @@ import Bird
 import Pipe
 import Options
 
+import System.Directory
+import System.IO 
+
 
 data Score = Score 
     { _value     :: Int 
@@ -42,3 +45,35 @@ updateScore :: Score -> [Pipe] -> Bird -> Score
 updateScore s@Score{..} ps b@Bird{..} = 
     let f = any (\p -> insidePipeGap p _birdX) ps 
      in if _sFlag then if f then s else addScore s else scoreSetFlag s f
+
+
+createFile :: FilePath -> IO () 
+createFile p = do 
+    handle <- openFile p WriteMode
+    hClose handle
+    
+
+writeHighScore :: Int -> IO () 
+writeHighScore n = do 
+    f <- doesFileExist __scoreData__
+
+    if f 
+       then do 
+       writeFile  __scoreData__ (show n) 
+
+       else do 
+       createFile __scoreData__
+       writeFile __scoreData__  (show n)
+
+
+loadhighScore :: IO Int
+loadhighScore = do 
+    f <- doesFileExist __scoreData__
+
+    if f 
+       then do 
+       text <- readFile __scoreData__  
+       return $ read text :: IO Int
+
+       else 
+       return 0 

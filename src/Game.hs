@@ -25,6 +25,7 @@ data Game = Game
     , _pipes    :: [Pipe]
     , _score    :: Score
     , _pictures :: GamePictures 
+    , _hScore   :: Int
     }
 
 
@@ -32,7 +33,8 @@ gameInit :: IO Game
 gameInit = do 
     ps <- pipesInit __nPipes  
     gp <- loadAllPictures 
-
+    hs <- loadhighScore 
+        
     return Game 
         { _state    = GameStart 
         , _bird     = birdInit 
@@ -41,6 +43,7 @@ gameInit = do
         , _pipes    = ps
         , _score    = scoreInit 
         , _pictures = gp
+        , _hScore   = hs 
         }
 
 
@@ -57,13 +60,29 @@ gameRestart g@Game{..} = do
 
 gameReset :: Game -> IO Game 
 gameReset g@Game{..} = do 
+    
     ps <- resetPipes _pipes 
-    return g
-        { _state = GameStop 
-        , _bird  = birdReset _bird
-        , _pipes = ps
-        , _score = scoreReset _score 
-        }
+
+    if _value _score > _hScore 
+       then do 
+       writeHighScore $ _value _score
+
+       return g
+           { _state = GameStop 
+           , _bird  = birdReset _bird
+           , _pipes = ps
+           , _score = scoreReset _score 
+           , _hScore = _value _score
+           }
+
+       else do  
+       return g
+           { _state = GameStop 
+           , _bird  = birdReset _bird
+           , _pipes = ps
+           , _score = scoreReset _score 
+           }
+
 
 
 updateGameObjects :: Game -> IO Game
@@ -126,7 +145,7 @@ updateGame _ g@Game{..} =
           updateGameObjects g
          
       GameLoop -> 
-          (updateGameObjects . updateGameState) g >>= return 
+          (updateGameObjects . updateGameState) g 
 
       GameOver -> 
           updateGameObjects g
@@ -166,6 +185,7 @@ gameDisplay g@Game{..} = case _state of
             , birdPicture _pictures _bird
             , groundPicture _pictures _ground
             , scorePicture _pictures _score
+            , highScorePicture _pictures _hScore
             ]
 
     GameOver -> 
@@ -175,6 +195,7 @@ gameDisplay g@Game{..} = case _state of
             , birdPicture _pictures _bird 
             , groundPicture _pictures _ground
             , scorePicture _pictures _score
+            , highScorePicture _pictures _hScore
 --            , gameOverPicture _pictures 
             ]
 

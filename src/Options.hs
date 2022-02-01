@@ -89,6 +89,8 @@ __scoreAssets =
     , "assets/font_big_9.png"
     ]
 
+__scoreData__ = "data/.highScore.dat"
+
 
 {- Logo -}
 __logoAssets = 

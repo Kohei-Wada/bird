@@ -24,7 +24,8 @@ dependencies:
 - gloss >= 0.2.3
 - gloss-juicy
 - random
-
+- directory
+- system-fileio 
 
 library:
   source-dirs: src
@@ -35,9 +36,9 @@ executables:
     source-dirs:         app
     ghc-options:
     - -threaded
-      #    - -rtsopts
+    - -rtsopts
     - -O2
-      #    - -with-rtsopts=-N
+    - -with-rtsopts=-N
     dependencies:
     - bird
 

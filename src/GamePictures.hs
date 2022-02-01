@@ -84,6 +84,12 @@ pipesPicture :: GamePictures -> [Pipe] -> [Picture]
 pipesPicture gp = map $ pipePicture gp
 
 
+highScorePicture :: GamePictures -> Int -> Picture
+highScorePicture _ n = 
+    let wh = __defaultGroundY  
+     in translate (__wWidth / 3) (wh)  $ scale 0.1 0.1 $ text $ "HIGH SCORE : " ++ show n 
+
+
 pipePicture :: GamePictures -> Pipe -> Picture
 pipePicture gp@GamePictures{..} p@Pipe{..} = 
      pictures [ translate _pipeX (_pipeUp + __wHeight / 2) _pipePicLng
