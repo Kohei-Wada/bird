@@ -7,15 +7,14 @@ import Actor
 
 import Graphics.Gloss
 
-
 data Sky = Sky 
     { _skyX   :: !Float 
     , _skyY   :: !Float
     , _skyWid :: !Int
     }
 
-
 instance Actor Sky where
+    initialize = pure skyInit
     update = skyUpdate
 
 skyInit :: Sky
@@ -26,10 +25,8 @@ skyInit = let w = __skyWid__ * expansionRate __skyWid__
                , _skyWid = w 
                }
 
-
 skyUpdate :: Sky -> IO Sky
 skyUpdate = pure . updateSkyX 
-
 
 updateSkyX :: Sky -> Sky
 updateSkyX s@Sky{..} = 
@@ -37,4 +34,3 @@ updateSkyX s@Sky{..} =
                     then -fromIntegral __skyWid 
                     else _skyX + __skySpeed * (1.0 / __fFps) 
       }
-

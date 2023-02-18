@@ -3,4 +3,5 @@ module Actor where
 import Prelude 
 
 class Actor a where
-    update :: a -> IO a
+    initialize :: IO a
+    update     :: a -> IO a

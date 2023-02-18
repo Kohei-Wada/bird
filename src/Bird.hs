@@ -19,9 +19,9 @@ data Bird = Bird
     } 
     deriving (Show, Eq)
 
-
 instance Actor Bird where
-    update = birdUpdate
+    initialize = pure birdInit
+    update     = birdUpdate
 
 
 birdInit :: Bird

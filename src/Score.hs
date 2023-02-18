@@ -43,7 +43,7 @@ scoreReset s@Score{..} = s { _value = 0
 
 updateScore :: Score -> [Pipe] -> Bird -> Score 
 updateScore s@Score{..} ps b@Bird{..} = 
-    let f = any (\p -> insidePipeGap p _birdX) ps 
+    let f = any (\p -> insidePipeGap p b) ps 
      in if _sFlag then if f then s else addScore s else scoreSetFlag s f
 
 
@@ -56,7 +56,6 @@ createFile p = do
 writeHighScore :: Int -> IO () 
 writeHighScore n = do 
     f <- doesFileExist __scoreData__
-
     if f 
        then do 
        writeFile  __scoreData__ (show n) 
@@ -73,7 +72,7 @@ loadhighScore = do
     if f 
        then do 
        text <- readFile __scoreData__  
-       return $ read text :: IO Int
+       pure $ read text 
 
        else 
-       return 0 
+       pure 0 

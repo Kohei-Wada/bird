@@ -11,10 +11,8 @@ import GamePictures
 import Actor
 
 import System.Exit
-
 import Graphics.Gloss
 import Graphics.Gloss.Interface.IO.Game
-
 
 data GameState = GameStart | GameStop | GameLoop | GameOver
 
@@ -32,20 +30,24 @@ data Game = Game
 
 gameInit :: IO Game
 gameInit = do 
-    ps <- pipesInit __nPipes  
+    ps <- pipesInit
     gp <- loadAllPictures 
     hs <- loadhighScore 
-        
+    b  <- initialize :: IO Bird
+    s  <- initialize :: IO Sky
+    g  <- initialize :: IO Ground
+
     pure Game 
         { _state    = GameStart 
-        , _bird     = birdInit 
-        , _sky      = skyInit 
-        , _ground   = groundInit  
+        , _bird     = b
+        , _sky      = s
+        , _ground   = g
         , _pipes    = ps
         , _score    = scoreInit 
         , _pictures = gp
         , _hScore   = hs 
         }
+
 
 gameRestart :: Game -> IO Game 
 gameRestart g@Game{..} = do 
@@ -60,9 +62,7 @@ gameRestart g@Game{..} = do
 
 gameReset :: Game -> IO Game 
 gameReset g@Game{..} = do 
-    
     ps <- resetPipes _pipes 
-
     if _value _score > _hScore 
        then do 
        writeHighScore $ _value _score
@@ -81,7 +81,6 @@ gameReset g@Game{..} = do
            , _pipes = ps
            , _score = scoreReset _score 
            }
-
 
 
 updateGameObjects :: Game -> IO Game
@@ -107,11 +106,10 @@ updateGameObjects g@Game{..} =
           if _dead _bird 
              then do 
                  b' <- update _bird
-                 pure g 
-                     { _bird = b'
-                     }
+                 pure g { _bird = b' }
+
              else do 
-                 ps <- mapM update _pipes
+                 ps <- mapM pipeUpdate _pipes
                  s' <- update _sky
                  g' <- update _ground
                  b' <- if checkCollision g || checkCoordinates _bird 
@@ -126,19 +124,15 @@ updateGameObjects g@Game{..} =
                      , _score  = updateScore _score _pipes _bird 
                      }
 
-      GameOver ->
-          pure g
+      GameOver -> pure g
 
 
--- TODO 
 updateGameState :: Game -> Game
 updateGameState g@Game{..} = 
     case _state of 
       GameLoop -> 
           if _dead _bird 
-             then let b@Bird{..} = _bird 
-                      s = if groundCollision' _ground _bird then GameOver else _state 
-                   in g { _state = s }
+             then g { _state = if groundCollision' _ground _bird then GameOver else _state }
              else g 
       _ -> g
 
@@ -153,9 +147,7 @@ updateGame _ g@Game{..} =
 
 
 checkCollision :: Game -> Bool
-checkCollision g@Game{..} = 
-    let b@Bird{..} = _bird 
-     in groundCollision' _ground b || pipesCollision _pipes _birdX _birdY 
+checkCollision g@Game{..} = groundCollision' _ground _bird || any (\p -> pipeCollision p _bird) _pipes
 
 
 checkCoordinates :: Bird -> Bool 
@@ -196,13 +188,12 @@ gameDisplay g@Game{..} = case _state of
             , groundPicture _pictures _ground
             , scorePicture _pictures _score
             , highScorePicture _pictures _hScore
---            , gameOverPicture _pictures 
+--          , gameOverPicture _pictures 
             ]
 
 
 eventHandler :: Event -> Game -> IO Game
 eventHandler e g@Game{..} = case _state of 
-
     GameStart -> 
         case e of 
           EventKey (MouseButton LeftButton) Down _ _ -> 
@@ -271,9 +262,8 @@ eventHandler e g@Game{..} = case _state of
           EventKey (MouseButton LeftButton) Down _ _ -> 
               gameReset g
 
-          EventKey (SpecialKey KeySpace) Down _ _ -> do
+          EventKey (SpecialKey KeySpace) Down _ _ -> 
               gameReset g
-
           EventKey (Char 'k') Down _ _ -> 
               gameReset g
  
@@ -283,10 +273,8 @@ eventHandler e g@Game{..} = case _state of
           _ -> 
               pure g
 
-
 gameMain :: IO ()
 gameMain = do
     let window = InWindow __winTitle (__wWidth, __wHeight) (500, 200)
     g <- gameInit
     playIO window __bkColor __iFps g gameDisplay eventHandler updateGame
-

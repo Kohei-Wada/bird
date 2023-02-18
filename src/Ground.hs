@@ -15,6 +15,7 @@ data Ground = Ground
 
 
 instance Actor Ground where
+    initialize = pure groundInit
     update = groundUpdate
 
 
