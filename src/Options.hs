@@ -98,5 +98,3 @@ __logoAssets =
 
 __gameOver = 
     [ "assets/gameover.png" ]
-
-

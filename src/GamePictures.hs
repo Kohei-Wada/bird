@@ -13,7 +13,6 @@ import Score
 
 import Graphics.Gloss
 
-
 data GamePictures = GamePictures
     { _birdPics    :: [Picture]
     , _groundPic   :: Picture
@@ -98,7 +97,6 @@ pipePicture gp@GamePictures{..} p@Pipe{..} =
               , translate _pipeX _pipeDw _pipePicDw
               ] 
 
-
 -- TODO 
 scorePicture :: GamePictures -> Score -> Picture
 scorePicture gp@GamePictures{..} s@Score{..} =
@@ -108,4 +106,3 @@ scorePicture gp@GamePictures{..} s@Score{..} =
        let nl = zip [0..] $ digs _value
            ps = map (\(i, n) -> translate (-__scoreWid__ * fromIntegral i) 0 (_scorePics !! n)) nl
         in translate _scoreX _scoreY $ pictures ps 
-

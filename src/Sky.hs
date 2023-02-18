@@ -3,6 +3,7 @@ module Sky where
 
 import Options
 import Utils
+import Actor
 
 import Graphics.Gloss
 
@@ -14,6 +15,9 @@ data Sky = Sky
     }
 
 
+instance Actor Sky where
+    update = skyUpdate
+
 skyInit :: Sky
 skyInit = let w = __skyWid__ * expansionRate __skyWid__  
            in Sky 
@@ -23,8 +27,8 @@ skyInit = let w = __skyWid__ * expansionRate __skyWid__
                }
 
 
-skyUpdate :: Sky -> Sky
-skyUpdate = updateSkyX 
+skyUpdate :: Sky -> IO Sky
+skyUpdate = pure . updateSkyX 
 
 
 updateSkyX :: Sky -> Sky

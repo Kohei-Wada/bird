@@ -3,6 +3,8 @@ module Ground where
 
 import Options
 import Utils
+import Actor
+import Bird 
 
 
 data Ground = Ground 
@@ -10,6 +12,10 @@ data Ground = Ground
     , _groundY   :: !Float
     , _groundWid :: !Int
     }
+
+
+instance Actor Ground where
+    update = groundUpdate
 
 
 groundInit :: Ground
@@ -21,8 +27,8 @@ groundInit = let w = __groundWid__ * expansionRate __groundWid__
                   }
 
 
-groundUpdate :: Ground -> Ground
-groundUpdate =  updateGroundX
+groundUpdate :: Ground -> IO Ground
+groundUpdate =  pure . updateGroundX
 
 
 updateGroundX :: Ground -> Ground 
@@ -37,7 +43,6 @@ addGroundX g@Ground{..} = g { _groundX = _groundX + __groundSpeed * (1.0 / __fFp
 resetGroundX :: Ground -> Ground
 resetGroundX g@Ground{..} = g { _groundX = -fromIntegral __groundWid + __groundResetBias } 
 
-
-groundCollision :: Ground -> Float -> Float -> Bool
-groundCollision g@Ground{..} x y = y < _groundY + __groundCollisionBias  
-
+groundCollision' :: Ground -> Bird -> Bool
+groundCollision' g@Ground{..} b@Bird{..} = 
+    _birdY < _groundY + __groundCollisionBias

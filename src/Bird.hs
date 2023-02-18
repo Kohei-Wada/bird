@@ -3,6 +3,7 @@
 module Bird where
     
 import Options
+import Actor
 
 import Graphics.Gloss
 
@@ -13,10 +14,14 @@ data Bird = Bird
     , _birdVy   :: !Float     
     , _count    :: !Int       -- count for FPS
     , _pIndex   :: !Int       -- Picture Index
-    , _angle    :: Float
-    , _dead     :: Bool
+    , _angle    :: !Float
+    , _dead     :: !Bool
     } 
     deriving (Show, Eq)
+
+
+instance Actor Bird where
+    update = birdUpdate
 
 
 birdInit :: Bird
@@ -72,10 +77,10 @@ birdSwooping :: Bird -> Bird
 birdSwooping b@Bird{..} = if _dead then b else setBirdVy b __birdSwoopingV
 
 
-birdUpdate :: Bird -> Bird
+birdUpdate :: Bird -> IO Bird
 birdUpdate b@Bird{..} = 
-    if _dead then (updateAngle . birdFalling) b
-             else (updateAngle . updatePicIndex . updateCount . birdFalling) b
+    if _dead then (pure . updateAngle . birdFalling) b
+             else (pure . updateAngle . updatePicIndex . updateCount . birdFalling) b
 
 
 updateCount :: Bird -> Bird
@@ -85,11 +90,13 @@ updateCount b@Bird{..} =
 
 updatePicIndex :: Bird -> Bird
 updatePicIndex b@Bird{..} = 
-    let i = if _count == 0 
-               then if _pIndex == (__nBirdAssets - 1) 
-                       then 0 
-                       else _pIndex + 1
-               else _pIndex
+    let i = if _count == 0 then 
+                if _pIndex == (__nBirdAssets - 1) then 
+                    0 
+                else 
+                    _pIndex + 1
+            else 
+                _pIndex
      in b { _pIndex = i }
 
 
@@ -107,4 +114,3 @@ calcurateAngle vy
 
 velocityToAngle :: Float -> Float
 velocityToAngle v = v / __angleBias 
-
