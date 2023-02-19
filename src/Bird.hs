@@ -7,7 +7,6 @@ import Actor
 
 import Graphics.Gloss
 
-
 data Bird = Bird 
     { _birdX    :: !Float
     , _birdY    :: !Float 
@@ -17,15 +16,15 @@ data Bird = Bird
     , _angle    :: !Float
     , _dead     :: !Bool
     } 
-    deriving (Show, Eq)
 
 instance Actor Bird where
-    initialize = pure birdInit
-    update     = birdUpdate
+    initialize  = birdInit
+    update      = birdUpdate
+    onCollision = pure . birdKill
 
 
-birdInit :: Bird
-birdInit = Bird 
+birdInit :: IO Bird
+birdInit = pure Bird 
         { _birdX    = __birdX
         , _birdY    = __birdY 
         , _birdVy   = 0 
@@ -35,26 +34,12 @@ birdInit = Bird
         , _dead     = False
         }
 
-
-birdReset :: Bird -> Bird
-birdReset b@Bird{..} = b { _birdX  = __birdX
-                         , _birdY  = __birdY 
-                         , _birdVy = 0 
-                         , _angle  = 0
-                         , _dead   = False
-                         }
-
-
---setBirdVx :: Bird -> Float -> Bird
---setBirdVx b@Bird{..} vX = b { _birdVx = vX }
-
-
 setBirdVy :: Bird -> Float -> Bird
 setBirdVy b@Bird{..} vY = b { _birdVy = vY }
 
 
-setBirdDead :: Bird -> Bool -> Bird 
-setBirdDead b@Bird{..} f = b { _dead = f }
+birdKill :: Bird -> Bird
+birdKill b@Bird{..} = b { _dead = True }
 
 
 updateBirdY :: Bird -> Bird

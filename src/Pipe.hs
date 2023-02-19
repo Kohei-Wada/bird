@@ -2,19 +2,18 @@
 module Pipe where
 
 import Options
-import Utils
 import Bird
 import Actor
 import Control.Monad
+import System.Random
 
 data Pipe = Pipe 
     { _pipeUp    :: !Float
     , _pipeDw    :: !Float
     , _pipeX     :: !Float
-    } deriving Show
+    } 
 
 newtype Pipes = Pipes [Pipe]
-
 
 unPipes :: Pipes -> [Pipe] 
 unPipes (Pipes ps) = ps
@@ -26,12 +25,6 @@ pipesInit = forM [1..__nPipes] $ \x -> do
     pipeInit $ (fromIntegral x * tmp / fromIntegral __nPipes) + tmp / 3.0
 
 
-resetPipes :: [Pipe] -> IO [Pipe]
-resetPipes ps = forM (zip ps [1..]) $ \(p, n) -> do 
-    let tmp = fromIntegral __wWidth 
-    pipeReset p (fromIntegral n * (tmp / fromIntegral (length ps)) + tmp / 3.0) 
-
-
 pipeInit :: Float -> IO Pipe
 pipeInit x = do
     r <- randomHeight 
@@ -40,20 +33,10 @@ pipeInit x = do
               , _pipeDw    = r + __pipesGap 
               }
 
-
-pipeReset :: Pipe -> Float -> IO Pipe
-pipeReset p@Pipe{..} x =  do 
-    r <- randomHeight
-    pure p { _pipeX  = x 
-           , _pipeUp = r
-           , _pipeDw = r + __pipesGap 
-           }
-
-
 pipeUpdate :: Pipe -> IO Pipe
 pipeUpdate p@Pipe{..} = 
     if _pipeX < -__wWidth / 2 
-       then pipeReset p $  __wWidth / 2 
+       then pipeInit (__wWidth / 2)
        else pure p { _pipeX = _pipeX + (__pipeSpeed / __fFps) }
 
 
@@ -65,6 +48,9 @@ pipeCollision p@Pipe{..} b@Bird{..} =
     && ( _birdY + fromIntegral __birdHgt__ >= _pipeUp || 
          _birdY - fromIntegral __birdHgt__ <= _pipeDw
        ) 
+
+randomHeight :: IO Float 
+randomHeight = randomRIO( 0, __wHeight / 2) 
 
 
 insidePipeGap :: Pipe -> Bird -> Bool

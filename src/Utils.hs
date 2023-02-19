@@ -9,9 +9,10 @@ import Graphics.Gloss.Juicy
 
 
 loadPictures :: [FilePath] -> IO [Picture]
-loadPictures ss = forM ss $ \s -> do 
-    Just p <- loadJuicy s
-    return p
+loadPictures ps = forM ps $ \s -> do 
+    tmp <- loadJuicy s
+    case tmp of 
+      Just p -> pure p 
 
 
 pictureSize :: Picture -> (Int, Int)
@@ -25,10 +26,6 @@ makeLongPicW p r originW =
 
 expansionRate :: Int -> Int
 expansionRate origin = round $ (fromIntegral __wWidth) / (fromIntegral origin) * 2 
-
-
-randomHeight:: IO Float 
-randomHeight = randomRIO( 0, __wHeight / 2) :: IO Float 
 
 
 digs :: Int -> [Int]

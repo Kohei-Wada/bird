@@ -1,4 +1,5 @@
 {-#LANGUAGE RecordWildCards #-}
+{-#LANGUAGE BangPatterns #-}
 module Score where
 
 import Bird 
@@ -10,20 +11,25 @@ import System.IO
 
 
 data Score = Score 
-    { _value     :: Int 
-    , _scoreX    :: Float
-    , _scoreY    :: Float
-    , _sFlag     :: Bool
+    { _value     :: !Int 
+    , _scoreX    :: !Float
+    , _scoreY    :: !Float
+    , _sFlag     :: !Bool
+    , _highScore :: !Int
     }
 
 
-scoreInit :: Score 
-scoreInit = Score 
-    { _value     = 0 
-    , _scoreX    = 0 
-    , _scoreY    = __wHeight / 3
-    , _sFlag     = False
-    }
+scoreInit :: IO Score 
+scoreInit = do 
+    hs <- loadhighScore 
+
+    pure Score 
+        { _value     = 0 
+        , _scoreX    = 0 
+        , _scoreY    = __wHeight / 3
+        , _sFlag     = False
+        , _highScore = hs
+        }
 
 
 addScore :: Score -> Score
@@ -35,15 +41,9 @@ scoreSetFlag :: Score -> Bool -> Score
 scoreSetFlag s@Score{..} b = s { _sFlag = b }
 
 
-scoreReset :: Score -> Score
-scoreReset s@Score{..} = s { _value = 0 
-                           , _sFlag = False 
-                           }
-
-
 updateScore :: Score -> [Pipe] -> Bird -> Score 
 updateScore s@Score{..} ps b@Bird{..} = 
-    let f = any (\p -> insidePipeGap p b) ps 
+    let !f = any (\p -> insidePipeGap p b) ps 
      in if _sFlag then if f then s else addScore s else scoreSetFlag s f
 
 
@@ -53,16 +53,16 @@ createFile p = do
     hClose handle
     
 
-writeHighScore :: Int -> IO () 
-writeHighScore n = do 
+writeHighScore :: Score -> IO () 
+writeHighScore s@Score{..} = do 
     f <- doesFileExist __scoreData__
     if f 
        then do 
-       writeFile  __scoreData__ (show n) 
+       writeFile  __scoreData__ (show _value) 
 
        else do 
        createFile __scoreData__
-       writeFile __scoreData__  (show n)
+       writeFile __scoreData__  (show _value)
 
 
 loadhighScore :: IO Int

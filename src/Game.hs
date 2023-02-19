@@ -17,33 +17,32 @@ import Graphics.Gloss.Interface.IO.Game
 data GameState = GameStart | GameStop | GameLoop | GameOver
 
 data Game = Game 
-    { _state    :: GameState
-    , _bird     :: Bird
-    , _sky      :: Sky
-    , _ground   :: Ground
-    , _pipes    :: [Pipe]
-    , _score    :: Score
-    , _pictures :: GamePictures 
-    , _hScore   :: Int
+    { _state    :: !GameState
+    , _bird     :: !Bird
+    , _sky      :: !Sky
+    , _ground   :: !Ground
+    , _pipes    :: ![Pipe]
+    , _score    :: !Score
+    , _pictures :: !GamePictures 
+    , _hScore   :: !Int
     }
-
 
 gameInit :: IO Game
 gameInit = do 
     ps <- pipesInit
     gp <- loadAllPictures 
     hs <- loadhighScore 
-    b  <- initialize :: IO Bird
-    s  <- initialize :: IO Sky
-    g  <- initialize :: IO Ground
-
+    b  <- initialize 
+    s  <- initialize
+    g  <- initialize
+    sc <- scoreInit
     pure Game 
         { _state    = GameStart 
         , _bird     = b
         , _sky      = s
         , _ground   = g
         , _pipes    = ps
-        , _score    = scoreInit 
+        , _score    = sc 
         , _pictures = gp
         , _hScore   = hs 
         }
@@ -51,35 +50,39 @@ gameInit = do
 
 gameRestart :: Game -> IO Game 
 gameRestart g@Game{..} = do 
-    ps <- resetPipes _pipes 
+    ps <- pipesInit
+    b  <- initialize
+    sc <- scoreInit
     pure g
         { _state = GameLoop 
-        , _bird  = birdReset _bird
+        , _bird  = b
         , _pipes = ps
-        , _score = scoreReset _score 
+        , _score = sc
         }
 
 
 gameReset :: Game -> IO Game 
 gameReset g@Game{..} = do 
-    ps <- resetPipes _pipes 
+    ps <- pipesInit 
+    b  <- initialize
+    sc <- scoreInit
     if _value _score > _hScore 
        then do 
-       writeHighScore $ _value _score
+       writeHighScore _score
        pure g
            { _state = GameStop 
-           , _bird  = birdReset _bird
+           , _bird  = b
            , _pipes = ps
-           , _score = scoreReset _score 
+           , _score = sc
            , _hScore = _value _score
            }
 
        else do  
        pure g
            { _state = GameStop 
-           , _bird  = birdReset _bird
+           , _bird  = b
            , _pipes = ps
-           , _score = scoreReset _score 
+           , _score = sc
            }
 
 
@@ -113,9 +116,8 @@ updateGameObjects g@Game{..} =
                  s' <- update _sky
                  g' <- update _ground
                  b' <- if checkCollision g || checkCoordinates _bird 
-                          then pure $ (`setBirdDead` True) _bird
+                          then pure $ birdKill _bird
                           else update _bird 
-
                  pure g 
                      { _bird   = b'
                      , _sky    = s'
@@ -132,7 +134,7 @@ updateGameState g@Game{..} =
     case _state of 
       GameLoop -> 
           if _dead _bird 
-             then g { _state = if groundCollision' _ground _bird then GameOver else _state }
+             then g { _state = if groundCollision _ground _bird then GameOver else _state }
              else g 
       _ -> g
 
@@ -147,7 +149,7 @@ updateGame _ g@Game{..} =
 
 
 checkCollision :: Game -> Bool
-checkCollision g@Game{..} = groundCollision' _ground _bird || any (\p -> pipeCollision p _bird) _pipes
+checkCollision g@Game{..} = groundCollision _ground _bird || any (\p -> pipeCollision p _bird) _pipes
 
 
 checkCoordinates :: Bird -> Bool 
@@ -188,7 +190,6 @@ gameDisplay g@Game{..} = case _state of
             , groundPicture _pictures _ground
             , scorePicture _pictures _score
             , highScorePicture _pictures _hScore
---          , gameOverPicture _pictures 
             ]
 
 

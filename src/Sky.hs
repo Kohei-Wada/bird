@@ -14,8 +14,9 @@ data Sky = Sky
     }
 
 instance Actor Sky where
-    initialize = pure skyInit
-    update = skyUpdate
+    initialize  = pure skyInit
+    update      = skyUpdate
+    onCollision = pure 
 
 skyInit :: Sky
 skyInit = let w = __skyWid__ * expansionRate __skyWid__  
