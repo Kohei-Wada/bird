@@ -25,7 +25,7 @@ data Game = Game
     , _bird     :: !Bird
     , _sky      :: !Sky
     , _ground   :: !Ground
-    , _pipes    :: ![Pipe]
+    , _pipes    :: !Pipes
     , _score    :: !Score
     , _pictures :: !GamePictures 
     , _hScore   :: !Int
@@ -33,9 +33,9 @@ data Game = Game
 
 gameInit :: IO Game
 gameInit = do 
-    ps <- pipesInit
     gp <- loadAllPictures 
     hs <- loadhighScore 
+    ps <- initialize
     b  <- initialize 
     s  <- initialize
     g  <- initialize
@@ -54,7 +54,7 @@ gameInit = do
 
 gameRestart :: Game -> IO Game 
 gameRestart g@Game{..} = do 
-    ps <- pipesInit
+    ps <- initialize
     b  <- initialize
     sc <- scoreInit
     pure g
@@ -67,7 +67,7 @@ gameRestart g@Game{..} = do
 
 gameReset :: Game -> IO Game 
 gameReset g@Game{..} = do 
-    ps <- pipesInit 
+    ps <- initialize
     b  <- initialize
     sc <- scoreInit
     if _value _score > _hScore 
@@ -116,7 +116,7 @@ updateGameObjects g@Game{..} =
                  pure g { _bird = b' }
 
              else do 
-                 ps <- mapM pipeUpdate _pipes
+                 ps <- update (_pipes)
                  s' <- update _sky
                  g' <- update _ground
                  b' <- if checkCollision g || checkCoordinates _bird 
@@ -127,7 +127,7 @@ updateGameObjects g@Game{..} =
                      , _sky    = s'
                      , _ground = g'
                      , _pipes  = ps
-                     , _score  = updateScore _score _pipes _bird 
+                     , _score  = updateScore _score (_pipes) _bird 
                      }
 
       GameOver -> pure g
@@ -153,11 +153,12 @@ updateGame _ g@Game{..} =
 
 
 checkCollision :: Game -> Bool
-checkCollision Game{..} = groundCollision _ground _bird || any (\p -> pipeCollision p _bird) _pipes
+checkCollision Game{..} = groundCollision _ground _bird || pipesCollision (_pipes) _bird
 
 
 checkCoordinates :: Bird -> Bool 
-checkCoordinates Bird{..} = -_birdY > __wHeight || _birdY > __wHeight 
+checkCoordinates Bird{..} = 
+    -_birdY > __wHeight || _birdY > __wHeight 
 
 
 gameDisplay :: Game -> IO Picture
@@ -179,7 +180,7 @@ gameDisplay Game{..} = case _state of
     GameLoop -> 
         pure $ pictures  
             [ skyPicture _pictures _sky
-            , pictures $ pipesPicture _pictures _pipes
+            , pictures $ pipesPicture _pictures (_pipes)
             , birdPicture _pictures _bird
             , groundPicture _pictures _ground
             , scorePicture _pictures _score
@@ -189,7 +190,7 @@ gameDisplay Game{..} = case _state of
     GameOver -> 
         pure $ pictures  
             [ skyPicture _pictures _sky
-            , pictures $ pipesPicture _pictures _pipes
+            , pictures $ pipesPicture _pictures (_pipes)
             , birdPicture _pictures _bird 
             , groundPicture _pictures _ground
             , scorePicture _pictures _score

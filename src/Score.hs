@@ -8,6 +8,10 @@ import Options
 
 import System.Directory
 import System.IO 
+import Control.Monad
+import Control.Monad.ST
+import Data.STRef
+
 
 data Score = Score 
     { _value     :: !Int 
@@ -21,7 +25,6 @@ data Score = Score
 scoreInit :: IO Score 
 scoreInit = do 
     hs <- loadhighScore 
-
     pure Score 
         { _value     = 0 
         , _scoreX    = 0 
@@ -40,9 +43,9 @@ scoreSetFlag :: Score -> Bool -> Score
 scoreSetFlag s@Score{..} b = s { _sFlag = b }
 
 
-updateScore :: Score -> [Pipe] -> Bird -> Score 
+updateScore :: Score -> Pipes -> Bird -> Score 
 updateScore s@Score{..} ps b@Bird{..} = 
-    let !f = any (\p -> insidePipeGap p b) ps 
+    let !f = insidePipesGap ps b
      in if _sFlag then if f then s else addScore s else scoreSetFlag s f
 
 

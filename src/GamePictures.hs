@@ -78,8 +78,8 @@ skyPicture :: GamePictures -> Sky -> Picture
 skyPicture GamePictures{..} s@Sky{..} = translate _skyX _skyY _skyPic 
 
 
-pipesPicture :: GamePictures -> [Pipe] -> [Picture]
-pipesPicture gp = map $ pipePicture gp
+pipesPicture :: GamePictures -> Pipes -> [Picture]
+pipesPicture gp (Pipes ps) = map (pipePicture gp) ps
 
 
 highScorePicture :: GamePictures -> Int -> Picture

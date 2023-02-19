@@ -1,4 +1,5 @@
 {-#LANGUAGE RecordWildCards #-}
+{-#LANGUAGE BangPatterns #-}
 
 module Bird (Bird(..), birdFlapping, birdKill, birdSwooping) where
     
@@ -38,15 +39,24 @@ birdInit = pure Bird
         }
 
 setBirdVy :: Bird -> Float -> Bird
-setBirdVy b@Bird{..} vY = b { _birdVy = vY }
+setBirdVy b vy = runST $ do 
+    b' <- newSTRef b
+    modifySTRef b' (\b -> b { _birdVy = vy })
+    readSTRef b'
 
 
 birdKill :: Bird -> Bird
-birdKill b@Bird{..} = b { _dead = True }
+birdKill b = runST $ do 
+    b' <- newSTRef b
+    modifySTRef b' (\b -> b { _dead = True })
+    readSTRef b'
 
 
 updateBirdY :: Bird -> Bird
-updateBirdY b@Bird{..} = b { _birdY = _birdY - _birdVy * (1.0 / __fFps) } 
+updateBirdY b = runST $ do 
+    b' <- newSTRef b
+    modifySTRef b' (\b@Bird{..} -> b { _birdY = _birdY - _birdVy * (1.0 / __fFps) } )
+    readSTRef b'
 
 
 updateBirdVy :: Bird -> Bird
@@ -62,15 +72,17 @@ birdFlapping b@Bird{..} = if _dead then b else setBirdVy b __birdFlappingV
 
 
 birdSwooping :: Bird -> Bird
-birdSwooping b@Bird{..} = if _dead then b else setBirdVy b __birdSwoopingV
+birdSwooping b@Bird{..} = runST $ do 
+    b' <- newSTRef b
+    modifySTRef b' (\b -> if _dead then b else setBirdVy b __birdSwoopingV)
+    readSTRef b'
 
-
+    
 birdUpdate :: Bird -> IO Bird 
 birdUpdate b = stToIO $ do 
     b' <- newSTRef b
     modifySTRef b' birdUpdate'
     readSTRef b'
-    
     where
         birdUpdate' :: Bird -> Bird
         birdUpdate' b@Bird{..} = 
@@ -78,25 +90,27 @@ birdUpdate b = stToIO $ do
                      else (updateAngle . updatePicIndex . updateCount . birdFalling) b
 
 
-
 updateCount :: Bird -> Bird
-updateCount b@Bird{..} = 
-    b { _count = if (fromIntegral _count) >= (__fFps / __fPps) then 0 else _count + 1 }
+updateCount b@Bird{..} = runST $ do
+    b' <- newSTRef b 
+    modifySTRef b' (\b -> b { _count = if (fromIntegral _count) >= (__fFps / __fPps) then 0 else _count + 1 })
+    readSTRef b'
 
 
 updatePicIndex :: Bird -> Bird
 updatePicIndex b@Bird{..} = 
-    let i = if _count == 0 then 
-                if _pIndex == (__nBirdAssets - 1) then 
-                    0 
-                else 
-                    _pIndex + 1
+    let !i = if _count == 0 then 
+                if _pIndex == (__nBirdAssets - 1) then 0 else _pIndex + 1
             else 
                 _pIndex
      in b { _pIndex = i }
 
+
 updateAngle :: Bird -> Bird 
-updateAngle b@Bird{..} = b { _angle = calcurateAngle _birdVy }
+updateAngle b = runST $ do 
+    b' <- newSTRef b
+    modifySTRef b' (\b@Bird{..} -> b { _angle = calcurateAngle _birdVy })
+    readSTRef b'
 
 
 calcurateAngle :: Float -> Float

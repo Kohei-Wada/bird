@@ -1,10 +1,12 @@
 {-#LANGUAGE RecordWildCards #-}
+{-#LANGUAGE BangPatterns #-}
 module Ground (Ground(..), groundCollision) where
 
 import Options
 import Utils
 import Actor
 import Bird 
+
 import Control.Monad
 import Control.Monad.ST
 import Data.STRef
@@ -22,9 +24,8 @@ instance Actor Ground where
     update      = groundUpdate
     onCollision = pure 
 
-
 groundInit :: IO Ground
-groundInit = let w = __groundWid__ * expansionRate __groundWid__ 
+groundInit = let !w = __groundWid__ * expansionRate __groundWid__ 
               in pure Ground 
                   { _groundX   = -fromIntegral w 
                   , _groundY   = __defaultGroundY 
@@ -37,8 +38,7 @@ groundUpdate g = stToIO $ do
     modifySTRef g' groundUpdate'
     readSTRef g'
 
-    where
-        groundUpdate' = updateGroundX
+    where groundUpdate' = updateGroundX
 
 
 updateGroundX :: Ground -> Ground 
@@ -53,4 +53,3 @@ resetGroundX g@Ground{..} = g { _groundX = -fromIntegral __groundWid + __groundR
 
 groundCollision :: Ground -> Bird -> Bool
 groundCollision Ground{..} b@Bird{..} = _birdY < _groundY + __groundCollisionBias
-
