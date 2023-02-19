@@ -9,7 +9,6 @@ import Options
 import System.Directory
 import System.IO 
 
-
 data Score = Score 
     { _value     :: !Int 
     , _scoreX    :: !Float
@@ -54,7 +53,7 @@ createFile p = do
     
 
 writeHighScore :: Score -> IO () 
-writeHighScore s@Score{..} = do 
+writeHighScore Score{..} = do 
     f <- doesFileExist __scoreData__
     if f 
        then do 

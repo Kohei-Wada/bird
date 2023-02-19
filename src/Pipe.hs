@@ -1,11 +1,15 @@
 {-#LANGUAGE RecordWildCards #-}
-module Pipe where
+module Pipe (Pipe(..), insidePipeGap, pipeCollision, pipesInit, pipeUpdate) where
 
 import Options
 import Bird
 import Actor
 import Control.Monad
 import System.Random
+
+import Control.Monad
+import Control.Monad.ST
+import Data.STRef
 
 data Pipe = Pipe 
     { _pipeUp    :: !Float
@@ -33,6 +37,7 @@ pipeInit x = do
               , _pipeDw    = r + __pipesGap 
               }
 
+
 pipeUpdate :: Pipe -> IO Pipe
 pipeUpdate p@Pipe{..} = 
     if _pipeX < -__wWidth / 2 
@@ -41,7 +46,7 @@ pipeUpdate p@Pipe{..} =
 
 
 pipeCollision :: Pipe -> Bird -> Bool
-pipeCollision p@Pipe{..} b@Bird{..} = 
+pipeCollision Pipe{..} Bird{..} = 
        _birdX <= _pipeX + fromIntegral __pipeWid__
     && _birdX >= _pipeX - fromIntegral __pipeWid__
 
@@ -54,6 +59,6 @@ randomHeight = randomRIO( 0, __wHeight / 2)
 
 
 insidePipeGap :: Pipe -> Bird -> Bool
-insidePipeGap p@Pipe{..} b@Bird{..} =
+insidePipeGap Pipe{..} Bird{..} =
        _birdX <= _pipeX + fromIntegral __pipeWid__ 
     && _birdX >= _pipeX - fromIntegral __pipeWid__ 

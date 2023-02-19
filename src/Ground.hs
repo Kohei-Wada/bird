@@ -1,10 +1,13 @@
 {-#LANGUAGE RecordWildCards #-}
-module Ground where
+module Ground (Ground(..), groundCollision) where
 
 import Options
 import Utils
 import Actor
 import Bird 
+import Control.Monad
+import Control.Monad.ST
+import Data.STRef
 
 
 data Ground = Ground 
@@ -28,9 +31,14 @@ groundInit = let w = __groundWid__ * expansionRate __groundWid__
                   , _groundWid = w
                   }
 
-
 groundUpdate :: Ground -> IO Ground
-groundUpdate =  pure . updateGroundX
+groundUpdate g = stToIO $ do 
+    g' <- newSTRef g
+    modifySTRef g' groundUpdate'
+    readSTRef g'
+
+    where
+        groundUpdate' = updateGroundX
 
 
 updateGroundX :: Ground -> Ground 
@@ -44,4 +52,5 @@ resetGroundX :: Ground -> Ground
 resetGroundX g@Ground{..} = g { _groundX = -fromIntegral __groundWid + __groundResetBias } 
 
 groundCollision :: Ground -> Bird -> Bool
-groundCollision g@Ground{..} b@Bird{..} = _birdY < _groundY + __groundCollisionBias
+groundCollision Ground{..} b@Bird{..} = _birdY < _groundY + __groundCollisionBias
+

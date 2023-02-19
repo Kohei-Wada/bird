@@ -1,5 +1,5 @@
 {-#LANGUAGE RecordWildCards #-}
-module Game where
+module Game (gameMain) where
 
 import Bird
 import Pipe
@@ -13,6 +13,10 @@ import Actor
 import System.Exit
 import Graphics.Gloss
 import Graphics.Gloss.Interface.IO.Game
+
+import Control.Monad
+import Control.Monad.ST
+import Data.STRef
 
 data GameState = GameStart | GameStop | GameLoop | GameOver
 
@@ -149,15 +153,15 @@ updateGame _ g@Game{..} =
 
 
 checkCollision :: Game -> Bool
-checkCollision g@Game{..} = groundCollision _ground _bird || any (\p -> pipeCollision p _bird) _pipes
+checkCollision Game{..} = groundCollision _ground _bird || any (\p -> pipeCollision p _bird) _pipes
 
 
 checkCoordinates :: Bird -> Bool 
-checkCoordinates b@Bird{..} = -_birdY > __wHeight || _birdY > __wHeight 
+checkCoordinates Bird{..} = -_birdY > __wHeight || _birdY > __wHeight 
 
 
 gameDisplay :: Game -> IO Picture
-gameDisplay g@Game{..} = case _state of 
+gameDisplay Game{..} = case _state of 
     GameStart -> 
         pure $ pictures  
             [ skyPicture _pictures _sky

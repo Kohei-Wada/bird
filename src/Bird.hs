@@ -1,10 +1,13 @@
 {-#LANGUAGE RecordWildCards #-}
 
-module Bird where
+module Bird (Bird(..), birdFlapping, birdKill, birdSwooping) where
     
 import Options
 import Actor
 
+import Control.Monad
+import Control.Monad.ST
+import Data.STRef
 import Graphics.Gloss
 
 data Bird = Bird 
@@ -62,10 +65,18 @@ birdSwooping :: Bird -> Bird
 birdSwooping b@Bird{..} = if _dead then b else setBirdVy b __birdSwoopingV
 
 
-birdUpdate :: Bird -> IO Bird
-birdUpdate b@Bird{..} = 
-    if _dead then (pure . updateAngle . birdFalling) b
-             else (pure . updateAngle . updatePicIndex . updateCount . birdFalling) b
+birdUpdate :: Bird -> IO Bird 
+birdUpdate b = stToIO $ do 
+    b' <- newSTRef b
+    modifySTRef b' birdUpdate'
+    readSTRef b'
+    
+    where
+        birdUpdate' :: Bird -> Bird
+        birdUpdate' b@Bird{..} = 
+            if _dead then (updateAngle . birdFalling) b
+                     else (updateAngle . updatePicIndex . updateCount . birdFalling) b
+
 
 
 updateCount :: Bird -> Bird
@@ -83,7 +94,6 @@ updatePicIndex b@Bird{..} =
             else 
                 _pIndex
      in b { _pIndex = i }
-
 
 updateAngle :: Bird -> Bird 
 updateAngle b@Bird{..} = b { _angle = calcurateAngle _birdVy }

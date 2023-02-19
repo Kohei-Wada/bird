@@ -1,7 +1,7 @@
 {-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE BangPatterns #-}
 
 module GamePictures where
-
 
 import Bird
 import Ground
@@ -39,10 +39,10 @@ loadAllPictures = do
     let gp = head gps
         gr = expansionRate __groundWid__ 
 
-    let sp = head sps
+        sp = head sps
         sr = expansionRate __skyWid__ 
 
-    let pp = pps !! 2
+        pp = pps !! 2
 
     return GamePictures 
         { _birdPics    = bps
@@ -58,25 +58,24 @@ loadAllPictures = do
 
 
 logoPicture :: GamePictures -> Picture 
-logoPicture gp@GamePictures{..} =  translate 0 0 _logoPic 
+logoPicture GamePictures{..} =  translate 0 0 _logoPic 
 
 
 gameOverPicture :: GamePictures -> Picture
-gameOverPicture gp@GamePictures{..} =  translate 0 0 _gameOverPic 
+gameOverPicture GamePictures{..} =  translate 0 0 _gameOverPic 
 
 
 birdPicture :: GamePictures -> Bird -> Picture
-birdPicture gp@GamePictures{..} b@Bird{..} = 
+birdPicture GamePictures{..} b@Bird{..} = 
    translate _birdX _birdY $ rotate _angle (_birdPics !! _pIndex) 
 
 
 groundPicture :: GamePictures -> Ground -> Picture 
-groundPicture gp@GamePictures{..} g@Ground{..} = 
-    translate _groundX _groundY _groundPic 
+groundPicture GamePictures{..} g@Ground{..} = translate _groundX _groundY _groundPic 
 
 
 skyPicture :: GamePictures -> Sky -> Picture
-skyPicture gp@GamePictures{..} s@Sky{..} = translate _skyX _skyY _skyPic 
+skyPicture GamePictures{..} s@Sky{..} = translate _skyX _skyY _skyPic 
 
 
 pipesPicture :: GamePictures -> [Pipe] -> [Picture]
@@ -99,10 +98,10 @@ pipePicture gp@GamePictures{..} p@Pipe{..} =
 
 -- TODO 
 scorePicture :: GamePictures -> Score -> Picture
-scorePicture gp@GamePictures{..} s@Score{..} =
+scorePicture GamePictures{..} Score{..} =
     if _value == 0 
        then translate _scoreX _scoreY $ _scorePics !! 0
        else 
-       let nl = zip [0..] $ digs _value
-           ps = map (\(i, n) -> translate (-__scoreWid__ * fromIntegral i) 0 (_scorePics !! n)) nl
+       let !nl = zip [0..] $ digs _value
+           !ps = map (\(i, n) -> translate (-__scoreWid__ * fromIntegral i) 0 (_scorePics !! n)) nl
         in translate _scoreX _scoreY $ pictures ps 
