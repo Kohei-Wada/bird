@@ -41,40 +41,49 @@ birdInit = pure Bird
 setBirdVy :: Bird -> Float -> Bird
 setBirdVy b vy = runST $ do 
     b' <- newSTRef b
-    modifySTRef b' (\b -> b { _birdVy = vy })
+    modifySTRef b' $ \b -> b { _birdVy = vy }
     readSTRef b'
 
 
 birdKill :: Bird -> Bird
 birdKill b = runST $ do 
     b' <- newSTRef b
-    modifySTRef b' (\b -> b { _dead = True })
+    modifySTRef b' $ \b -> b { _dead = True }
     readSTRef b'
 
 
 updateBirdY :: Bird -> Bird
 updateBirdY b = runST $ do 
     b' <- newSTRef b
-    modifySTRef b' (\b@Bird{..} -> b { _birdY = _birdY - _birdVy * (1.0 / __fFps) } )
+    modifySTRef b' $ \b@Bird{..} -> b { _birdY = _birdY - _birdVy * (1.0 / __fFps) } 
     readSTRef b'
 
 
 updateBirdVy :: Bird -> Bird
-updateBirdVy b@Bird{..} = b { _birdVy = _birdVy + __gravity * (1.0 / __fFps) }
+updateBirdVy b = runST $ do 
+    b' <- newSTRef b
+    modifySTRef b' $ \b@Bird{..} -> b { _birdVy = _birdVy + __gravity * (1.0 / __fFps) }
+    readSTRef b'
 
     
 birdFalling :: Bird -> Bird   
-birdFalling = updateBirdY . updateBirdVy
+birdFalling b = runST $ do 
+    b' <- newSTRef b
+    modifySTRef b' (updateBirdY . updateBirdVy) 
+    readSTRef b'
 
 
 birdFlapping :: Bird -> Bird
-birdFlapping b@Bird{..} = if _dead then b else setBirdVy b __birdFlappingV 
+birdFlapping b@Bird{..} = runST $ do 
+    b' <- newSTRef b
+    modifySTRef b' $ \b -> if _dead then b else setBirdVy b __birdFlappingV 
+    readSTRef b'
 
 
 birdSwooping :: Bird -> Bird
 birdSwooping b@Bird{..} = runST $ do 
     b' <- newSTRef b
-    modifySTRef b' (\b -> if _dead then b else setBirdVy b __birdSwoopingV)
+    modifySTRef b' $ \b -> if _dead then b else setBirdVy b __birdSwoopingV
     readSTRef b'
 
     
@@ -83,6 +92,7 @@ birdUpdate b = stToIO $ do
     b' <- newSTRef b
     modifySTRef b' birdUpdate'
     readSTRef b'
+
     where
         birdUpdate' :: Bird -> Bird
         birdUpdate' b@Bird{..} = 
@@ -93,17 +103,20 @@ birdUpdate b = stToIO $ do
 updateCount :: Bird -> Bird
 updateCount b@Bird{..} = runST $ do
     b' <- newSTRef b 
-    modifySTRef b' (\b -> b { _count = if (fromIntegral _count) >= (__fFps / __fPps) then 0 else _count + 1 })
+    modifySTRef b' $ \b -> b { _count = if (fromIntegral _count) >= (__fFps / __fPps) then 0 else _count + 1 }
     readSTRef b'
 
 
 updatePicIndex :: Bird -> Bird
-updatePicIndex b@Bird{..} = 
+updatePicIndex b@Bird{..} = runST $ do 
+    b' <- newSTRef b
     let !i = if _count == 0 then 
                 if _pIndex == (__nBirdAssets - 1) then 0 else _pIndex + 1
             else 
                 _pIndex
-     in b { _pIndex = i }
+
+    modifySTRef b' $ \b -> b { _pIndex = i}
+    readSTRef b'
 
 
 updateAngle :: Bird -> Bird 

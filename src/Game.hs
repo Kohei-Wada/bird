@@ -64,7 +64,6 @@ gameRestart g@Game{..} = do
         , _score = sc
         }
 
-
 gameReset :: Game -> IO Game 
 gameReset g@Game{..} = do 
     ps <- initialize
@@ -74,10 +73,10 @@ gameReset g@Game{..} = do
        then do 
        writeHighScore _score
        pure g
-           { _state = GameStop 
-           , _bird  = b
-           , _pipes = ps
-           , _score = sc
+           { _state  = GameStop 
+           , _bird   = b
+           , _pipes  = ps
+           , _score  = sc
            , _hScore = _value _score
            }
 
@@ -91,23 +90,20 @@ gameReset g@Game{..} = do
 
 
 updateGameObjects :: Game -> IO Game
-updateGameObjects g@Game{..} = 
+updateGameObjects g@Game{..} = do 
+    s' <- update _sky
+    g' <- update _ground
+
     case _state of 
       GameStart -> do 
-          s' <- update _sky
-          g' <- update _ground
-          pure g 
-              { _sky    = s'
-              , _ground = g'
-              }
+          pure g { _sky    = s'
+                 , _ground = g'
+                 }
 
       GameStop -> do 
-          s' <- update _sky
-          g' <- update _ground
-          pure g 
-              { _sky    = s'
-              , _ground = g'
-              }
+          pure g { _sky    = s'
+                 , _ground = g'
+                 }
 
       GameLoop -> do 
           if _dead _bird 
@@ -117,8 +113,6 @@ updateGameObjects g@Game{..} =
 
              else do 
                  ps <- update (_pipes)
-                 s' <- update _sky
-                 g' <- update _ground
                  b' <- if checkCollision g || checkCoordinates _bird 
                           then pure $ birdKill _bird
                           else update _bird 
