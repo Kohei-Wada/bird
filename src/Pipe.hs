@@ -17,6 +17,10 @@ import System.Random
 import Control.Monad
 import Control.Monad.ST
 import Data.STRef
+import Data.Array.ST
+import GHC.IO 
+
+newtype Pipes = Pipes [Pipe]
 
 data Pipe = Pipe 
     { _pipeUp :: !Float
@@ -24,15 +28,12 @@ data Pipe = Pipe
     , _pipeX  :: !Float
     } 
 
-newtype Pipes = Pipes [Pipe]
-
 instance Actor Pipes where
     initialize = pipesInit
     update     = pipesUpdate
 
 randomHeight :: IO Float 
 randomHeight = randomRIO( 0, __wHeight / 2) 
-
 
 pipesInit :: IO Pipes
 pipesInit = do 
@@ -49,46 +50,46 @@ pipeInit r x =
          , _pipeDw    = r + __pipesGap 
          }
 
-
 pipesUpdate :: Pipes -> IO Pipes
-pipesUpdate (Pipes ps) = do 
-    ps' <- forM ps $ \p@Pipe{..} -> do 
-        if _pipeX < -__wWidth / 2 
+pipesUpdate (Pipes ps) = stToIO $ do 
+    a <- newListArray (1, __nPipes) ps :: ST s (STArray s Int Pipe)
+    forM_ [1 .. __nPipes] $ \i -> do 
+        p <- readArray a i 
+        if _pipeX p < -__wWidth / 2 
            then do 
-               r <- randomHeight
-               pipeReset p (__wWidth / 2) r
+               r <- ioToST $ randomHeight
+               writeArray a i $ pipeReset p (__wWidth / 2) r
            else do 
-               pipeUpdate p
+               writeArray a i $ pipeUpdate p
 
+    ps' <- getElems a
     pure $ Pipes ps'
 
+    where
+        pipeReset :: Pipe -> Float -> Float -> Pipe
+        pipeReset p@Pipe{..} x r = runST $ do 
+            p' <- newSTRef p
+            modifySTRef p' (\p -> p { _pipeX  = x, _pipeUp = r, _pipeDw = r + __pipesGap })
+            readSTRef p'
 
-pipeReset :: Pipe -> Float -> Float -> IO Pipe
-pipeReset p@Pipe{..} x r = stToIO $ do 
-    p' <- newSTRef p
-    modifySTRef p' (\p -> p { _pipeX  = x, _pipeUp = r, _pipeDw = r + __pipesGap })
-    readSTRef p'
-
-
-pipeUpdate :: Pipe -> IO Pipe
-pipeUpdate p = stToIO $ do 
-    p' <- newSTRef p
-    modifySTRef p' (\p@Pipe{..} -> p { _pipeX = _pipeX + (__pipeSpeed / __fFps) })
-    readSTRef p'
+        pipeUpdate :: Pipe -> Pipe
+        pipeUpdate p = runST $ do 
+            p' <- newSTRef p
+            modifySTRef p' (\p@Pipe{..} -> p { _pipeX = _pipeX + (__pipeSpeed / __fFps) })
+            readSTRef p'
 
 
 pipesCollision :: Pipes -> Bird -> Bool
-pipesCollision (Pipes ps) b = any (\p -> pipeCollision p b) ps
+pipesCollision (Pipes ps) b = any (\p -> pipeCollision p b) ps 
+    where
+        pipeCollision :: Pipe -> Bird -> Bool
+        pipeCollision Pipe{..} Bird{..} = 
+               _birdX <= _pipeX + fromIntegral __pipeWid__
+            && _birdX >= _pipeX - fromIntegral __pipeWid__
 
-
-pipeCollision :: Pipe -> Bird -> Bool
-pipeCollision Pipe{..} Bird{..} = 
-       _birdX <= _pipeX + fromIntegral __pipeWid__
-    && _birdX >= _pipeX - fromIntegral __pipeWid__
-
-    && ( _birdY + fromIntegral __birdHgt__ >= _pipeUp || 
-         _birdY - fromIntegral __birdHgt__ <= _pipeDw
-       ) 
+            && ( _birdY + fromIntegral __birdHgt__ >= _pipeUp || 
+                 _birdY - fromIntegral __birdHgt__ <= _pipeDw
+               ) 
 
 
 insidePipesGap :: Pipes -> Bird -> Bool

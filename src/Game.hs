@@ -17,6 +17,7 @@ import Graphics.Gloss.Interface.IO.Game
 import Control.Monad
 import Control.Monad.ST
 import Data.STRef
+import GHC.IO (ioToST)
 
 data GameState = GameStart | GameStop | GameLoop | GameOver
 
@@ -128,18 +129,23 @@ updateGameObjects g@Game{..} = do
 
 
 updateGameState :: Game -> Game
-updateGameState g@Game{..} = 
-    case _state of 
-      GameLoop -> 
-          if _dead _bird 
-             then g { _state = if groundCollision _ground _bird then GameOver else _state }
-             else g 
-      _ -> g
+updateGameState g@Game{..} = runST $ do 
+    g' <- newSTRef g
+    modifySTRef g' updateGameState' 
+    readSTRef g'
+        where 
+            updateGameState' g = case _state of 
+              GameLoop -> 
+                  if _dead _bird 
+                     then g { _state = if groundCollision _ground _bird then GameOver else _state }
+                     else g 
+              _ -> g
+
 
 
 updateGame :: Float -> Game -> IO Game
-updateGame _ g@Game{..} = 
-    case _state of
+updateGame _ g@Game{..} = stToIO $ do 
+    ioToST $ case _state of
       GameStart -> updateGameObjects g
       GameStop  -> updateGameObjects g
       GameLoop  -> updateGameObjects $ updateGameState g 
@@ -278,3 +284,4 @@ gameMain = do
     let window = InWindow __winTitle (__wWidth, __wHeight) (500, 200)
     g <- gameInit
     playIO window __bkColor __iFps g gameDisplay eventHandler updateGame
+
