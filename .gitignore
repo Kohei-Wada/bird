@@ -1,0 +1,4 @@
+.stack-work/
+*~
+data/*.dat
+bird-exe.eventlog
