@@ -56,4 +56,4 @@ groundUpdate g = stToIO $ do
             readSTRef g'
 
 groundCollision :: Ground -> Bird -> Bool
-groundCollision Ground{..} b@Bird{..} = realToFrac _birdY < _groundY + __groundCollisionBias
+groundCollision Ground{..} Bird{..} = realToFrac _birdY < _groundY + __groundCollisionBias

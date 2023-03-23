@@ -114,4 +114,3 @@ scorePicture GamePictures{..} Score{..} =
 translateD :: Double -> Double -> Picture -> Picture
 translateD x y p = translate (realToFrac x) (realToFrac y) p
 {-# INLINE translateD #-}
-
