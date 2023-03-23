@@ -40,13 +40,13 @@ groundUpdate g = stToIO $ do
         updateGroundX :: Ground -> Ground 
         updateGroundX g@Ground{..} = runST $ do 
             g' <- newSTRef g
-            modifySTRef g' $ \g -> if _groundX < -(fromIntegral __wWidth) then resetGroundX g else addGroundX g
+            modifySTRef g' $ \g -> if _groundX < -(__wWidth) then resetGroundX g else addGroundX g
             readSTRef g'
 
         addGroundX :: Ground -> Ground 
         addGroundX g@Ground{..} = runST $ do 
             g' <- newSTRef g
-            modifySTRef g' $ \g -> g { _groundX = _groundX + realToFrac __groundSpeed * realToFrac (1.0 / __fFps) }
+            modifySTRef g' $ \g -> g { _groundX = _groundX + realToFrac __groundSpeed * realToFrac (1.0 / __dFps) }
             readSTRef g'
 
         resetGroundX :: Ground -> Ground

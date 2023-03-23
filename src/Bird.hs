@@ -56,14 +56,14 @@ updateBirdY :: Bird -> Bird
 updateBirdY b = runST $ do 
     b' <- newSTRef b
     modifySTRef b' $ 
-        \b@Bird{..} -> b { _birdY = _birdY - realToFrac (_birdVy * (1.0 / __fFps)) } 
+        \b@Bird{..} -> b { _birdY = _birdY - realToFrac (_birdVy * (1.0 / __dFps)) } 
     readSTRef b'
 
 
 updateBirdVy :: Bird -> Bird
 updateBirdVy b = runST $ do 
     b' <- newSTRef b
-    modifySTRef b' $ \b@Bird{..} -> b { _birdVy = _birdVy + __gravity * (1.0 / __fFps) }
+    modifySTRef b' $ \b@Bird{..} -> b { _birdVy = _birdVy + __gravity * (1.0 / __dFps) }
     readSTRef b'
 
     
@@ -104,7 +104,7 @@ birdUpdate b = stToIO $ do
 updateCount :: Bird -> Bird
 updateCount b@Bird{..} = runST $ do
     b' <- newSTRef b 
-    modifySTRef b' $ \b -> b { _count = if (fromIntegral _count) >= (__fFps / __fPps) then 0 else _count + 1 }
+    modifySTRef b' $ \b -> b { _count = if (fromIntegral _count) >= (__dFps / __fPps) then 0 else _count + 1 }
     readSTRef b'
 
 

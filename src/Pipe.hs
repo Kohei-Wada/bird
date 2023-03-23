@@ -39,7 +39,7 @@ pipesInit :: IO Pipes
 pipesInit = do 
     ps <- forM [1 .. __nPipes] $ \x -> do 
         r <- randomHeight
-        pure $ pipeInit r ((fromIntegral x * fromIntegral __wWidth / fromIntegral __nPipes) + fromIntegral __wWidth / 3.0)
+        pure $ pipeInit r ((fromIntegral x * __wWidth / fromIntegral __nPipes) + __wWidth / 3.0)
     pure $ Pipes ps 
 
 
@@ -75,7 +75,7 @@ pipesUpdate (Pipes ps) = stToIO $ do
         pipeUpdate :: Pipe -> Pipe
         pipeUpdate p = runST $ do 
             p' <- newSTRef p
-            modifySTRef p' (\p@Pipe{..} -> p { _pipeX = _pipeX + realToFrac (__pipeSpeed / __fFps) })
+            modifySTRef p' (\p@Pipe{..} -> p { _pipeX = _pipeX + realToFrac (__pipeSpeed / __dFps) })
             readSTRef p'
 
 

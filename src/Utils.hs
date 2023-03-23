@@ -25,7 +25,7 @@ makeLongPicW p r originW =
 
 
 expansionRate :: Int -> Int
-expansionRate origin = round $ (fromIntegral __wWidth) / (fromIntegral origin) * 2 
+expansionRate origin = round $ (__wWidth) / (fromIntegral origin) * 2 
 
 
 digs :: Int -> [Int]

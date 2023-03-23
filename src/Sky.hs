@@ -38,5 +38,5 @@ skyUpdate s = stToIO $ do
 
 updateSkyX :: Sky -> Sky
 updateSkyX s@Sky{..} = 
-    s { _skyX  = if _skyX <  -(fromIntegral __wWidth) then -fromIntegral __skyWid else _skyX + __skySpeed * realToFrac (1.0/__fFps) 
+    s { _skyX  = if _skyX <  -__wWidth then - fromIntegral __skyWid else _skyX + __skySpeed * (1.0/__dFps) 
       }

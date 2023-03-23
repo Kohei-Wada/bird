@@ -279,7 +279,7 @@ eventHandler e g@Game{..} = case _state of
 
 gameMain :: IO ()
 gameMain = do
-    let window = InWindow __winTitle (__wWidth, __wHeight) (500, 200)
+    let window = InWindow __winTitle (round __wWidth, round __wHeight) (500, 200)
     g <- gameInit
     playIO window __bkColor __iFps g gameDisplay eventHandler updateGame
 

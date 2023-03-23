@@ -5,22 +5,22 @@ import Graphics.Gloss
 
 {- Game -}
 __iFps     = 60                  :: Int
-__fFps     = fromIntegral __iFps :: Double
+__dFps     = fromIntegral __iFps :: Double
 __winTitle = "Flappy Bird"
 __bkColor  = cyan
 
-__winWidth__ , __winHeight__ , __wWidth, __wHeight :: Num a => a
-__winWidth__  = 276  -- WARNING : Don't change
-__winHeight__ = 600  -- WARNING : Don't change
-__wWidth      = __winWidth__ * 3
-__wHeight     = __winHeight__
+--__winWidth__ , __winHeight__ , __wWidth, __wHeight :: Num a => a
+__winWidth__  = 276 :: Double  -- WARNING : Don't change 
+__winHeight__ = 600 :: Double -- WARNING : Don't change
+__wWidth      = __winWidth__ * 3.0 :: Double
+__wHeight     = __winHeight__ :: Double
 
 
 {- Bird -}
 __birdWid__     = 34                  :: Int
 __birdHgt__     = 24                  :: Int
-__birdX         = (-1) * __wWidth / 5 :: Double
-__birdY         = __winHeight__ / 8   :: Double
+__birdX         = (-1) * __wWidth / 5.0 :: Double
+__birdY         = __winHeight__ / 8.0   :: Double
 __gravity       = 2000                :: Double
 __birdFlappingV = -500.0              :: Double
 __birdSwoopingV = 500.0               :: Double
