@@ -94,10 +94,10 @@ highScorePicture _ n =
 
 pipePicture :: GamePictures -> Pipe -> Picture
 pipePicture GamePictures{..} Pipe{..} = 
-     pictures [ translate _pipeX (_pipeUp + __wHeight / 2) _pipePicLng
-              , translate _pipeX (_pipeDw - __wHeight / 2) _pipePicLng
-              , translate _pipeX _pipeUp _pipePicUp 
-              , translate _pipeX _pipeDw _pipePicDw
+     pictures [ translateD _pipeX (_pipeUp + __wHeight / 2) _pipePicLng
+              , translateD _pipeX (_pipeDw - __wHeight / 2) _pipePicLng
+              , translateD _pipeX _pipeUp _pipePicUp 
+              , translateD _pipeX _pipeDw _pipePicDw
               ] 
 {-# INLINE pipePicture #-}
 
@@ -111,3 +111,10 @@ scorePicture GamePictures{..} Score{..} =
            !ps = map (\(i, n) -> translate (-__scoreWid__ * fromIntegral i) 0 (_scorePics !! n)) nl
         in translate _scoreX _scoreY $ pictures ps 
 {-# INLINE scorePicture #-}
+
+
+-- utility function for translate
+translateD :: Double -> Double -> Picture -> Picture
+translateD x y p = translate (realToFrac x) (realToFrac y) p
+{-# INLINE translateD #-}
+

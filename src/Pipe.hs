@@ -23,16 +23,16 @@ import GHC.IO
 newtype Pipes = Pipes [Pipe]
 
 data Pipe = Pipe 
-    { _pipeUp :: !Float
-    , _pipeDw :: !Float
-    , _pipeX  :: !Float
+    { _pipeUp :: !Double
+    , _pipeDw :: !Double
+    , _pipeX  :: !Double
     } 
 
 instance Actor Pipes where
     initialize = pipesInit
     update     = pipesUpdate
 
-randomHeight :: IO Float 
+randomHeight :: IO Double
 randomHeight = randomRIO( 0, __wHeight / 2) 
 
 pipesInit :: IO Pipes
@@ -43,7 +43,7 @@ pipesInit = do
     pure $ Pipes ps 
 
 
-pipeInit :: Float -> Float -> Pipe
+pipeInit :: Double -> Double -> Pipe
 pipeInit r x = 
     Pipe { _pipeUp    = r 
          , _pipeX     = x
@@ -66,7 +66,7 @@ pipesUpdate (Pipes ps) = stToIO $ do
     pure $ Pipes ps'
 
     where
-        pipeReset :: Pipe -> Float -> Float -> Pipe
+        pipeReset :: Pipe -> Double -> Double -> Pipe
         pipeReset p@Pipe{..} x r = runST $ do 
             p' <- newSTRef p
             modifySTRef p' (\p -> p { _pipeX  = x, _pipeUp = r, _pipeDw = r + __pipesGap })

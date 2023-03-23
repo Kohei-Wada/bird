@@ -39,7 +39,7 @@ __birdAssets    =
 
 {- Pipe -}
 __pipeWid__      = 52     :: Int  -- Warning : Original picture size , Don't change.
-__pipesGap       = -120   :: Float
+__pipesGap       = -120   :: Double
 __pipeHgt        = 1      :: Int
 __nPipes         = 3      :: Int
 __pipeSpeed      = -150.0 :: Double
