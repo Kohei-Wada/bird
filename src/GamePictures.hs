@@ -70,11 +70,11 @@ birdPicture GamePictures{..} Bird{..} =
 {-# INLINE birdPicture #-}
 
 groundPicture :: GamePictures -> Ground -> Picture 
-groundPicture GamePictures{..} g@Ground{..} = translateD _groundX _groundY _groundPic 
+groundPicture GamePictures{..} Ground{..} = translateD _groundX _groundY _groundPic 
 {-# INLINE groundPicture #-}
 
 skyPicture :: GamePictures -> Sky -> Picture
-skyPicture GamePictures{..} s@Sky{..} = translateD _skyX _skyY _skyPic 
+skyPicture GamePictures{..} Sky{..} = translateD _skyX _skyY _skyPic 
 {-# INLINE skyPicture #-}
 
 pipesPicture :: GamePictures -> Pipes -> [Picture]
