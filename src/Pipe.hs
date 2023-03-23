@@ -29,8 +29,9 @@ data Pipe = Pipe
     } 
 
 instance Actor Pipes where
-    initialize = pipesInit
-    update     = pipesUpdate
+    initialize  = pipesInit
+    update      = pipesUpdate
+    onCollision = undefined
 
 randomHeight :: IO Double
 randomHeight = randomRIO( 0, __wHeight / 2) 

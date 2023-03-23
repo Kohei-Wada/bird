@@ -140,7 +140,7 @@ updateGameState g@Game{..} = runST $ do
                      then g { _state = if groundCollision _ground _bird then GameOver else _state }
                      else g 
               _ -> g
-
+            {-# INLINE updateGameState' #-}
 
 updateGame :: Float -> Game -> IO Game
 updateGame _ g@Game{..} = stToIO $ do 
@@ -282,4 +282,3 @@ gameMain = do
     let window = InWindow __winTitle (round __wWidth, round __wHeight) (500, 200)
     g <- gameInit
     playIO window __bkColor __iFps g gameDisplay eventHandler updateGame
-
