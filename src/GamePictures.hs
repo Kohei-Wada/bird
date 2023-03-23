@@ -56,7 +56,6 @@ loadAllPictures = do
         , _gameOverPic = gop !! 0 
         }
 
-
 logoPicture :: GamePictures -> Picture 
 logoPicture GamePictures{..} = translate 0 0 _logoPic 
 {-# INLINE logoPicture #-}
@@ -84,8 +83,7 @@ pipesPicture gp (Pipes ps) = map (pipePicture gp) ps
 
 highScorePicture :: GamePictures -> Int -> Picture
 highScorePicture _ n = 
-    let wh = __defaultGroundY  
-     in translateD (__wWidth / 3) wh $ scale 0.1 0.1 $ text $ "HIGH SCORE : " ++ show n 
+    translateD (__wWidth / 3) __defaultGroundY $ scale 0.1 0.1 $ text $ "HIGH SCORE : " ++ show n 
 {-# INLINE highScorePicture #-}
 
 pipePicture :: GamePictures -> Pipe -> Picture
@@ -108,7 +106,6 @@ scorePicture GamePictures{..} Score{..} =
         in translateD _scoreX _scoreY $ pictures ps 
 {-# INLINE scorePicture #-}
 
-
 -- utility function for translate
 translateD :: Double -> Double -> Picture -> Picture
 translateD x y p = translate (realToFrac x) (realToFrac y) p
@@ -118,5 +115,4 @@ translateD x y p = translate (realToFrac x) (realToFrac y) p
 rotateD :: Double -> Picture -> Picture
 rotateD a p = rotate (realToFrac a) p
 {-# INLINE rotateD #-}
-
 
