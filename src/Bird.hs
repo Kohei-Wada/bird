@@ -13,7 +13,7 @@ import Graphics.Gloss
 
 data Bird = Bird 
     { _birdX    :: !Double
-    , _birdY    :: !Float 
+    , _birdY    :: !Double
     , _birdVy   :: !Float     
     , _count    :: !Int       -- count for FPS
     , _pIndex   :: !Int       -- Picture Index
@@ -55,7 +55,8 @@ birdKill b = runST $ do
 updateBirdY :: Bird -> Bird
 updateBirdY b = runST $ do 
     b' <- newSTRef b
-    modifySTRef b' $ \b@Bird{..} -> b { _birdY = _birdY - _birdVy * (1.0 / __fFps) } 
+    modifySTRef b' $ 
+        \b@Bird{..} -> b { _birdY = _birdY - realToFrac (_birdVy * (1.0 / __fFps)) } 
     readSTRef b'
 
 

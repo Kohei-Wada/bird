@@ -88,7 +88,7 @@ pipesCollision (Pipes ps) b = any (\p -> pipeCollision p b) ps
             && realToFrac _birdX >= _pipeX - fromIntegral __pipeWid__
 
             && ( realToFrac _birdY + fromIntegral __birdHgt__ >= _pipeUp || 
-                 _birdY - fromIntegral __birdHgt__ <= _pipeDw
+                 realToFrac _birdY - fromIntegral __birdHgt__ <= _pipeDw
                ) 
 
 
