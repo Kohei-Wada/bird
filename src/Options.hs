@@ -75,7 +75,7 @@ __groundAssets        =
 
 
 {- Score -}
-__scoreWid__ = 20 :: Float
+__scoreWid__ = 20 :: Double
 __scoreAssets = 
     [ "assets/font_big_0.png"
     , "assets/font_big_1.png"

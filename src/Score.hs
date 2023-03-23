@@ -15,8 +15,8 @@ import Data.STRef
 
 data Score = Score 
     { _value     :: !Int 
-    , _scoreX    :: !Float
-    , _scoreY    :: !Float
+    , _scoreX    :: !Double
+    , _scoreY    :: !Double
     , _sFlag     :: !Bool
     , _highScore :: !Int
     }
