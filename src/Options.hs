@@ -62,13 +62,13 @@ __skyAssets     =
 
 
 {- Ground -}
-__defaultGroundX      = 0.0           :: Float
-__defaultGroundY      = -250.0        :: Float
+__defaultGroundX      = 0.0           :: Double
+__defaultGroundY      = -250.0        :: Double
 __groundSpeed         = __pipeSpeed   :: Double
 __groundWid__         = 336           :: Int -- Warning : Original picture size, Don't change.
 __groundWid           = __groundWid__ :: Int
-__groundCollisionBias = 80            :: Float
-__groundResetBias     = 10            :: Float 
+__groundCollisionBias = 80            :: Double
+__groundResetBias     = 10            :: Double
 __groundAssets        = 
     [ "assets/land.png" 
     ]

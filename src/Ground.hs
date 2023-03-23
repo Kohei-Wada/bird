@@ -12,8 +12,8 @@ import Control.Monad.ST
 import Data.STRef
 
 data Ground = Ground 
-    { _groundX   :: !Float 
-    , _groundY   :: !Float
+    { _groundX   :: !Double
+    , _groundY   :: !Double
     , _groundWid :: !Int
     }
 

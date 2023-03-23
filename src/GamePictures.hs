@@ -72,7 +72,7 @@ birdPicture GamePictures{..} Bird{..} =
 {-# INLINE birdPicture #-}
 
 groundPicture :: GamePictures -> Ground -> Picture 
-groundPicture GamePictures{..} g@Ground{..} = translate _groundX _groundY _groundPic 
+groundPicture GamePictures{..} g@Ground{..} = translate (realToFrac _groundX) (realToFrac _groundY) _groundPic 
 {-# INLINE groundPicture #-}
 
 
@@ -88,7 +88,7 @@ pipesPicture gp (Pipes ps) = map (pipePicture gp) ps
 highScorePicture :: GamePictures -> Int -> Picture
 highScorePicture _ n = 
     let wh = __defaultGroundY  
-     in translate (__wWidth / 3) (wh)  $ scale 0.1 0.1 $ text $ "HIGH SCORE : " ++ show n 
+     in translate (__wWidth / 3) (realToFrac wh)  $ scale 0.1 0.1 $ text $ "HIGH SCORE : " ++ show n 
 {-# INLINE highScorePicture #-}
 
 
