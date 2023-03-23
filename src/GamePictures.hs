@@ -58,34 +58,38 @@ loadAllPictures = do
 
 
 logoPicture :: GamePictures -> Picture 
-logoPicture GamePictures{..} =  translate 0 0 _logoPic 
-
+logoPicture GamePictures{..} = translate 0 0 _logoPic 
+{-# INLINE logoPicture #-}
 
 gameOverPicture :: GamePictures -> Picture
-gameOverPicture GamePictures{..} =  translate 0 0 _gameOverPic 
+gameOverPicture GamePictures{..} = translate 0 0 _gameOverPic 
+{-# INLINE gameOverPicture #-}
 
 
 birdPicture :: GamePictures -> Bird -> Picture
 birdPicture GamePictures{..} Bird{..} = 
    translate _birdX _birdY $ rotate _angle (_birdPics !! _pIndex) 
-
+{-# INLINE birdPicture #-}
 
 groundPicture :: GamePictures -> Ground -> Picture 
 groundPicture GamePictures{..} g@Ground{..} = translate _groundX _groundY _groundPic 
+{-# INLINE groundPicture #-}
 
 
 skyPicture :: GamePictures -> Sky -> Picture
 skyPicture GamePictures{..} s@Sky{..} = translate _skyX _skyY _skyPic 
-
+{-# INLINE skyPicture #-}
 
 pipesPicture :: GamePictures -> Pipes -> [Picture]
 pipesPicture gp (Pipes ps) = map (pipePicture gp) ps
+{-# INLINE pipesPicture #-}
 
 
 highScorePicture :: GamePictures -> Int -> Picture
 highScorePicture _ n = 
     let wh = __defaultGroundY  
      in translate (__wWidth / 3) (wh)  $ scale 0.1 0.1 $ text $ "HIGH SCORE : " ++ show n 
+{-# INLINE highScorePicture #-}
 
 
 pipePicture :: GamePictures -> Pipe -> Picture
@@ -95,6 +99,7 @@ pipePicture GamePictures{..} Pipe{..} =
               , translate _pipeX _pipeUp _pipePicUp 
               , translate _pipeX _pipeDw _pipePicDw
               ] 
+{-# INLINE pipePicture #-}
 
 -- TODO 
 scorePicture :: GamePictures -> Score -> Picture
@@ -105,4 +110,4 @@ scorePicture GamePictures{..} Score{..} =
        let !nl = zip [0..] $ digs _value
            !ps = map (\(i, n) -> translate (-__scoreWid__ * fromIntegral i) 0 (_scorePics !! n)) nl
         in translate _scoreX _scoreY $ pictures ps 
-
+{-# INLINE scorePicture #-}
