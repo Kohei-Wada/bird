@@ -14,10 +14,10 @@ import Graphics.Gloss
 data Bird = Bird 
     { _birdX    :: !Double
     , _birdY    :: !Double
-    , _birdVy   :: !Float     
+    , _birdVy   :: !Double
     , _count    :: !Int       -- count for FPS
     , _pIndex   :: !Int       -- Picture Index
-    , _angle    :: !Float
+    , _angle    :: !Double
     , _dead     :: !Bool
     } 
 
@@ -38,7 +38,7 @@ birdInit = pure Bird
         , _dead     = False
         }
 
-setBirdVy :: Bird -> Float -> Bird
+setBirdVy :: Bird -> Double -> Bird
 setBirdVy b vy = runST $ do 
     b' <- newSTRef b
     modifySTRef b' $ \b -> b { _birdVy = vy }
@@ -127,7 +127,7 @@ updateAngle b = runST $ do
     readSTRef b'
 
 
-calcurateAngle :: Float -> Float
+calcurateAngle :: Double -> Double
 calcurateAngle vy 
   | tmp > __maxBirdAngle = __maxBirdAngle 
   | tmp < __minBirdAngle = __minBirdAngle
@@ -135,5 +135,5 @@ calcurateAngle vy
   where tmp = velocityToAngle vy
 
 
-velocityToAngle :: Float -> Float
+velocityToAngle :: Double -> Double
 velocityToAngle v = v / __angleBias 

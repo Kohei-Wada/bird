@@ -68,7 +68,7 @@ gameOverPicture GamePictures{..} = translate 0 0 _gameOverPic
 
 birdPicture :: GamePictures -> Bird -> Picture
 birdPicture GamePictures{..} Bird{..} = 
-   translate (realToFrac _birdX) (realToFrac _birdY) $ rotate _angle (_birdPics !! _pIndex) 
+   translate (realToFrac _birdX) (realToFrac _birdY) $ rotate (realToFrac _angle) (_birdPics !! _pIndex) 
 {-# INLINE birdPicture #-}
 
 groundPicture :: GamePictures -> Ground -> Picture 

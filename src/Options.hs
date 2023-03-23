@@ -5,7 +5,7 @@ import Graphics.Gloss
 
 {- Game -}
 __iFps     = 60                  :: Int
-__fFps     = fromIntegral __iFps :: Float
+__fFps     = fromIntegral __iFps :: Double
 __winTitle = "Flappy Bird"
 __bkColor  = cyan
 
@@ -21,13 +21,13 @@ __birdWid__     = 34                  :: Int
 __birdHgt__     = 24                  :: Int
 __birdX         = (-1) * __wWidth / 5 :: Double
 __birdY         = __winHeight__ / 8   :: Double
-__gravity       = 2000                :: Float
-__birdFlappingV = -500.0              :: Float
-__birdSwoopingV = 500.0               :: Float
-__maxBirdAngle  = 90                  :: Float
-__minBirdAngle  = -45                 :: Float
-__angleBias     = 10                  :: Float
-__fPps          = 30                  :: Float -- Picture per sec
+__gravity       = 2000                :: Double
+__birdFlappingV = -500.0              :: Double
+__birdSwoopingV = 500.0               :: Double
+__maxBirdAngle  = 90                  :: Double
+__minBirdAngle  = -45                 :: Double
+__angleBias     = 10                  :: Double
+__fPps          = 30                  :: Double -- Picture per sec
 __nBirdAssets   = 4                   :: Int
 __birdAssets    = 
     [ "assets/bird-01.png"
@@ -42,7 +42,7 @@ __pipeWid__      = 52     :: Int  -- Warning : Original picture size , Don't cha
 __pipesGap       = -120   :: Float
 __pipeHgt        = 1      :: Int
 __nPipes         = 3      :: Int
-__pipeSpeed      = -150.0 :: Float
+__pipeSpeed      = -150.0 :: Double
 __pipeAssets     = 
     [ "assets/pipe-down.png"
     , "assets/pipe-up.png"
@@ -64,7 +64,7 @@ __skyAssets     =
 {- Ground -}
 __defaultGroundX      = 0.0           :: Float
 __defaultGroundY      = -250.0        :: Float
-__groundSpeed         = __pipeSpeed   :: Float
+__groundSpeed         = __pipeSpeed   :: Double
 __groundWid__         = 336           :: Int -- Warning : Original picture size, Don't change.
 __groundWid           = __groundWid__ :: Int
 __groundCollisionBias = 80            :: Float

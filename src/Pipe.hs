@@ -75,7 +75,7 @@ pipesUpdate (Pipes ps) = stToIO $ do
         pipeUpdate :: Pipe -> Pipe
         pipeUpdate p = runST $ do 
             p' <- newSTRef p
-            modifySTRef p' (\p@Pipe{..} -> p { _pipeX = _pipeX + (__pipeSpeed / __fFps) })
+            modifySTRef p' (\p@Pipe{..} -> p { _pipeX = _pipeX + realToFrac (__pipeSpeed / __fFps) })
             readSTRef p'
 
 

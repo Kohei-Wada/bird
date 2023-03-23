@@ -46,7 +46,7 @@ groundUpdate g = stToIO $ do
         addGroundX :: Ground -> Ground 
         addGroundX g@Ground{..} = runST $ do 
             g' <- newSTRef g
-            modifySTRef g' $ \g -> g { _groundX = _groundX + __groundSpeed * (1.0 / __fFps) }
+            modifySTRef g' $ \g -> g { _groundX = _groundX + realToFrac __groundSpeed * realToFrac (1.0 / __fFps) }
             readSTRef g'
 
         resetGroundX :: Ground -> Ground
