@@ -66,7 +66,7 @@ gameOverPicture GamePictures{..} =  translate 0 0 _gameOverPic
 
 
 birdPicture :: GamePictures -> Bird -> Picture
-birdPicture GamePictures{..} b@Bird{..} = 
+birdPicture GamePictures{..} Bird{..} = 
    translate _birdX _birdY $ rotate _angle (_birdPics !! _pIndex) 
 
 
@@ -89,7 +89,7 @@ highScorePicture _ n =
 
 
 pipePicture :: GamePictures -> Pipe -> Picture
-pipePicture gp@GamePictures{..} p@Pipe{..} = 
+pipePicture GamePictures{..} Pipe{..} = 
      pictures [ translate _pipeX (_pipeUp + __wHeight / 2) _pipePicLng
               , translate _pipeX (_pipeDw - __wHeight / 2) _pipePicLng
               , translate _pipeX _pipeUp _pipePicUp 
@@ -105,3 +105,4 @@ scorePicture GamePictures{..} Score{..} =
        let !nl = zip [0..] $ digs _value
            !ps = map (\(i, n) -> translate (-__scoreWid__ * fromIntegral i) 0 (_scorePics !! n)) nl
         in translate _scoreX _scoreY $ pictures ps 
+
