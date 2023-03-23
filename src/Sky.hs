@@ -11,8 +11,8 @@ import Control.Monad.ST
 import Data.STRef
 
 data Sky = Sky 
-    { _skyX   :: !Float 
-    , _skyY   :: !Float
+    { _skyX   :: !Double
+    , _skyY   :: !Double
     , _skyWid :: !Int
     }
 

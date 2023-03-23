@@ -52,9 +52,9 @@ __pipeAssets     =
 
 {- Sky -}
 __skyWid__      = 276             :: Int -- Warning : Original picture size, Don't change.
-__defaultSkyX   = 0.0             :: Float
-__defaultSkyY   = -150.0          :: Float
-__skySpeed      = -50             :: Float
+__defaultSkyX   = 0.0             :: Double
+__defaultSkyY   = -150.0          :: Double
+__skySpeed      = -50             :: Double
 __skyWid        = __skyWid__      :: Int
 __skyAssets     = 
     [ "assets/sky.png" 

@@ -77,7 +77,7 @@ groundPicture GamePictures{..} g@Ground{..} = translate _groundX _groundY _groun
 
 
 skyPicture :: GamePictures -> Sky -> Picture
-skyPicture GamePictures{..} s@Sky{..} = translate _skyX _skyY _skyPic 
+skyPicture GamePictures{..} s@Sky{..} = translate (realToFrac _skyX) (realToFrac _skyY) _skyPic 
 {-# INLINE skyPicture #-}
 
 pipesPicture :: GamePictures -> Pipes -> [Picture]
