@@ -12,7 +12,7 @@ import Data.STRef
 import Graphics.Gloss
 
 data Bird = Bird 
-    { _birdX    :: !Float
+    { _birdX    :: !Double
     , _birdY    :: !Float 
     , _birdVy   :: !Float     
     , _count    :: !Int       -- count for FPS

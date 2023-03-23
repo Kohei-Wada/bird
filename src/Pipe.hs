@@ -84,10 +84,10 @@ pipesCollision (Pipes ps) b = any (\p -> pipeCollision p b) ps
     where
         pipeCollision :: Pipe -> Bird -> Bool
         pipeCollision Pipe{..} Bird{..} = 
-               _birdX <= _pipeX + fromIntegral __pipeWid__
-            && _birdX >= _pipeX - fromIntegral __pipeWid__
+               realToFrac _birdX <= _pipeX + fromIntegral __pipeWid__
+            && realToFrac _birdX >= _pipeX - fromIntegral __pipeWid__
 
-            && ( _birdY + fromIntegral __birdHgt__ >= _pipeUp || 
+            && ( realToFrac _birdY + fromIntegral __birdHgt__ >= _pipeUp || 
                  _birdY - fromIntegral __birdHgt__ <= _pipeDw
                ) 
 
@@ -97,5 +97,4 @@ insidePipesGap (Pipes ps) b = any (\p -> insidePipeGap p b) ps
     where
         insidePipeGap :: Pipe -> Bird -> Bool
         insidePipeGap Pipe{..} Bird{..} =
-               _birdX <= _pipeX + fromIntegral __pipeWid__ 
-            && _birdX >= _pipeX - fromIntegral __pipeWid__ 
+               realToFrac _birdX <= _pipeX + fromIntegral __pipeWid__ && realToFrac _birdX >= _pipeX - fromIntegral __pipeWid__ 

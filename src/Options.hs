@@ -19,8 +19,8 @@ __wHeight     = __winHeight__
 {- Bird -}
 __birdWid__     = 34                  :: Int
 __birdHgt__     = 24                  :: Int
-__birdX         = (-1) * __wWidth / 5 :: Float
-__birdY         = __winHeight__ / 8   :: Float 
+__birdX         = (-1) * __wWidth / 5 :: Double
+__birdY         = __winHeight__ / 8   :: Float
 __gravity       = 2000                :: Float
 __birdFlappingV = -500.0              :: Float
 __birdSwoopingV = 500.0               :: Float
