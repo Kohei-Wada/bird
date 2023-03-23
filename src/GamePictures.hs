@@ -14,15 +14,15 @@ import Score
 import Graphics.Gloss
 
 data GamePictures = GamePictures
-    { _birdPics    :: [Picture]
-    , _groundPic   :: Picture
-    , _skyPic      :: Picture
-    , _pipePicUp   :: Picture
-    , _pipePicDw   :: Picture
-    , _pipePicLng  :: Picture
-    , _scorePics   :: [Picture]
-    , _logoPic     :: Picture
-    , _gameOverPic :: Picture
+    { _birdPics    :: ![Picture]
+    , _groundPic   :: !Picture
+    , _skyPic      :: !Picture
+    , _pipePicUp   :: !Picture
+    , _pipePicDw   :: !Picture
+    , _pipePicLng  :: !Picture
+    , _scorePics   :: ![Picture]
+    , _logoPic     :: !Picture
+    , _gameOverPic :: !Picture
     }
 
 
