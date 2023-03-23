@@ -142,7 +142,6 @@ updateGameState g@Game{..} = runST $ do
               _ -> g
 
 
-
 updateGame :: Float -> Game -> IO Game
 updateGame _ g@Game{..} = stToIO $ do 
     ioToST $ case _state of
@@ -153,12 +152,11 @@ updateGame _ g@Game{..} = stToIO $ do
 
 
 checkCollision :: Game -> Bool
-checkCollision Game{..} = groundCollision _ground _bird || pipesCollision (_pipes) _bird
+checkCollision Game{..} = groundCollision _ground _bird || pipesCollision _pipes _bird
 
 
 checkCoordinates :: Bird -> Bool 
-checkCoordinates Bird{..} = 
-    -_birdY > __wHeight || _birdY > __wHeight 
+checkCoordinates Bird{..} = -_birdY > __wHeight || _birdY > __wHeight 
 
 
 gameDisplay :: Game -> IO Picture
