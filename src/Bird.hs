@@ -132,7 +132,7 @@ calcurateAngle vy
   | tmp > __maxBirdAngle = __maxBirdAngle 
   | tmp < __minBirdAngle = __minBirdAngle
   | otherwise = tmp 
-  where tmp = velocityToAngle vy
+  where !tmp = velocityToAngle vy
 
 
 velocityToAngle :: Double -> Double
