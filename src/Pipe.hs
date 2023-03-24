@@ -76,7 +76,7 @@ pipesUpdate (Pipes ps) = stToIO $ do
         pipeUpdate :: Pipe -> Pipe
         pipeUpdate p = runST $ do 
             p' <- newSTRef p
-            modifySTRef p' (\p@Pipe{..} -> p { _pipeX = _pipeX + realToFrac (__pipeSpeed / __dFps) })
+            modifySTRef p' (\p@Pipe{..} -> p { _pipeX = _pipeX + (__pipeSpeed / __dFps) })
             readSTRef p'
 
 
@@ -85,11 +85,11 @@ pipesCollision (Pipes ps) b = any (\p -> pipeCollision p b) ps
     where
         pipeCollision :: Pipe -> Bird -> Bool
         pipeCollision Pipe{..} Bird{..} = 
-               realToFrac _birdX <= _pipeX + fromIntegral __pipeWid__
-            && realToFrac _birdX >= _pipeX - fromIntegral __pipeWid__
+               _birdX <= _pipeX + fromIntegral __pipeWid__
+            && _birdX >= _pipeX - fromIntegral __pipeWid__
 
-            && ( realToFrac _birdY + fromIntegral __birdHgt__ >= _pipeUp || 
-                 realToFrac _birdY - fromIntegral __birdHgt__ <= _pipeDw
+            && ( _birdY + fromIntegral __birdHgt__ >= _pipeUp || 
+                 _birdY - fromIntegral __birdHgt__ <= _pipeDw
                ) 
 
 
@@ -98,4 +98,4 @@ insidePipesGap (Pipes ps) b = any (\p -> insidePipeGap p b) ps
     where
         insidePipeGap :: Pipe -> Bird -> Bool
         insidePipeGap Pipe{..} Bird{..} =
-               realToFrac _birdX <= _pipeX + fromIntegral __pipeWid__ && realToFrac _birdX >= _pipeX - fromIntegral __pipeWid__ 
+               _birdX <= _pipeX + fromIntegral __pipeWid__ && _birdX >= _pipeX - fromIntegral __pipeWid__ 
