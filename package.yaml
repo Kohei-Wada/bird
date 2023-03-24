@@ -36,10 +36,8 @@ executables:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
-    - -threaded
     - -rtsopts
     - -O3
-    - -with-rtsopts=-N
     dependencies:
     - bird
 
