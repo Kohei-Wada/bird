@@ -28,6 +28,9 @@ dependencies:
 - system-fileio 
 - array
 
+- HUnit
+- silently
+
 library:
   source-dirs: src
 

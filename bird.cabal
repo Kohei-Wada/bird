@@ -40,12 +40,14 @@ library
   hs-source-dirs:
       src
   build-depends:
-      array
+      HUnit
+    , array
     , base >=4.7 && <5
     , directory
     , gloss >=0.2.3
     , gloss-juicy
     , random
+    , silently
     , system-fileio
   default-language: Haskell2010
 
@@ -57,13 +59,15 @@ executable bird-exe
       app
   ghc-options: -rtsopts -O3
   build-depends:
-      array
+      HUnit
+    , array
     , base >=4.7 && <5
     , bird
     , directory
     , gloss >=0.2.3
     , gloss-juicy
     , random
+    , silently
     , system-fileio
   default-language: Haskell2010
 
@@ -71,17 +75,20 @@ test-suite bird-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      BirdTest
       Paths_bird
   hs-source-dirs:
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      array
+      HUnit
+    , array
     , base >=4.7 && <5
     , bird
     , directory
     , gloss >=0.2.3
     , gloss-juicy
     , random
+    , silently
     , system-fileio
   default-language: Haskell2010
