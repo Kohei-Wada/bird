@@ -1,5 +1,5 @@
 {-#LANGUAGE RecordWildCards #-}
-module Game (gameMain) where
+module Game where
 
 import Bird
 import Pipe
@@ -143,8 +143,8 @@ updateGameState g@Game{..} = runST $ do
             {-# INLINE updateGameState' #-}
 
 updateGame :: Float -> Game -> IO Game
-updateGame _ g@Game{..} = stToIO $ do 
-    ioToST $ case _state of
+updateGame _ g@Game{..} = 
+    case _state of
       GameStart -> updateGameObjects g
       GameStop  -> updateGameObjects g
       GameLoop  -> updateGameObjects $ updateGameState g 
