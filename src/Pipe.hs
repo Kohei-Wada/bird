@@ -6,6 +6,8 @@ module Pipe
     , Pipes(..)
     , pipesCollision
     , insidePipesGap
+    , pipeUpdate
+    , pipeReset
     ) where
 
 import Options
@@ -52,33 +54,21 @@ pipeInit r x =
          }
 
 pipesUpdate :: Pipes -> IO Pipes
-pipesUpdate (Pipes ps) = stToIO $ do 
-    a <- newListArray (1, __nPipes) ps :: ST s (STArray s Int Pipe)
-    forM_ [1 .. __nPipes] $ \i -> do 
-        p <- readArray a i 
-        if _pipeX p < -__wWidth / 2 
-           then do 
-               r <- ioToST $ randomHeight
-               writeArray a i $ pipeReset p (__wWidth / 2) r
-           else do 
-               writeArray a i $ pipeUpdate p
+pipesUpdate (Pipes ps) = do
+    newPs <- forM ps $ \p -> do
+        if _pipeX p < -__wWidth / 2
+            then do
+                r <- randomHeight
+                pure $ pipeReset p (__wWidth / 2) r
+            else do
+                pure $ pipeUpdate p
+    pure $ Pipes newPs
 
-    ps' <- getElems a
-    pure $ Pipes ps'
+pipeReset :: Pipe -> Double -> Double -> Pipe
+pipeReset p@Pipe{..} x r = p { _pipeX  = x, _pipeUp = r, _pipeDw = r + __pipesGap }
 
-    where
-        pipeReset :: Pipe -> Double -> Double -> Pipe
-        pipeReset p@Pipe{..} x r = runST $ do 
-            p' <- newSTRef p
-            modifySTRef p' (\p -> p { _pipeX  = x, _pipeUp = r, _pipeDw = r + __pipesGap })
-            readSTRef p'
-
-        pipeUpdate :: Pipe -> Pipe
-        pipeUpdate p = runST $ do 
-            p' <- newSTRef p
-            modifySTRef p' (\p@Pipe{..} -> p { _pipeX = _pipeX + (__pipeSpeed / __dFps) })
-            readSTRef p'
-
+pipeUpdate :: Pipe -> Pipe
+pipeUpdate p@Pipe{..} = p { _pipeX = _pipeX + (__pipeSpeed / __dFps) }
 
 pipesCollision :: Pipes -> Bird -> Bool
 pipesCollision (Pipes ps) b = any (\p -> pipeCollision p b) ps 
@@ -98,4 +88,4 @@ insidePipesGap (Pipes ps) b = any (\p -> insidePipeGap p b) ps
     where
         insidePipeGap :: Pipe -> Bird -> Bool
         insidePipeGap Pipe{..} Bird{..} =
-               _birdX <= _pipeX + fromIntegral __pipeWid__ && _birdX >= _pipeX - fromIntegral __pipeWid__ 
+               _birdX <= _pipeX + fromIntegral __pipeWid__ && _birdX >= _pipeX - fromIntegral __pipeWid__

@@ -1,7 +1,7 @@
 {-#LANGUAGE RecordWildCards #-}
 {-#LANGUAGE BangPatterns #-}
 
-module Bird (Bird(..), birdFlapping, birdKill, birdSwooping) where
+module Bird (Bird(..), birdFlapping, birdKill, birdSwooping, setBirdVy, updateBirdY, updateBirdVy, birdFalling, updateCount, updatePicIndex, updateAngle, calcurateAngle) where
     
 import Options
 import Actor
@@ -39,60 +39,28 @@ birdInit = pure Bird
         }
 
 setBirdVy :: Bird -> Double -> Bird
-setBirdVy b vy = runST $ do 
-    b' <- newSTRef b
-    modifySTRef b' $ \b -> b { _birdVy = vy }
-    readSTRef b'
-
+setBirdVy b vy = b { _birdVy = vy }
 
 birdKill :: Bird -> Bird
-birdKill b = runST $ do 
-    b' <- newSTRef b
-    modifySTRef b' $ \b -> b { _dead = True }
-    readSTRef b'
-
+birdKill b = b { _dead = True }
 
 updateBirdY :: Bird -> Bird
-updateBirdY b = runST $ do 
-    b' <- newSTRef b
-    modifySTRef b' $ 
-        \b@Bird{..} -> b { _birdY = _birdY - realToFrac (_birdVy * (1.0 / __dFps)) } 
-    readSTRef b'
-
+updateBirdY b@Bird{..} = b { _birdY = _birdY - realToFrac (_birdVy * (1.0 / __dFps)) }
 
 updateBirdVy :: Bird -> Bird
-updateBirdVy b = runST $ do 
-    b' <- newSTRef b
-    modifySTRef b' $ \b@Bird{..} -> b { _birdVy = _birdVy + __gravity * (1.0 / __dFps) }
-    readSTRef b'
+updateBirdVy b@Bird{..} = b { _birdVy = _birdVy + __gravity * (1.0 / __dFps) }
 
-    
 birdFalling :: Bird -> Bird   
-birdFalling b = runST $ do 
-    b' <- newSTRef b
-    modifySTRef b' (updateBirdY . updateBirdVy) 
-    readSTRef b'
-
+birdFalling = updateBirdY . updateBirdVy
 
 birdFlapping :: Bird -> Bird
-birdFlapping b@Bird{..} = runST $ do 
-    b' <- newSTRef b
-    modifySTRef b' $ \b -> if _dead then b else setBirdVy b __birdFlappingV 
-    readSTRef b'
-
+birdFlapping b@Bird{..} = if _dead then b else setBirdVy b __birdFlappingV 
 
 birdSwooping :: Bird -> Bird
-birdSwooping b@Bird{..} = runST $ do 
-    b' <- newSTRef b
-    modifySTRef b' $ \b -> if _dead then b else setBirdVy b __birdSwoopingV
-    readSTRef b'
+birdSwooping b@Bird{..} = if _dead then b else setBirdVy b __birdSwoopingV
 
-    
 birdUpdate :: Bird -> IO Bird 
-birdUpdate b = stToIO $ do 
-    b' <- newSTRef b
-    modifySTRef b' birdUpdate'
-    readSTRef b'
+birdUpdate b = pure $ birdUpdate' b
 
     where
         birdUpdate' :: Bird -> Bird
@@ -100,31 +68,19 @@ birdUpdate b = stToIO $ do
             if _dead then (updateAngle . birdFalling) b
                      else (updateAngle . updatePicIndex . updateCount . birdFalling) b
 
-
 updateCount :: Bird -> Bird
-updateCount b@Bird{..} = runST $ do
-    b' <- newSTRef b 
-    modifySTRef b' $ \b -> b { _count = if (fromIntegral _count) >= (__dFps / __fPps) then 0 else _count + 1 }
-    readSTRef b'
-
+updateCount b@Bird{..} = b { _count = if (fromIntegral _count) >= (__dFps / __fPps) then 0 else _count + 1 }
 
 updatePicIndex :: Bird -> Bird
-updatePicIndex b@Bird{..} = runST $ do 
-    b' <- newSTRef b
+updatePicIndex b@Bird{..} = 
     let !i = if _count == 0 then 
                 if _pIndex == (__nBirdAssets - 1) then 0 else _pIndex + 1
             else 
                 _pIndex
-
-    modifySTRef b' $ \b -> b { _pIndex = i}
-    readSTRef b'
-
+     in b { _pIndex = i}
 
 updateAngle :: Bird -> Bird 
-updateAngle b = runST $ do 
-    b' <- newSTRef b
-    modifySTRef b' (\b@Bird{..} -> b { _angle = calcurateAngle _birdVy })
-    readSTRef b'
+updateAngle b@Bird{..} = b { _angle = calcurateAngle _birdVy }
 
 
 calcurateAngle :: Double -> Double

@@ -19,7 +19,7 @@ import Control.Monad.ST
 import Data.STRef
 import GHC.IO (ioToST)
 
-data GameState = GameStart | GameStop | GameLoop | GameOver
+data GameState = GameStart | GameStop | GameLoop | GameOver deriving (Eq, Show)
 
 data Game = Game 
     { _state    :: !GameState
@@ -35,7 +35,7 @@ data Game = Game
 gameInit :: IO Game
 gameInit = do 
     gp <- loadAllPictures 
-    hs <- loadhighScore 
+    hs <- loadHighScoreFromFile __scoreData__
     ps <- initialize
     b  <- initialize 
     s  <- initialize
@@ -72,7 +72,7 @@ gameReset g@Game{..} = do
     sc <- scoreInit
     if _value _score > _hScore 
        then do 
-       writeHighScore _score
+       writeHighScoreToFile __scoreData__ _score
        pure g
            { _state  = GameStop 
            , _bird   = b
@@ -198,84 +198,46 @@ gameDisplay Game{..} = case _state of
 
 eventHandler :: Event -> Game -> IO Game
 eventHandler e g@Game{..} = case _state of 
-    GameStart -> 
-        case e of 
-          EventKey (MouseButton LeftButton) Down _ _ -> 
-              pure g { _state = GameStop }
+    GameStart -> handleGameStartEvent e g
+    GameStop  -> handleGameStopEvent e g
+    GameLoop  -> handleGameLoopEvent e g
+    GameOver  -> handleGameOverEvent e g
 
-          EventKey (SpecialKey KeySpace) Down _ _ -> 
-              pure g { _state = GameStop }
+handleGameStartEvent :: Event -> Game -> IO Game
+handleGameStartEvent e g = case e of 
+    EventKey (MouseButton LeftButton) Down _ _ -> pure g { _state = GameStop }
+    EventKey (SpecialKey KeySpace) Down _ _    -> pure g { _state = GameStop }
+    EventKey (Char 'k') Down _ _               -> pure g { _state = GameStop }
+    EventKey (Char 'q') Down _ _               -> exitSuccess
+    _                                          -> pure g
 
-          EventKey (Char 'k') Down _ _ -> 
-              pure g { _state = GameStop }
+handleGameStopEvent :: Event -> Game -> IO Game
+handleGameStopEvent e g = case e of 
+    EventKey (MouseButton LeftButton) Down _ _ -> pure g { _state = GameLoop }
+    EventKey (SpecialKey KeySpace) Down _ _    -> pure g { _state = GameLoop }
+    EventKey (Char 'k') Down _ _               -> pure g { _state = GameLoop }
+    EventKey (Char 'q') Down _ _               -> exitSuccess
+    _                                          -> pure g
 
-          EventKey (Char 'q') Down _ _ -> 
-              exitSuccess
+handleGameLoopEvent :: Event -> Game -> IO Game
+handleGameLoopEvent e g@Game{..} = case e of 
+    EventKey (MouseButton LeftButton) Down _ _ -> pure g { _bird = birdFlapping _bird } 
+    EventKey (SpecialKey KeySpace) Down _ _    -> pure g { _bird = birdFlapping _bird } 
+    EventKey (Char 'k') Down _ _               -> pure g { _bird = birdFlapping _bird } 
+    EventKey (Char 'j') Down _ _               -> pure g { _bird = birdSwooping _bird }
+    EventKey (Char 'l') Down _ _               -> pure g 
+    EventKey (Char 'h') Down _ _               -> pure g 
+    EventKey (Char 'r') Down _ _               -> gameRestart g
+    EventKey (Char 'q') Down _ _               -> exitSuccess
+    _                                          -> pure g
 
-          _ -> 
-              pure g
-
-    GameStop -> 
-        case e of 
-          EventKey (MouseButton LeftButton) Down _ _ -> 
-              pure g { _state = GameLoop }
-
-          EventKey (SpecialKey KeySpace) Down _ _ -> 
-              pure g { _state = GameLoop }
-
-          EventKey (Char 'k') Down _ _ -> 
-              pure g { _state = GameLoop }
-
-          EventKey (Char 'q') Down _ _ -> 
-              exitSuccess
-
-          _ -> 
-              pure g
-
-    GameLoop -> 
-        case e of 
-          EventKey (MouseButton LeftButton) Down _ _ -> 
-              pure g { _bird = birdFlapping _bird } 
-
-          EventKey (SpecialKey KeySpace) Down _ _ -> 
-              pure g { _bird = birdFlapping _bird } 
-                  
-          EventKey (Char 'k') Down _ _ -> 
-              pure g { _bird = birdFlapping _bird } 
-
-          EventKey (Char 'j') Down _ _ -> 
-              pure g { _bird = birdSwooping _bird }
-
-          EventKey (Char 'l') Down _ _ -> 
-              pure g 
-
-          EventKey (Char 'h') Down _ _ -> 
-              pure g 
-
-          EventKey (Char 'r') Down _ _ -> 
-              gameRestart g
-
-          EventKey (Char 'q') Down _ _ -> 
-              exitSuccess
-              
-          _ ->
-              pure g
-    
-    GameOver -> 
-        case e of 
-          EventKey (MouseButton LeftButton) Down _ _ -> 
-              gameReset g
-
-          EventKey (SpecialKey KeySpace) Down _ _ -> 
-              gameReset g
-          EventKey (Char 'k') Down _ _ -> 
-              gameReset g
- 
-          EventKey (Char 'q') Down _ _ -> 
-              exitSuccess
- 
-          _ -> 
-              pure g
+handleGameOverEvent :: Event -> Game -> IO Game
+handleGameOverEvent e g = case e of 
+    EventKey (MouseButton LeftButton) Down _ _ -> gameReset g
+    EventKey (SpecialKey KeySpace) Down _ _    -> gameReset g
+    EventKey (Char 'k') Down _ _               -> gameReset g
+    EventKey (Char 'q') Down _ _               -> exitSuccess
+    _                                          -> pure g
 
 gameMain :: IO ()
 gameMain = do
