@@ -1,6 +1,6 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.35.1.
+-- This file has been generated from package.yaml by hpack version 0.37.0.
 --
 -- see: https://github.com/sol/hpack
 
@@ -49,7 +49,7 @@ library
     , gloss-juicy
     , random
     , silently
-    , system-fileio
+    , unix
   default-language: Haskell2010
 
 executable bird-exe
@@ -69,14 +69,13 @@ executable bird-exe
     , gloss-juicy
     , random
     , silently
-    , system-fileio
+    , unix
   default-language: Haskell2010
 
 test-suite bird-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      BirdTest
       Paths_bird
   hs-source-dirs:
       test
@@ -91,5 +90,5 @@ test-suite bird-test
     , gloss-juicy
     , random
     , silently
-    , system-fileio
+    , unix
   default-language: Haskell2010

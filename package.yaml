@@ -25,7 +25,7 @@ dependencies:
 - gloss-juicy
 - random
 - directory
-- system-fileio 
+- unix 
 - array
 
 - HUnit
